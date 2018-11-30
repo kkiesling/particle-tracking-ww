@@ -1,0 +1,10 @@
+C evenly spaced on the x-z  plane, traveling in +x direction
+sdef erg=14   vec=0 1 0   dir=1   y=-195 x=D1 z=D2
+SI1  L  -150 -100 -50  0  50 100 150
+SP1       1    1   1   1   1  1   1
+SI2  L  -150 -100 -50  0  50 100 150
+SP2       1    1   1   1   1  1   1
+C
+nps 1e3
+ptrac file=asc write=all event=sur
+dbcn 20J
