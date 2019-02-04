@@ -6,7 +6,7 @@ dagmc
 wwig
 C single particle source
 sdef erg=14   vec=1 0 0   dir=1   x=2 y=2 z=2
-NPS 10
+NPS 2
 MODE N
 C tally
 FMESH4:N  ORIGIN=-12 -12 -12 IMESH=12 JMESH=12 KMESH=12
