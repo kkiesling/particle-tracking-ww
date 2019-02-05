@@ -1,11 +1,11 @@
 Case 1
-C Origin: (2, 2, 2)
+C Origin: (1, 1, 1)
 C Dir: (1, 0, 0)
 C Data Cards
 dagmc
 wwig
 C single particle source
-sdef erg=14   vec=1 0 0   dir=1   x=2 y=2 z=2
+sdef erg=14   vec=1 0 0   dir=1   x=1 y=1 z=1
 NPS 2
 MODE N
 C tally
