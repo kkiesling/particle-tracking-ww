@@ -9,7 +9,7 @@ sdef erg=14   vec=1 0 0   dir=1   x=1 y=1 z=1
 NPS 2
 MODE N
 C tally
-FMESH4:N  ORIGIN=-12 -12 -12 IMESH=12 JMESH=12 KMESH=12
-         IINTS=24 JINTS=24 KINTS=24
+CFMESH4:N  ORIGIN=-12 -12 -12 IMESH=12 JMESH=12 KMESH=12
+C         IINTS=24 JINTS=24 KINTS=24
 c ptrac file=asc write=all event=sur
 dbcn 20J
