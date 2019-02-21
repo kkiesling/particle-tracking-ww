@@ -1,0 +1,20 @@
+method                        cadis
+anisn_library                 27n19g
+anisn_upscatter               false
+
+mcnp_input                    ../../toy-native-geom.inp
+mcnp_tallies                  15
+
+denovo_x_blocks               2
+denovo_y_blocks               2
+denovo_z_blocks               1
+
+denovo_first_group 11
+denovo_last_group  11
+
+mesh_x                         -15.00000   15.00000
+mesh_x_ints                                      30
+mesh_y                         -15.00000   15.00000
+mesh_y_ints                                      30
+mesh_z                         -15.00000   15.00000
+mesh_z_ints                                      30
