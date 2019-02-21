@@ -1,0 +1,18 @@
+Toy Problem
+dagmc
+C Source definition --- volume source in helium center
+SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
+SI1 -10. 4i 10.
+SP1 0 1 4R
+SI2 -10. 10.
+SP2 0 1
+SI3 -10. 10.
+SP3 0 1
+NPS 1e4
+MODE N
+C point detector tally
+F15:N 10 0 0 5
+C mesh tally
+FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
+         IINTS=30 JINTS=30 KINTS=30
+dbcn 20J
