@@ -5,6 +5,8 @@ anisn_upscatter               false
 mcnp_input                    ../../toy-native-geom.inp
 mcnp_tallies                  15
 
+denovo_pn_order  3
+
 denovo_x_blocks               2
 denovo_y_blocks               2
 denovo_z_blocks               1
