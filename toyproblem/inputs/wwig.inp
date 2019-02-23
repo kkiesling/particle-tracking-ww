@@ -14,10 +14,10 @@ NPS 1e4
 MODE N
 C WW information
 C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
-WWP:n    5. 3. 5 0 0 0
+WWP:n    5. 3. 3 0 0 0
 C point detector tally
 F15:N 10 0 0 5
 C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
-         IINTS=30 JINTS=30 KINTS=30
+         IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
