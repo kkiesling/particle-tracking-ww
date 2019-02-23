@@ -10,7 +10,7 @@ SI2 -10. 10.
 SP2 0 1
 SI3 -10. 10.
 SP3 0 1
-NPS 1e4
+NPS 1e5
 MODE N
 C point detector tally
 F15:N 10 0 0 5
