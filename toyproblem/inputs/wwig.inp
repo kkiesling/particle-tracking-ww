@@ -1,5 +1,6 @@
 Toy Problem
-C RUN: mcnp6 i=../../toy-wwinp.inp gcad=../../transport-toy.h5m wcad=../../ lcad=../../lcad_mod
+C RUN:
+C mcnp6 i=../../inputs/wwig.inp gcad=../../transport-model/transport-toy.h5m wcad=../../ lcad=../../inputs/lcad_mod
 dagmc
 wwig
 C Source definition --- volume source in helium center
