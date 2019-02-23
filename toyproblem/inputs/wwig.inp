@@ -1,24 +1,35 @@
 Toy Problem
 C RUN:
-C mcnp6 i=../../inputs/wwig.inp gcad=../../transport-model/transport-toy.h5m wcad=../../ lcad=../../inputs/lcad_mod
+C mcnp6 i=../../inputs/wwig.inp gcad=../../transport-model/transport-toy.h5m wcad=../../wwfiles/wwig.h5m lcad=../../inputs/lcad_mod
 dagmc
 wwig
 C Source definition --- volume source in helium center
 SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
-SI1 -10. 4i 10.
-SP1 0 1 4R
-SI2 -10. 10.
-SP2 0 1
-SI3 -10. 10.
-SP3 0 1
-NPS 1e4
+SI1 -10. 10i 10.
+SP1 0 1 10R
+c * added by ADVANTG
+sb1    0.00000e+00 1.99528e-02 2.51160e-02 3.16668e-02 4.00088e-02 5.05986e-02
+       6.46696e-02 8.33713e-02 1.07752e-01 1.40990e-01 1.86684e-01 2.49189e-01
+SI2 -5. 10i 5.
+SP2 0 1 10R
+c * added by ADVANTG
+sb2    0.00000e+00 8.27154e-02 9.12642e-02 9.89414e-02 1.06101e-01 1.10606e-01
+       1.25222e-01 9.78846e-02 8.75437e-02 7.63617e-02 6.62507e-02 5.71095e-02
+SI3 -5. 10i 5
+SP3 0 1 10R
+c * added by ADVANTG
+sb3    0.00000e+00 8.16080e-02 9.17411e-02 9.91863e-02 1.05175e-01 1.10580e-01
+       1.25479e-01 9.93188e-02 8.74459e-02 7.64391e-02 6.65247e-02 5.65013e-02
+NPS 1e5
 MODE N
 C WW information
 C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
-WWP:n    5. 3. 3 0 0 0
+c * added by ADVANTG
+wwp:n 5.0 j 100 1 0 0 1.990133553e+03
 C point detector tally
 F15:N 10 0 0 5
 C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
          IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
+
