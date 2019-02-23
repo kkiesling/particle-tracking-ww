@@ -2,10 +2,11 @@ method                        cadis
 anisn_library                 27n19g
 anisn_upscatter               false
 
-mcnp_input                    ../../toy-native-geom.inp
+mcnp_input                    ../../inputs/native-geom.inp
 mcnp_tallies                  15
 
-denovo_pn_order  3
+denovo_quad_num_polar   8
+denovo_quad_num_azi     8
 
 denovo_x_blocks               2
 denovo_y_blocks               2
@@ -15,8 +16,8 @@ denovo_first_group 11
 denovo_last_group  11
 
 mesh_x                         -15.00000   15.00000
-mesh_x_ints                                      30
+mesh_x_ints                                      60
 mesh_y                         -15.00000   15.00000
-mesh_y_ints                                      30
+mesh_y_ints                                      60
 mesh_z                         -15.00000   15.00000
-mesh_z_ints                                      30
+mesh_z_ints                                      60
