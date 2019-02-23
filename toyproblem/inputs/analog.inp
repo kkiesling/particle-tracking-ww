@@ -1,5 +1,6 @@
 Toy Problem
-C RUN: mcnp6 i=../../toy-wwinp.inp gcad=../../transport-toy.h5m lcad=../../lcad_mod
+C RUN:
+C mcnp6 i=../../inputs/analog.inp gcad=../../transport-model/transport-toy.h5m lcad=../../inputs/lcad_mod
 dagmc
 C Source definition --- volume source in helium center
 SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
@@ -15,5 +16,5 @@ C point detector tally
 F15:N 10 0 0 5
 C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
-         IINTS=30 JINTS=30 KINTS=30
+         IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
