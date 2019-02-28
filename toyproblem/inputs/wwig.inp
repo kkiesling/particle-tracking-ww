@@ -5,7 +5,7 @@ dagmc distlimit=on
 wwig
 C Source definition --- volume source in helium center
 SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
-SI1 -10. 10i 10.
+SI1 -5. 10i 5.
 SP1 0 1 10R
 c * added by ADVANTG
 sb1    0.00000e+00 1.99528e-02 2.51160e-02 3.16668e-02 4.00088e-02 5.05986e-02
@@ -20,12 +20,12 @@ SP3 0 1 10R
 c * added by ADVANTG
 sb3    0.00000e+00 8.16080e-02 9.17411e-02 9.91863e-02 1.05175e-01 1.10580e-01
        1.25479e-01 9.93188e-02 8.74459e-02 7.64391e-02 6.65247e-02 5.65013e-02
-NPS 1e5
+NPS 10
 MODE N
 C WW information
 C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
 c * added by ADVANTG
-wwp:n 5.0 j 5 1 0 0
+wwp:n 5.0 j 100 1 0 0
 C normalization factor from cadis: 1.990133553e+03
 C point detector tally
 F15:N 10 0 0 5
@@ -33,4 +33,4 @@ C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
          IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
-prdmp  j -10
+prdmp  j 2
