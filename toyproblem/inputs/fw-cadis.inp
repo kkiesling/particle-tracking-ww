@@ -1,0 +1,29 @@
+method                        fwcadis
+anisn_library                 27n19g
+anisn_upscatter               false
+
+mcnp_input                    ../../inputs/native-geom.inp
+mcnp_tallies                  4
+
+fwcadis_spatial_treatment  global
+
+denovo_quad_num_polar   8
+denovo_quad_num_azi     8
+
+denovo_x_blocks               2
+denovo_y_blocks               2
+denovo_z_blocks               1
+
+denovo_first_group 11
+denovo_last_group  11
+
+mesh_x                         -15.00000   15.00000
+mesh_x_ints                                      60
+mesh_y                         -15.00000   15.00000
+mesh_y_ints                                      60
+mesh_z                         -15.00000   15.00000
+mesh_z_ints                                      60
+
+mcnp_mxspln 5
+mcnp_ww_ratio 5
+mcnp_sb_type space
