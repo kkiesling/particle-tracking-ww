@@ -1,0 +1,12 @@
+Toy Problem
+C RUN:
+C mcnp6 i=../../inputs/analog-point.inp gcad=../../transport-model/transport-toy.h5m lcad=../../inputs/lcad_mod
+dagmc
+C Source definition --- volume source in helium center
+SDEF X=0 Y=0 Z=0 ERG=.0001 PAR=1
+NPS 1e3
+MODE N
+C mesh tally
+FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
+         IINTS=60 JINTS=60 KINTS=60
+dbcn 20J

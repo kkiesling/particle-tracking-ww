@@ -1,0 +1,18 @@
+Toy Problem
+C RUN:
+C mcnp6 i=../../inputs/wwig-point.inp gcad=../../transport-model/transport-toy.h5m wcad=../../wwfiles/wwig-point.h5m lcad=../../inputs/lcad_mod
+dagmc distlimit=on
+wwig
+C Source definition --- volume source in helium center
+SDEF X=0 Y=0 Z=0 ERG=.0001 PAR=1
+NPS 2
+MODE N
+C WW information
+C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
+wwp:n 5.0 j 100 1 0 0
+C 2.078987641e+00
+C mesh tally
+FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
+         IINTS=60 JINTS=60 KINTS=60
+dbcn 20J
+prdmp j 1
