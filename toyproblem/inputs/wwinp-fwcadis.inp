@@ -1,0 +1,34 @@
+Toy Problem
+C RUN:
+C mcnp6 i=../../inputs/wwinp-fwcadis.inp gcad=../../transport-model/transport-toy.h5m wwinp=../../wwfiles/wwinp-fw lcad=../../inputs/lcad_mod
+dagmc
+C Source definition --- volume source in helium center
+SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
+SI1 -5. 10i 5.
+SP1 0 1 10R
+c * added by ADVANTG
+sb1    0.00000e+00 9.76950e-02 9.35635e-02 9.04550e-02 8.82570e-02 8.68959e-02
+       8.64460e-02 8.68843e-02 8.82166e-02 9.04390e-02 9.35276e-02 9.76199e-02
+SI2 -5. 10i 5.
+SP2 0 1 10R
+c * added by ADVANTG
+sb2    0.00000e+00 9.76579e-02 9.35322e-02 9.04317e-02 8.82458e-02 8.68780e-02
+       8.64134e-02 8.69019e-02 8.82593e-02 9.04436e-02 9.35415e-02 9.76946e-02
+SI3 -5. 10i 5
+SP3 0 1 10R
+c * added by ADVANTG
+sb3    0.00000e+00 9.77014e-02 9.36066e-02 9.04973e-02 8.82682e-02 8.69117e-02
+       8.64486e-02 8.68668e-02 8.81895e-02 9.04163e-02 9.34898e-02 9.76036e-02
+NPS 1e5
+MODE N
+C WW information
+C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
+c * added by ADVANTG
+wwp:n 5.0 j 5 j -1 0 3.251757966e+05
+C point detector tally
+C F15:N 10 0 0 5
+C mesh tally
+FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
+         IINTS=60 JINTS=60 KINTS=60
+dbcn 20J
+prdmp  j 1000
