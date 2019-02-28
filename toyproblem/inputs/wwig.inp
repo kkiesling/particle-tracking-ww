@@ -1,7 +1,7 @@
 Toy Problem
 C RUN:
 C mcnp6 i=../../inputs/wwig.inp gcad=../../transport-model/transport-toy.h5m wcad=../../wwfiles/wwig.h5m lcad=../../inputs/lcad_mod
-dagmc
+dagmc distlimit=on
 wwig
 C Source definition --- volume source in helium center
 SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
@@ -25,11 +25,12 @@ MODE N
 C WW information
 C  w_u multiplier | w_s mult | max splits | surf/coll | wwinp file | ...
 c * added by ADVANTG
-wwp:n 5.0 j 100 1 0 0 1.990133553e+03
+wwp:n 5.0 j 5 1 0 0
+C normalization factor from cadis: 1.990133553e+03
 C point detector tally
 F15:N 10 0 0 5
 C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
          IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
-
+prdmp  j -10
