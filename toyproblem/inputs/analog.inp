@@ -3,7 +3,7 @@ C RUN:
 C mcnp6 i=../../inputs/analog.inp gcad=../../transport-model/transport-toy.h5m lcad=../../inputs/lcad_mod
 dagmc
 C Source definition --- volume source in helium center
-SDEF X=d1 Y=d2 Z=d3 ERG=.0001 PAR=1
+SDEF X=d1 Y=d2 Z=d3 ERG=.4 PAR=1
 SI1 -5. 10i 5
 SP1 0 1 10R
 SI2 -5. 10i 5.
@@ -13,8 +13,6 @@ SP3 0 1 10R
 NPS 1e5
 MODE N
 C point detector tally
-F15:N 10 0 0 5
-C mesh tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
          IINTS=60 JINTS=60 KINTS=60
 dbcn 20J

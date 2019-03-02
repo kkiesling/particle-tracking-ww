@@ -14,8 +14,8 @@ denovo_x_blocks               2
 denovo_y_blocks               2
 denovo_z_blocks               1
 
-denovo_first_group 11
-denovo_last_group  11
+denovo_first_group 6
+denovo_last_group  6
 
 mesh_x                         -15.00000   15.00000
 mesh_x_ints                                      60
@@ -26,4 +26,3 @@ mesh_z_ints                                      60
 
 mcnp_mxspln 5
 mcnp_ww_ratio 5
-mcnp_sb_type space
