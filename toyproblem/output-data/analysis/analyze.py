@@ -1,8 +1,8 @@
 from pyne import mesh
 import sys
 import numpy as np
-import pdb
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 # Read in mesh files
 ref_file = sys.argv[1]
@@ -44,64 +44,5 @@ z_mesh.tag('zval', size=1, tagtype='nat_mesh', dtype=np.float)
 z_mesh.zval[:] = z_values[:]
 
 save_name = ref_name + '-' + comp_name
-z_mesh.write_hdf5(save_name + '.h5m', write_mats=False)
-
-# remove -1 values from data (nonsensical)
-z_vals = np.array([])
-for i in z_values:
-    if i != -1.0:
-        z_vals = np.append(z_vals, i)
-
-
-# plot normalized histogram (PDF and CDF)
-
-# make title:
-if ref_name == 'analog':
-    first = 'Analog'
-elif ref_name == 'wwinp':
-    first = 'Cartesian WW Mesh'
-elif ref_name == 'wwig':
-    first = 'WWIG'
-
-if comp_name == 'analog':
-    second = 'Analog'
-elif comp_name == 'wwinp':
-    second = 'Cartesian WW Mesh'
-elif comp_name == 'wwig':
-    second = 'WWIG'
-
-title = first + ' vs. ' + second
-
-# PDF
-bins = np.linspace(0, 10, num=101)
-pdf, axpdf = plt.subplots(figsize=(9, 6))
-_, bins, patches = plt.hist(np.clip(z_vals, bins[0], bins[-1]),
-    bins=bins, normed=True, color='#3782CC', histtype='bar')
-#xlabels = bins[1:-1:10].astype(str)
-#xlabels[-1] += '+'
-#axpdf.set_xticklabels(xlabels)
-plt.xlim([0, 10])
-plt.ylim([0, 1.0])
-#plt.xticks(bins[1:-1:10])
-plt.xlabel('Z value')
-plt.title(title + '\n' + 'Z-Score PDF')
-pdf.tight_layout()
-plt.savefig(save_name + '-pdf.png')
-#plt.show()
-
-# CDF
-bins = np.linspace(0, 10, num=101)
-cdf, axcdf = plt.subplots(figsize=(9, 6))
-_, bins, patches = plt.hist(np.clip(z_vals, bins[0], bins[-1]),
-    bins=bins, cumulative=True, normed=True, color='#3782CC', histtype='bar')
-#xlabels = bins[1:-1:10].astype(str)
-#xlabels[-1] += '+'
-#axcdf.set_xticklabels(xlabels)
-plt.xlim([0, 10])
-plt.ylim([0, 1.0])
-#plt.xticks(bins[1:-1:10])
-plt.xlabel('Z value')
-plt.title(title + '\n' + 'Z-Score CDF')
-cdf.tight_layout()
-plt.savefig(save_name + '-cdf.png')
-#plt.show()
+z_mesh.write_hdf5(save_name + '-zval.h5m', write_mats=False)
+delta_mesh.write_hdf5(save_name + '-delta.h5m', write_mats=False)
