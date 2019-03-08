@@ -10,9 +10,11 @@ SI2 -5. 10i 5.
 SP2 0 1 10R
 SI3 -5. 10i 5
 SP3 0 1 10R
-NPS 4e4
+NPS 8e4
 MODE N
 C point detector tally
 FMESH4:N  ORIGIN=-15 -15 -15 IMESH=15 JMESH=15 KMESH=15
          IINTS=60 JINTS=60 KINTS=60
 dbcn 20J
+prdmp j 1000
+rand hist=60000
