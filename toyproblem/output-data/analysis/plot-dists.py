@@ -53,6 +53,16 @@ def get_name(zfile):
     return save_name, title
 
 
+def count_z(data):
+    """get % for z <= 2"""
+
+    nz = float(len(data))
+    z2 = data[data <= 2.0]
+    n2 = float(len(z2))
+    percent = n2/nz*100.
+    return percent
+
+
 if __name__ == '__main__':
 
     legends = []
@@ -92,3 +102,7 @@ if __name__ == '__main__':
     plt.savefig('CDF.png')
     plt.clf()
 
+    # count z value
+    for zvals in zdata:
+        p = count_z(zvals)
+        print(p)
