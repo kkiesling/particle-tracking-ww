@@ -2,7 +2,7 @@ from pyne import mesh
 import sys
 import numpy as np
 from matplotlib import pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 
 # Read in mesh files
 ref_file = sys.argv[1]
@@ -45,5 +45,5 @@ z_mesh.tag('zval', size=1, tagtype='nat_mesh', dtype=np.float)
 z_mesh.zval[:] = z_values[:]
 
 save_name = ref_name + '-' + comp_name
-z_mesh.write_hdf5(save_name + '-zval.h5m', write_mats=False)
-epsilon_mesh.write_hdf5(save_name + '-delta.h5m', write_mats=False)
+z_mesh.write_hdf5(save_name + '-zscore.h5m', write_mats=False)
+epsilon_mesh.write_hdf5(save_name + '-epsilon.h5m', write_mats=False)
