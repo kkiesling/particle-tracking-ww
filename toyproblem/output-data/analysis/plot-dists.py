@@ -81,9 +81,9 @@ if __name__ == '__main__':
         plot_dens_pdf(bins, zvals, legends[i], colors[i])
 
     plt.xlim([0, bins[-1]])
-    plt.xlabel('z-value')
+    plt.xlabel('z-score')
     plt.ylabel('PDF')
-    plt.title('Z-Value Probability Distribution Function')
+    plt.title('Z-Score Probability Distribution Function')
     plt.legend(loc='best')
     plt.tight_layout()
     plt.savefig('PDF.png')
@@ -94,9 +94,9 @@ if __name__ == '__main__':
         plot_dens_cdf(bins, zvals, legends[i], colors[i])
 
     plt.xlim([0, bins[-1]])
-    plt.xlabel('z-value')
+    plt.xlabel('z-score')
     plt.ylabel('CDF')
-    plt.title('Z-Value Cumulative Distribution Function')
+    plt.title('Z-Score Cumulative Distribution Function')
     plt.legend(loc='lower right')
     plt.tight_layout()
     plt.savefig('CDF.png')
