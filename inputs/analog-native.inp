@@ -6,17 +6,17 @@ C cell # | mat # | density | surf combos
 
 C Surface Cards
 C 1: left void region containing source
-1 RPP -50 50   -25 25   -25 25
+1 RPP -100 100   -50 50   -50 50
 
 C Data Cards
 IMP:n 1 0
 MODE n
-NPS 1e5
+NPS 1e6
 C Material: lead
 m1 82000 0.032988
-C source: point source (isotropic neutron at (-40, 15, -15) with E=14MeV
-SDEF par=1  x=-40 y=15 z=15 erg=14
+C source: point source (isotropic neutron point source E=14MeV)
+SDEF par=1  x=-90 y=40 z=-40 erg=14
 C detector tally
-F15:N   40 -15 15  2
+F15:N   90 -40 40  2
 print 110
 dbcn 20J
