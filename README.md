@@ -1,3 +1,9 @@
-# Test geometries for MCNP6.2 development
+# Particle Tracking WW Geoms
 
-To run: `mcnp6 i=input.inp gcad=transport-geom.h5m wcad=wwig.h5m`
+The geometries and problem designed in this branch are meant to be simple
+geometries that do actually require a variance reduction.
+
+Purpose:
+
+* Simple geom development and running
+* generation of WWIGs for each energy group
