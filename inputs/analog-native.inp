@@ -1,22 +1,105 @@
 Simple Shielding Geometry
 C Cell Cards
 C cell # | mat # | density | surf combos
-01          1      -11.35      -1
-100         0                  +1
+C Paraffin source region
+01           1      -0.9      -1
+C Shield
+02           2      -2.23     -2
+03           3      -8.0      -3
+04           4      -0.9      -4
+C everything else
+100          0                +1  +2  +3  +4  -5
+C graveyard
+101          0                +5
 
 C Surface Cards
-C 1: left void region containing source
-1 RPP -100 100   -50 50   -50 50
+C 1: Paraffin block (contains source) 50x50x50 cm centered at origin
+1 RPP -25 25   -25 25   -25 25
+C Shield: graphite, steel, polyethylene
+C 80x80 cm face, varying thickness, starts 100 cm from paraffin
+C 1st layer: graphite, 5 cm
+2 RPP  125 130    -40 40   -40 40
+C 2nd layer: SS-316, 5 cm
+3 RPP  130 135    -40 40   -40 40
+C 3rd layer: polyethylene, 10 cm
+4 RPP  135 145    -40 40   -40 40
+C Bounding box
+5 RPP  -26 150   -41 41    -41 41
 
 C Data Cards
-IMP:n 1 0
-MODE n
-NPS 1e6
-C Material: lead
-m1 82000 0.032988
-C source: point source (isotropic neutron point source E=14MeV)
-SDEF par=1  x=-90 y=40 z=-40 erg=14
+IMP:n 1 1 1 1 1 0
+MODE p
+NPS 1e5
+C *******************
+C **** MATERIALS ****
+C *******************
+C name: Wax, Paraffin (source region)
+C density = 0.9
+m1   1001 -1.4857e-01
+     1002 -3.4149e-05
+     6012 -8.4153e-01
+     6013 -9.8628e-03
+C name: Graphite (C)
+C density  2.23
+m2   6012 -9.8930e-01
+     6013 -1.0700e-02
+C name: Steel, Stainless 316
+C density = 8.0
+m3   6012 -4.0525e-04
+     6013 -4.7496e-06
+     14028 -4.6576e-03
+     14029 -2.4506e-04
+     14030 -1.6730e-04
+     15031 -2.3000e-04
+     16032 -1.4207e-04
+     16033 -1.1568e-06
+     16034 -6.7534e-06
+     16036 -1.6826e-08
+     24050 -7.0953e-03
+     24052 -1.4229e-01
+     24053 -1.6445e-02
+     24054 -4.1707e-03
+     25055 -1.0140e-02
+     26054 -3.7769e-02
+     26056 -6.1482e-01
+     26057 -1.4453e-02
+     26058 -1.9571e-03
+     28058 -8.0637e-02
+     28060 -3.2131e-02
+     28061 -1.4200e-03
+     28062 -4.6019e-03
+     28064 -1.2096e-03
+     42092 -3.4791e-03
+     42094 -2.2385e-03
+     42095 -3.9165e-03
+     42096 -4.1651e-03
+     42097 -2.4237e-03
+     42098 -6.2211e-03
+     42100 -2.5560e-03
+C name: Polyethylene, Non-borated
+C density = 0.9
+m4   1001 -1.4368e-01
+     1002 -3.3025e-05
+     6012 -8.4636e-01
+     6013 -9.9194e-03
+C ****************
+C **** SOURCE ****
+C ****************
+C source: Co-60, 1.3 MeV photon, collimated 15 degrees
+C around +x direction
+SDEF par=2  x=0 y=0 z=0 erg=1.3  vec= 1 0 0  dir=D1
+SI1 0. 10i 0.760
+SP1 0 1 10R
+C *****************
+C **** Tallies ****
+C *****************
+C Standard energy bin for all tallies
+E0  0.01   0.05   0.1  0.5   1.0   1.3
 C detector tally
-F15:N   90 -40 40  2
+F15:p  147 0 0 0
+C meshtally
+FMESH14:p origin= -26 -41 -41    imesh=150  iints=176
+          jmesh=41  jints=82    kmesh=41  kints=82
+          emesh=0.01   0.05   0.1  0.5   1.0   1.3
+          eints=1 1 1 1 1
 print 110
-dbcn 20J
