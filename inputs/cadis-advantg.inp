@@ -5,16 +5,19 @@ anisn_upscatter               false
 mcnp_input                    ../../inputs/analog-native.inp
 mcnp_tallies                  15
 
-denovo_x_blocks               2
-denovo_y_blocks               2
+denovo_quad_num_polar   8
+denovo_quad_num_azi     8
+
+denovo_x_blocks               4
+denovo_y_blocks               1
 denovo_z_blocks               1
 
 denovo_first_group 37
 denovo_last_group  45
 
-mesh_x                         -26.0   154.0
-mesh_x_ints                                     180
-mesh_y                         -41.0    41.0
-mesh_y_ints                                      82
-mesh_z                         -41.0    41.0
-mesh_z_ints                                      82
+mesh_x                         -25.0   155.0
+mesh_x_ints                                     90
+mesh_y                         -40.0    40.0
+mesh_y_ints                                     40
+mesh_z                         -40.0    40.0
+mesh_z_ints                                     40

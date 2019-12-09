@@ -17,7 +17,7 @@ C Shield: stainless steel 316
 C 80x80 cm face, 25cm thick, starts 100 cm from paraffin box
 2 RPP  125 150    -40 40   -40 40
 C Bounding box
-3 RPP  -26 154   -41 41    -41 41
+3 RPP  -25 155   -40 40    -40 40
 
 C Data Cards
 IMP:n 1 1 1 0
@@ -81,8 +81,8 @@ E0  .01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
 C detector tally
 F15:p  152 0 0 0
 C meshtally
-FMESH14:p origin= -26 -41 -41    imesh=154  iints=180
-          jmesh=41  jints=82    kmesh=41  kints=82
+FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
+          jmesh=40  jints=40    kmesh=40  kints=40
           emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
           eints=1 1 1 1 1 1 1 1 1
 print 110
