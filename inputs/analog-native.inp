@@ -5,26 +5,19 @@ C Paraffin source region
 01           1      -0.9      -1
 C Shield
 02           3      -8.0     -2
-03           3      -8.0      -3
-04           3      -8.0      -4
 C everything else
-100          0                +1  +2  +3  +4  -5
+100          0                +1  +2  -3
 C graveyard
-101          0                +5
+101          0                +3
 
 C Surface Cards
 C 1: Paraffin block (contains source) 50x50x50 cm centered at origin
 1 RPP -25 25   -25 25   -25 25
-C Shield: graphite, steel, polyethylene
-C 80x80 cm face, varying thickness, starts 100 cm from paraffin
-C 1st layer: graphite, 5 cm
-2 RPP  125 130    -40 40   -40 40
-C 2nd layer: SS-316, 5 cm
-3 RPP  130 135    -40 40   -40 40
-C 3rd layer: polyethylene, 10 cm
-4 RPP  135 145    -40 40   -40 40
+C Shield: stainless steel 316
+C 80x80 cm face, 25cm thick, starts 100 cm from paraffin box
+2 RPP  125 150    -40 40   -40 40
 C Bounding box
-5 RPP  -26 150   -41 41    -41 41
+3 RPP  -26 154   -41 41    -41 41
 
 C Data Cards
 IMP:n 1 1 1 1 1 0
@@ -39,10 +32,6 @@ m1   1001 -1.4857e-01
      1002 -3.4149e-05
      6012 -8.4153e-01
      6013 -9.8628e-03
-C name: Graphite (C)
-C density  2.23
-m2   6012 -9.8930e-01
-     6013 -1.0700e-02
 C name: Steel, Stainless 316
 C density = 8.0
 m3   6012 -4.0525e-04
@@ -76,19 +65,13 @@ m3   6012 -4.0525e-04
      42097 -2.4237e-03
      42098 -6.2211e-03
      42100 -2.5560e-03
-C name: Polyethylene, Non-borated
-C density = 0.9
-m4   1001 -1.4368e-01
-     1002 -3.3025e-05
-     6012 -8.4636e-01
-     6013 -9.9194e-03
 C ****************
 C **** SOURCE ****
 C ****************
-C source: Co-60, 1.3 MeV photon, collimated 5 degrees
+C source: Co-60, 1.3 MeV photon, collimated 15 degrees
 C around +x direction
 SDEF par=2  x=0 y=0 z=0 erg=1.3  vec= 1 0 0  dir=D1
-SI1 0.99619 10i 1.
+SI1 0.9659 10i 1.
 SP1 0 1 10R
 C *****************
 C **** Tallies ****
@@ -96,9 +79,9 @@ C *****************
 C Standard energy bin for all tallies
 E0  0.05   0.1  0.5   1.0   1.3
 C detector tally
-F15:p  147 0 0 0
+F15:p  152 0 0 0
 C meshtally
-FMESH14:p origin= -26 -41 -41    imesh=150  iints=176
+FMESH14:p origin= -26 -41 -41    imesh=154  iints=180
           jmesh=41  jints=82    kmesh=41  kints=82
           emesh=0.05   0.1  0.5   1.0   1.3
           eints=1 1 1 1
