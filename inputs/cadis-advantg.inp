@@ -1,0 +1,20 @@
+method                        cadis
+anisn_library                 27n19g
+anisn_upscatter               false
+
+mcnp_input                    ../../inputs/analog-native.inp
+mcnp_tallies                  15
+
+denovo_x_blocks               2
+denovo_y_blocks               2
+denovo_z_blocks               1
+
+denovo_first_group 37
+denovo_last_group  45
+
+mesh_x                         -26.0   154.0
+mesh_x_ints                                     180
+mesh_y                         -41.0    41.0
+mesh_y_ints                                      82
+mesh_z                         -41.0    41.0
+mesh_z_ints                                      82
