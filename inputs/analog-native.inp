@@ -20,7 +20,7 @@ C Bounding box
 3 RPP  -25 155   -40 40    -40 40
 
 C Data Cards
-IMP:n 1 1 1 0
+IMP:p 1 1 1 0
 MODE p
 NPS 1e6
 C *******************
