@@ -29,7 +29,7 @@ C Bounding box
 C Data Cards
 IMP:n 1 1 1 1 1 0
 MODE p
-NPS 1e5
+NPS 1e6
 C *******************
 C **** MATERIALS ****
 C *******************
@@ -85,7 +85,7 @@ m4   1001 -1.4368e-01
 C ****************
 C **** SOURCE ****
 C ****************
-C source: Co-60, 1.3 MeV photon, collimated 15 degrees
+C source: Co-60, 1.3 MeV photon, collimated 5 degrees
 C around +x direction
 SDEF par=2  x=0 y=0 z=0 erg=1.3  vec= 1 0 0  dir=D1
 SI1 0.99619 10i 1.
