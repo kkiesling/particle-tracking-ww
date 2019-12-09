@@ -20,7 +20,7 @@ C Bounding box
 3 RPP  -26 154   -41 41    -41 41
 
 C Data Cards
-IMP:n 1 1 1 1 1 0
+IMP:n 1 1 1 0
 MODE p
 NPS 1e6
 C *******************
@@ -77,12 +77,12 @@ C *****************
 C **** Tallies ****
 C *****************
 C Standard energy bin for all tallies
-E0  0.05   0.1  0.5   1.0   1.3
+E0  .01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
 C detector tally
 F15:p  152 0 0 0
 C meshtally
 FMESH14:p origin= -26 -41 -41    imesh=154  iints=180
           jmesh=41  jints=82    kmesh=41  kints=82
-          emesh=0.05   0.1  0.5   1.0   1.3
-          eints=1 1 1 1
+          emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
+          eints=1 1 1 1 1 1 1 1 1
 print 110
