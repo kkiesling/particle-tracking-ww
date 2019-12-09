@@ -22,7 +22,7 @@ C Bounding box
 C Data Cards
 IMP:p 1 1 1 0
 MODE p
-NPS 1e6
+NPS 1e5
 C *******************
 C **** MATERIALS ****
 C *******************
@@ -89,4 +89,4 @@ print 110
 C *********************
 C **** WWINP edits ****
 C *********************
-wwp:p 5.0 j 100 j -1 0 1.109792819e-09
+wwp:p 5.0 j 5 j -1 0 1.109792819e-09
