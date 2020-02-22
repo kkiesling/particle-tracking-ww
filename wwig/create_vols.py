@@ -8,7 +8,7 @@ def assign_info():
     for i in range(0,9):
         info[i] = {}
 
-    info[0] = {'wmin': 11.06, 'wmax':1.0e30, 'data':'ww_p_000', 'ratio': 1000, 'el': 0.01, 'eu': 0.045}
+    info[0] = {'wmin': 11.06, 'wmax':1.0e30, 'data':'ww_p_000', 'ratio': 1000, 'el': 0.0, 'eu': 0.045}
     info[1] = {'wmin': 10.77, 'wmax':2.1e36, 'data':'ww_p_001', 'ratio': 50000, 'el': 0.045, 'eu': 0.1 }
     info[2] = {'wmin': 10.29, 'wmax':3.1e21, 'data':'ww_p_002', 'ratio': 1000 , 'el': 0.1, 'eu': 0.2}
     info[3] = {'wmin': 10.11, 'wmax':3.4e15, 'data':'ww_p_003', 'ratio': 1000 , 'el': 0.2, 'eu': 0.3}
