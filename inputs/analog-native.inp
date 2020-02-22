@@ -77,12 +77,12 @@ C *****************
 C **** Tallies ****
 C *****************
 C Standard energy bin for all tallies
-E0  0  .045  .1  .2  .3  .4  .6  .8  1.  1.33
+E0  .01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
 C detector tally
 F15:p  152 0 0 0
 C meshtally
 FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
           jmesh=40  jints=40    kmesh=40  kints=40
-          emesh=0  .045  .1  .2  .3  .4  .6  .8  1.  1.33
+          emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
           eints=1 1 1 1 1 1 1 1 1
 print 110
