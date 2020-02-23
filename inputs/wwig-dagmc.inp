@@ -27,6 +27,9 @@ FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
           emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
           eints=1 1 1 1 1 1 1 1 1
 print 110
+prdmp  j 1
+rand hist=10
+C problem particles: 2
 C *********************
 C **** WWINP edits ****
 C *********************
