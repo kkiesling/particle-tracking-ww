@@ -38,7 +38,7 @@ def main():
     # location to save
     database = '/home/kkiesling/Pokeball/Documents/CNERG/ww-files/particle-tracking-ww/wwig/'
 
-    for i in range(0, len(info)):
+    for i in range(0, 1):
 
         print("*************************************   Group {}".format(i))
 
@@ -50,7 +50,7 @@ def main():
         g = v.IsoVolume()
 
         if i == 0:
-            g.generate_levels(4, wmin, info[i]['wmax'], log=True)
+            g.assign_levels([1.918e8, 1.385e19, 1.0e30])
         else:
             g.generate_levels(ratio, wmin, info[i]['wmax'], ratio=True)
 
