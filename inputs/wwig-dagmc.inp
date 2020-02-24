@@ -3,7 +3,7 @@ C TO RUN:
 C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/transport.h5m wcad=../../inputs/wwig-geoms/
 C Data Cards
 dagmc
-wwig
+wwig wxmin -25 wxmax 155 wymin -40 wymax 40 wzmin -40 wzmax 40
 MODE p
 NPS 15
 C ****************
@@ -28,7 +28,7 @@ FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
           eints=1 1 1 1 1 1 1 1 1
 print 110
 prdmp  j 1
-rand hist=10
+rand hist=6
 C problem particles: 2
 C *********************
 C **** WWINP edits ****
