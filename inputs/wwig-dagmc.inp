@@ -1,6 +1,6 @@
-Simple Shielding Geometry w/ WWIG variance reduction & DAGMC geom
+Shielding Geometry w/ WWIG variance reduction & DAGMC geom PHOTONS
 C TO RUN:
-C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/transport.h5m wcad=../../inputs/wwig-geoms/
+C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/watertight_dagmc.h5m wcad=../../inputs/wwig-geoms/
 C Data Cards
 dagmc
 wwig wxmin -25 wxmax 155 wymin -40 wymax 40 wzmin -40 wzmax 40
@@ -33,4 +33,4 @@ C problem particles: 2
 C *********************
 C **** WWINP edits ****
 C *********************
-wwp:p 5.0 j 5 1 0 0
+wwp:p 5.0 j 5 1 0 0 1
