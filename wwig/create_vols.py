@@ -38,7 +38,7 @@ def main():
     # location to save
     database = '/home/kkiesling/Pokeball/Documents/CNERG/ww-files/particle-tracking-ww/wwig/'
 
-    for i in range(0, 1):
+    for i in range(0, len(info)):
 
         print("*************************************   Group {}".format(i))
 
@@ -56,9 +56,9 @@ def main():
 
         g.generate_volumes(f, info[i]['data'], dbname=db)
         #print(g.levels)
-        g.create_geometry(info[i]['el'], info[i]['eu'], tag_groups=True, tag_for_viz=True, norm=multiplier, merge_tol=0.0049)
-        g.write_geometry(sname='{}.h5m'.format(info[i]['data']))
-        g.write_geometry(sname='{}.vtk'.format(info[i]['data']))
+        g.create_geometry(info[i]['el'], info[i]['eu'], tag_groups=True, tag_for_viz=False, norm=multiplier, merge_tol=0.0049)
+        g.write_geometry(sname='{}-noviz.h5m'.format(info[i]['data']))
+        g.write_geometry(sname='{}-noviz.vtk'.format(info[i]['data']))
 
 
 if __name__ == '__main__':
