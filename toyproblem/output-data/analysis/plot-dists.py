@@ -57,7 +57,9 @@ def count_z(data):
     """get % for z <= 2"""
 
     nz = float(len(data))
-    z2 = data[data <= 2.0]
+
+    # CHANGE THIS VALUE FOR DIFFERENT SIGMA COUNT
+    z2 = data[data <= 3.0]
     n2 = float(len(z2))
     percent = n2/nz*100.
     return percent
