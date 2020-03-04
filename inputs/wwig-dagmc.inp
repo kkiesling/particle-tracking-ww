@@ -3,9 +3,9 @@ C TO RUN:
 C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/watertight_dagmc.h5m wcad=../../inputs/wwig-geoms/
 C Data Cards
 dagmc
-wwig wxmin -25 wxmax 155 wymin -40 wymax 40 wzmin -40 wzmax 40
+wwig
 MODE p
-NPS 15
+NPS 1e6
 C ****************
 C **** SOURCE ****
 C ****************
@@ -27,8 +27,8 @@ FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
           emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
           eints=1 1 1 1 1 1 1 1 1
 print 110
-prdmp  j 1
-rand hist=6
+prdmp  j 10000
+C rand hist=6
 C problem particles: 2
 C *********************
 C **** WWINP edits ****
