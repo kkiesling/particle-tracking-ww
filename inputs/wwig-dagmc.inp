@@ -1,11 +1,11 @@
 Shielding Geometry w/ WWIG variance reduction & DAGMC geom PHOTONS
 C TO RUN:
-C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/watertight_dagmc.h5m wcad=../../inputs/wwig-geoms/
+C mcnp6 i=../../inputs/wwig-dagmc.inp gcad=../../inputs/transport-geom/watertight_dagmc.h5m wcad=../../inputs/wwig-geoms/ lcad=../../inputs/lcad-p
 C Data Cards
 dagmc
 wwig
 MODE p
-NPS 1e6
+NPS 30
 C ****************
 C **** SOURCE ****
 C ****************
@@ -27,8 +27,8 @@ FMESH14:p origin= -25 -40 -40    imesh=155  iints=90
           emesh=.01  .045  .1  .2  .3  .4  .6  .8  1.  1.33
           eints=1 1 1 1 1 1 1 1 1
 print 110
-prdmp  j 10000
-C rand hist=6
+prdmp  j 3
+rand hist=11
 C problem particles: 2
 C *********************
 C **** WWINP edits ****
