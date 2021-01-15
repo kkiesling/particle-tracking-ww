@@ -1,0 +1,23 @@
+two group test problem, beam of 2 MeV neutrons in +x dir in water
+C Cell Cards
+C cell # | mat # | density | surf combos
+C water
+1           1      -1.0      -1
+C graveyard
+101          0                +1
+
+C surfaces
+C block of water
+1 RPP 0 10   -2.5 2.5   -2.5 2.5
+
+C Data Cards
+IMP:n 1 0
+C water
+m1   1000 2   8000 1
+MODE n
+NPS 2
+SDEF par=1  x=0.5 y=0 z=0 erg=2.0  vec= 1 0 0
+C WWIG edits
+C C_u, C_s, maxsplits, where (-1 coll, 0 surf & coll, 1 surfs),
+C switchn=0 for wwig
+wwp:n 5.0 j 5 1 0 0 1
