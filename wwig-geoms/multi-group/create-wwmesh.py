@@ -9,10 +9,6 @@ num_mesh = (len(cx) - 1) * (len(cy) - 1) * (len(cz) - 1)
 
 # ww values for each mesh voxel region
 ww_vals = [0.1, 0.02, 0.004, 0.0008, 0.00016]
-#w_vals_4 = [0.1, 0.02, 0.004, 0.0008] # highest group has one less mesh spacing
-
-# ww surface values:
-# ww_surfs = [0.06, 0.012, 0.0024, 0.00048]
 
 # x coordinates where each surface will be located, key is energy group id
 w_loc = {0: [0, 1, 6, 11, 16, 20],  # E0
