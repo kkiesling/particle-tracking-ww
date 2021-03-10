@@ -1,5 +1,5 @@
 two group test problem, beam of 2 MeV neutrons in +x dir in water
-C to run: mcnp6 i=../../inputs/native-wwig.inp wcad=../../wwig-geoms/geoms/
+C to run: mcnp6 i=../../inputs/native-wwig.inp wcad=../../wwig-geoms/two-group/geoms/
 C Cell Cards
 C cell # | mat # | density | surf combos
 C water
