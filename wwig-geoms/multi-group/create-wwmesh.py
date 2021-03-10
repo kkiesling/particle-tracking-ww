@@ -38,3 +38,7 @@ m.ww_n[:] = ww_data
 
 # save mesh
 m.write_hdf5('ww-mesh.h5m', write_mats=False)
+
+# To create wwig geoms:
+# generate_isogeom full ww-mesh-expanded.vtk ww_n_004 -lv 0.06 0.012 0.0024 0.00048 -db e4 -t E_LOW_BOUND 9e-1 -t E_UP_BOUND 1.5 -g wwn_4.h5m -v
+# e_bounds = [1.e-11, 1.5e-2, 1.5e-1, 4.e-1, 9.e-1, 1.5]
