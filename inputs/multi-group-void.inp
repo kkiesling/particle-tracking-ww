@@ -15,7 +15,7 @@ C Data Cards
 IMP:n 1 0
 C void
 m1 1001 -0.11190 8016 -0.88810
-C VOID 1
+VOID 1
 MODE n
 NPS 2
 SDEF par=1  x=0.5 y=0 z=0 erg=D1  vec=1 0 0 dir=1
