@@ -130,6 +130,8 @@ def analyze_data(wdf):
 
     total = wdf.shape[0]
 
+    print("Total wwval checks recorded: {}".format(total))
+
     # check locations of look-ups:
     check_position((wdf))
     n_pos_correct = len(wdf[wdf['location check'] == True])
@@ -161,5 +163,3 @@ if __name__ == "__main__":
 
     # analyze data
     analyze_data(wdf)
-
-    #print(wdf)
