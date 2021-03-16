@@ -1,6 +1,7 @@
 import pandas as pd
 import sys
 import math as m
+import numpy as np
 
 
 def parse_line(line):
@@ -75,7 +76,6 @@ def check_position(wdf):
         x = row['xyz'][0]
         y = row['xyz'][1]
         z = row['xyz'][2]
-        energy = row['Energy']
         e_bounds = (row['E_low'], row['E_hi'])
         x_surfs = ex_surfs[e_bounds]
 
@@ -94,13 +94,13 @@ def check_weight(wdf):
         w_p = row['w_p']
         ww_l = row['ww_l']
         ww_u = row['ww_u']
-        ww_s = 3.*ww_l
+        ww_s = 3. * ww_l
 
         # check w_p for each of the three options
         if w_i < ww_l:
             # particle weight is below w_l so terminate (nan) or survive with
             # survival weight ww_s
-            if (w_p == ww_s) or (m.isnan(w_p)):
+            if (np.isclose(w_p, ww_s, rtol=1e-5)) or (m.isnan(w_p)):
                 row['weight check'] = True
             else:
                 row['weight check'] = False
@@ -116,11 +116,11 @@ def check_weight(wdf):
                 # edge of boundary
                 n_split = 1
             else:
-                n_split = m.ceil(w_i/ww_u)
+                n_split = m.ceil(w_i / ww_u)
                 if (n_split > 5):
                     # max splits specified by mcnp
                     n_split = 5
-            if (w_p == w_i/n_split):
+            if (np.isclose(w_p, w_i / n_split, rtol=1e-5)):
                 row['weight check'] = True
             else:
                 row['weight check'] = False
@@ -142,7 +142,12 @@ def analyze_data(wdf):
     check_weight(wdf)
     n_w_correct = len(wdf[wdf['weight check'] == True])
     w_percent = float(n_w_correct) / float(total) * 100.
-    print("{} % of weight checks are correct".format(w_percent))
+    print("{} % of weight checks yield corrent new weights".format(w_percent))
+
+    if w_percent < 100:
+        print(wdf[wdf['weight check'] == False])
+        print("{} events are incorrect weight application.".format(
+            len(wdf[wdf['weight check'] == False])))
 
 
 if __name__ == "__main__":
