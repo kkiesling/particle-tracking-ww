@@ -38,24 +38,36 @@ def parse_line(line):
     return key, val
 
 
-def read_file(fname, wdf):
+def read_file(fname):
     """read file line by line and populate dataframe"""
 
-    i = -1  # initial index
+    data = []
+    d_tmp = {}
+    # i = -1  # initial index
     with open(fname, 'r') as f:
         for line in f:
             if "****" in line:
+                if bool(d_tmp):
+                    # append previously filled dictionary, but not
+                    # the first initial empty dictionary
+                    data.append(d_tmp)
                 # new event, so index i and go to next line
-                i += 1
+                # i += 1
+                d_tmp = {}
             else:
                 # populate current event with information
                 key, val = parse_line(line)
-                wdf.loc[i, key] = val
+                d_tmp[key] = val
+                # wdf.loc[i, key] = val
+
+    # append last particle's information too
+    data.append(d_tmp)
+
+    return data
 
 
-def check_position(wdf):
+def check_position(row):
     """for a given position and energy, check that it is on a wwig surface"""
-
     # WWIG geometry info:
 
     # geom extents for y and z:
@@ -71,83 +83,77 @@ def check_position(wdf):
                 (4.0e-1, 9.0e-1): [0, 4, 9, 14, 19, 20],
                 (9.0e-1, 1.5e0): [0, 5, 10, 15, 20]}
 
-    for i, row in wdf.iterrows():
-        # get position and energy information
-        x = row['xyz'][0]
-        y = row['xyz'][1]
-        z = row['xyz'][2]
-        e_bounds = (row['E_low'], row['E_hi'])
-        x_surfs = ex_surfs[e_bounds]
+    # get position and energy information
+    x = row['xyz'][0]
+    y = row['xyz'][1]
+    z = row['xyz'][2]
+    e_bounds = (row['E_low'], row['E_hi'])
+    x_surfs = ex_surfs[e_bounds]
 
-        if (x in x_surfs) or (y in y_surfs) or (z in z_surfs):
-            row['location check'] = True
-        else:
-            row['location check'] = False
+    return (x in x_surfs) or (y in y_surfs) or (z in z_surfs)
 
 
-def check_weight(wdf):
+def check_weight(row):
     """for a given W_l and W_u on the wwig surface, check that the
     weight is properly updated"""
 
-    for i, row in wdf.iterrows():
-        w_i = row['w_i']
-        w_p = row['w_p']
-        ww_l = row['ww_l']
-        ww_u = row['ww_u']
-        ww_s = 3. * ww_l
+    w_i = row['w_i']
+    w_p = row['w_p']
+    ww_l = row['ww_l']
+    ww_u = row['ww_u']
+    ww_s = 3. * ww_l
 
-        # check w_p for each of the three options
-        if w_i < ww_l:
-            # particle weight is below w_l so terminate (nan) or survive with
-            # survival weight ww_s
-            if (np.isclose(w_p, ww_s, rtol=1e-5)) or (m.isnan(w_p)):
-                row['weight check'] = True
-            else:
-                row['weight check'] = False
-        elif ww_l < w_i < ww_u:
-            # particle weight is w/in window so no change
-            if w_p == w_i:
-                row['weight check'] = True
-            else:
-                row['weight check'] = False
-        elif w_i > ww_u:
-            # particle splits according to ww_u
-            if ww_u == 0:
-                # edge of boundary
-                n_split = 1
-            else:
-                n_split = m.ceil(w_i / ww_u)
-                if (n_split > 5):
-                    # max splits specified by mcnp
-                    n_split = 5
-            if (np.isclose(w_p, w_i / n_split, rtol=1e-5)):
-                row['weight check'] = True
-            else:
-                row['weight check'] = False
+    # check w_p for each of the three options
+    if w_i < ww_l:
+        # particle weight is below w_l so terminate (nan) or survive with
+        # survival weight ww_s
+        return (np.isclose(w_p, ww_s, rtol=1e-5)) or (m.isnan(w_p))
+
+    elif ww_l < w_i < ww_u:
+        # particle weight is w/in window so no change
+        return (w_p == w_i)
+
+    elif w_i > ww_u:
+        # particle splits according to ww_u
+        if ww_u == 0:
+            # edge of boundary
+            n_split = 1
+        else:
+            n_split = m.ceil(w_i / ww_u)
+            if (n_split > 5):
+                # max splits specified by mcnp
+                n_split = 5
+        return (np.isclose(w_p, w_i / n_split, rtol=1e-5))
 
 
 def analyze_data(wdf):
 
     total = wdf.shape[0]
 
-    print("Total wwval checks recorded: {}".format(total))
-
     # check locations of look-ups:
-    check_position((wdf))
+    wdf['location check'] = wdf.apply(lambda row: check_position(row), axis=1)
     n_pos_correct = len(wdf[wdf['location check'] == True])
     pos_percent = float(n_pos_correct) / float(total) * 100.
-    print("{} % of wwval checks occur on a surface".format(pos_percent))
 
     # check that weights are properly being applied
-    check_weight(wdf)
+    wdf['weight check'] = wdf.apply(lambda row: check_weight(row), axis=1)
     n_w_correct = len(wdf[wdf['weight check'] == True])
     w_percent = float(n_w_correct) / float(total) * 100.
-    print("{} % of weight checks yield corrent new weights".format(w_percent))
+
+    if pos_percent < 100:
+        print(wdf[wdf['location check'] == False])
+        print("{} events are occur not on a surface.".format(
+            len(wdf[wdf['location check'] == False])))
 
     if w_percent < 100:
         print(wdf[wdf['weight check'] == False])
         print("{} events are incorrect weight application.".format(
             len(wdf[wdf['weight check'] == False])))
+
+    # print info
+    print("Total wwval checks recorded: {}".format(total))
+    print("{} % of wwval checks occur on a surface".format(pos_percent))
+    print("{} % of weight checks yield corrent new weights".format(w_percent))
 
 
 if __name__ == "__main__":
@@ -155,16 +161,15 @@ if __name__ == "__main__":
     # output file to analyze
     fname = sys.argv[1]
 
-    # initialize pandas data structure
     # position (x, y, z), particle energy, ww lower and upper energy bounds,
     #   wwig surface W_l and W_u bounds, initial weight, post wwval weight
-    columns = ['xyz', 'Energy', 'E_low', 'E_hi',
-               'ww_l', 'ww_u', 'w_i', 'w_p',
-               'location check', 'weight check']
-    wdf = pd.DataFrame(columns=columns)
+    # columns = ['xyz', 'Energy', 'E_low', 'E_hi',
+    #            'ww_l', 'ww_u', 'w_i', 'w_p',
+    #            'location check', 'weight check']
 
     # read file and populate dataframe
-    read_file(fname, wdf)
+    data = read_file(fname)
+    wdf = pd.DataFrame(data)
 
-    # analyze data
+    # analyze data to check position and expected weight change
     analyze_data(wdf)
