@@ -18,6 +18,13 @@ def parse_line(line):
         y = float(str_lst[1])
         z = float(str_lst[2])
         val = (x, y, z)
+    elif "Direction" in keyname:
+        key = 'uvw'
+        str_lst = info.strip().split()
+        u = float(str_lst[0])
+        v = float(str_lst[1])
+        w = float(str_lst[2])
+        val = (u, v, w)
     else:
         val = float(info.strip())
         if "Energy (mcnp)" in keyname:
@@ -139,19 +146,32 @@ def analyze_data(wdf):
     w_percent = float(n_w_correct) / float(total) * 100.
 
     if pos_percent < 100:
-        print(wdf[wdf['location check'] == False])
         print("{} events are occur not on a surface.".format(
             len(wdf[wdf['location check'] == False])))
+        print(wdf[wdf['location check'] == False])
 
     if w_percent < 100:
-        print(wdf[wdf['weight check'] == False])
         print("{} events are incorrect weight application.".format(
             len(wdf[wdf['weight check'] == False])))
+        print(wdf[wdf['weight check'] == False])
+
 
     # print info
     print("Total wwval checks recorded: {}".format(total))
     print("{} % of wwval checks occur on a surface".format(pos_percent))
     print("{} % of weight checks yield corrent new weights".format(w_percent))
+
+    tmp = wdf[(wdf['weight check'] == True)]
+    tmp['u'] = tmp['uvw'].apply(lambda x: x[0])
+    print("Negative x-dir, correct weight, and w < w_l")
+    print(tmp[(tmp['weight check'] == True) & (tmp['u'] < 0.0)
+          & (tmp['w_i'] < tmp['ww_l'])])
+
+    print("Locations where w < w_l and correct w_p")
+    print(tmp[(tmp['weight check'] == True) & (tmp['w_i'] < tmp['ww_l'])])
+
+    print("Locations where w < w_l and wrong w_p")
+    print(tmp[(tmp['weight check'] == False) & (tmp['w_i'] < tmp['ww_l'])])
 
 
 if __name__ == "__main__":
