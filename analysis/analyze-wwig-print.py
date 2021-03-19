@@ -3,6 +3,9 @@ import sys
 import math as m
 import numpy as np
 
+rtol = 1e-3
+atol = 0
+
 
 def parse_line(line):
     """deterimine what information is on the line"""
@@ -93,9 +96,9 @@ def check_position(row):
     e_bounds = (row['E_low'], row['E_hi'])
     x_surfs = ex_surfs[e_bounds]
 
-    return any(np.isclose(x, xi, rtol=1e-5) for xi in x_surfs) or \
-        any(np.isclose(y, yi, rtol=1e-5) for yi in y_surfs) or \
-        any(np.isclose(z, zi, rtol=1e-5) for zi in z_surfs)
+    return any(np.isclose(x, xi, rtol=rtol) for xi in x_surfs) or \
+        any(np.isclose(y, yi, rtol=rtol) for yi in y_surfs) or \
+        any(np.isclose(z, zi, rtol=rtol) for zi in z_surfs)
 
 
 def check_weight(row):
@@ -112,7 +115,7 @@ def check_weight(row):
     if w_i < ww_l:
         # particle weight is below w_l so terminate (nan) or survive with
         # survival weight ww_s
-        return (np.isclose(w_p, ww_s, rtol=1e-5)) or (m.isnan(w_p))
+        return (np.isclose(w_p, ww_s, rtol=rtol, atol=atol)) or (w_p == -1)
 
     elif ww_l < w_i < ww_u:
         # particle weight is w/in window so no change
@@ -128,7 +131,7 @@ def check_weight(row):
             if (n_split > 5):
                 # max splits specified by mcnp
                 n_split = 5
-        return (np.isclose(w_p, w_i / n_split, rtol=1e-5))
+        return (np.isclose(w_p, w_i / n_split, rtol=rtol, atol=atol))
 
 
 def analyze_data(wdf):
@@ -155,23 +158,22 @@ def analyze_data(wdf):
             len(wdf[wdf['weight check'] == False])))
         print(wdf[wdf['weight check'] == False])
 
-
     # print info
     print("Total wwval checks recorded: {}".format(total))
     print("{} % of wwval checks occur on a surface".format(pos_percent))
     print("{} % of weight checks yield corrent new weights".format(w_percent))
+    print("relative tolerance used for checks: {}".format(rtol))
 
-    tmp = wdf[(wdf['weight check'] == True)]
-    tmp['u'] = tmp['uvw'].apply(lambda x: x[0])
-    print("Negative x-dir, correct weight, and w < w_l")
-    print(tmp[(tmp['weight check'] == True) & (tmp['u'] < 0.0)
-          & (tmp['w_i'] < tmp['ww_l'])])
-
-    print("Locations where w < w_l and correct w_p")
-    print(tmp[(tmp['weight check'] == True) & (tmp['w_i'] < tmp['ww_l'])])
-
-    print("Locations where w < w_l and wrong w_p")
-    print(tmp[(tmp['weight check'] == False) & (tmp['w_i'] < tmp['ww_l'])])
+    # Checks for filtering direction information
+    # tmp = wdf[(wdf['weight check'] == True)]
+    # tmp['u'] = tmp['uvw'].apply(lambda x: x[0])
+    # print("Negative x-dir, correct weight, and w < w_l")
+    # print(tmp[(tmp['weight check'] == True) & (tmp['u'] < 0.0)
+    #       & (tmp['w_i'] < tmp['ww_l'])])
+    # print("Locations where w < w_l and correct w_p")
+    # print(tmp[(tmp['weight check'] == True) & (tmp['w_i'] < tmp['ww_l'])])
+    # print("Locations where w < w_l and wrong w_p")
+    # print(tmp[(tmp['weight check'] == False) & (tmp['w_i'] < tmp['ww_l'])])
 
 
 if __name__ == "__main__":
