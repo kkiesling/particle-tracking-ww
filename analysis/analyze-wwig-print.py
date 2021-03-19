@@ -86,7 +86,9 @@ def check_position(row):
     e_bounds = (row['E_low'], row['E_hi'])
     x_surfs = ex_surfs[e_bounds]
 
-    return (x in x_surfs) or (y in y_surfs) or (z in z_surfs)
+    return any(np.isclose(x, xi, rtol=1e-5) for xi in x_surfs) or \
+        any(np.isclose(y, yi, rtol=1e-5) for yi in y_surfs) or \
+        any(np.isclose(z, zi, rtol=1e-5) for zi in z_surfs)
 
 
 def check_weight(row):
