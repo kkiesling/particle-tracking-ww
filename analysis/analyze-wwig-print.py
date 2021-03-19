@@ -43,7 +43,6 @@ def read_file(fname):
 
     data = []
     d_tmp = {}
-    # i = -1  # initial index
     with open(fname, 'r') as f:
         for line in f:
             if "****" in line:
@@ -51,14 +50,11 @@ def read_file(fname):
                     # append previously filled dictionary, but not
                     # the first initial empty dictionary
                     data.append(d_tmp)
-                # new event, so index i and go to next line
-                # i += 1
                 d_tmp = {}
             else:
                 # populate current event with information
                 key, val = parse_line(line)
                 d_tmp[key] = val
-                # wdf.loc[i, key] = val
 
     # append last particle's information too
     data.append(d_tmp)
