@@ -1,0 +1,64 @@
+Demo problem: "fusion" reactor
+C to run: mcnp6 i=../../../inputs/demo/analog.inp
+C Cell Cards
+C cell # | mat # | density | surf combos
+01  2  -0.214    -1
+02  1  -8        (-2  +1) +4 +5
+03  2  -0.214    (-3  +2):-4:-5
+100 0                +3
+
+C Surface Cards
+1  RPP   -100  100    -100  100    -100  100
+2  RPP   -150  150    -150  150    -150  150
+3  RPP   -200  200    -200  200    -200  200
+C streaming paths
+04 RPP    -5  5   100  150   -5 5
+05 RPP   100  150    -5  5   -5 5
+
+C Data Cards
+IMP:n 1 1 1 0
+C materials: stainless steel 304 and water
+m1   6012 -3.9536e-04
+     6013 -4.6337e-06
+     14028 -4.5933e-03
+     14029 -2.4168e-04
+     14030 -1.6499e-04
+     15031 -2.3000e-04
+     16032 -1.4207e-04
+     16033 -1.1568e-06
+     16034 -6.7533e-06
+     16036 -1.6825e-08
+     24050 -7.9299e-03
+     24052 -1.5903e-01
+     24053 -1.8380e-02
+     24054 -4.6613e-03
+     25055 -9.9999e-03
+     26054 -3.9616e-02
+     26056 -6.4489e-01
+     26057 -1.5160e-02
+     26058 -2.0529e-03
+     28058 -6.2157e-02
+     28060 -2.4767e-02
+     28061 -1.0946e-03
+     28062 -3.5473e-03
+     28064 -9.3243e-04
+m2    2003 -1.3400e-06
+      2004 -1.0000e+00
+C Source definition --- volume source in helium center
+SDEF X=d1 Y=d2 Z=d3 ERG=14 PAR=1
+SI1 -100. 10i 100.
+SP1 0 1 10R
+SI2 -100. 10i 100.
+SP2 0 1 10R
+SI3 -100. 10i 100.
+SP3 0 1 10R
+NPS 1e3
+MODE N
+C point detector at outside reactor
+C use energy groups corresponding to WWIG geom
+F15:N 170 170 0 5
+E15 0.001 0.01 0.25 0.5 1 2 3 5 10 20
+C mesh tally for global VR
+FMESH4:N  ORIGIN=-200 -200 -200 IMESH=200 JMESH=200 KMESH=200
+          IINTS=100 JINTS=100 KINTS=100
+          EMESH=0.001 0.01 0.25 0.5 1 2 3 5 10 20
