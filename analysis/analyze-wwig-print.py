@@ -83,7 +83,7 @@ def check_position(row):
     # x surface locations based on energy
     # key = energy bounds (E_low, E_high)
     # value = list of locations
-    ex_surfs = {(1.e-11, 1.5e-2): [0, 1, 6, 11, 16, 20],
+    ex_surfs = {(0, 1.5e-2): [0, 1, 6, 11, 16, 20],
                 (1.5e-2, 1.5e-1): [0, 2, 7, 12, 17, 20],
                 (1.5e-1, 4.0e-1): [0, 3, 8, 13, 18, 20],
                 (4.0e-1, 9.0e-1): [0, 4, 9, 14, 19, 20],
