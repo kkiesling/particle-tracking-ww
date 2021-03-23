@@ -1,0 +1,28 @@
+multi group test problem, beam of neutrons in +x dir in water
+C to run: mcnp6 i=../../../inputs/impl-verification/wwig.inp wcad=../../../wwig-geoms/multi-group/geoms/
+C Cell Cards
+C cell # | mat # | density | surf combos
+C water
+1           1      -0.2      -1
+C graveyard
+101          0                +1
+
+C surfaces
+C void box
+1 RPP 0 20   -5 5   -5 5
+
+C Data Cards
+IMP:n 1 0
+m1 1001 -0.11190 8016 -0.88810
+MODE n
+NPS 100
+SDEF par=1  x=0.5 y=0 z=0 erg=D1  vec=1 0 0
+C energy distribution in source (upper energy bound of bin)
+SI1 H    0.001   0.25   0.5   0.75   1.0   1.25   1.5
+SP1 D  0       1      1     1     1      1      1
+C WWIG edits
+C C_u, C_s, maxsplits, where (-1 coll, 0 surf & coll, 1 surfs),
+C switchn=0 for wwig
+wwp:n 5.0 j 5 0 0 0 1
+C point detector at x=19.5cm, r=0.5cm
+F15:n 19.5 0 0 0.5
