@@ -3,7 +3,7 @@ C to run: mcnp6 i= ../../../inputs/impl-verificaiton/analog.inp
 C Cell Cards
 C cell # | mat # | density | surf combos
 C water
-1           1      -0.2      -1
+1           1      -0.05      -1
 C graveyard
 101          0                +1
 
@@ -22,3 +22,4 @@ SI1 H    0.001   0.25   0.5   0.75   1.0   1.25   1.5
 SP1 D  0       1      1     1     1      1      1
 C point detector at x=19.5cm, r=0.5cm
 F15:n 19.5 0 0 0.5
+E15 1.5e-2 1.5e-1 4.e-1 9.e-1 1.5
