@@ -1,0 +1,17 @@
+method                        fwcadis
+anisn_library                 27n19g
+anisn_upscatter               false
+
+mcnp_input                    ../../../inputs/demo/analog.inp
+mcnp_tallies                  4
+
+denovo_x_blocks               2
+denovo_y_blocks               2
+denovo_z_blocks               1
+
+mesh_x                         -200.00000   200.00000
+mesh_x_ints                                      100
+mesh_y                         -200.00000   200.00000
+mesh_y_ints                                      100
+mesh_z                         -200.00000   200.00000
+mesh_z_ints                                      100
