@@ -52,13 +52,13 @@ SI2 -100. 10i 100.
 SP2 0 1 10R
 SI3 -100. 10i 100.
 SP3 0 1 10R
-NPS 1e3
+NPS 1e5
 MODE N
 C point detector at outside reactor
 C use energy groups corresponding to WWIG geom
 F15:N 170 170 0 5
-E15 0.001 0.01 0.25 1 2 3 5 10 20
+E15 0.001 0.01 0.25 1 3 5 10 20
 C mesh tally for global VR
 FMESH4:N  ORIGIN=-200 -200 -200 IMESH=200 JMESH=200 KMESH=200
           IINTS=100 JINTS=100 KINTS=100
-          EMESH=0.001 0.01 0.25 1 2 3 5 10 20
+          EMESH=0.001 0.01 0.25 1 3 5 10 20
