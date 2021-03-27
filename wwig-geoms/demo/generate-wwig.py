@@ -4,8 +4,6 @@ import meshio
 from pymoab import core, tag
 from IsogeomGenerator import driver, isg, ivdb
 
-RATIO = 5
-NORM = 8.681593714e-08
 # to run:
 # generate_isogeom full [wwinp-mesh].vtk ww_n_[ID] -gl ratio -lx [MIN] [MAX] -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
 
@@ -52,14 +50,14 @@ def get_data(fvtk, e_bounds):
     return wwig_info
 
 
-def generate_wwigs(wwig_info, fvtk):
+def generate_wwigs(wwig_info, fvtk, ratio, norm):
 
     for ID, info in wwig_info.items():
 
         # generate levels
-        minN = info['w_min'] * RATIO
+        minN = info['w_min'] * ratio
         maxN = info['w_max']
-        levels = driver.generate_levels(RATIO, minN, maxN, mode='ratio')
+        levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
 
         # generate volumes from visit
         data = info['name']
@@ -72,17 +70,19 @@ def generate_wwigs(wwig_info, fvtk):
         sname = 'wwn_' + ID + '.h5m'
         tags = {'E_LOW_BOUND': info['e_min'],
                 'E_UP_BOUND': info['e_max']}
-        driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=NORM, sname=sname)
+        driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=norm, sname=sname)
 
 
 if __name__ == '__main__':
 
     # get file (expanded_tags.vtk, mesh_with_tags.h5m)
-    fvtk = sys.argv[1]
-    fh5m = sys.argv[2]
+    ratio = sys.argv[1]
+    norm = sys.argv[2]
+    fvtk = sys.argv[3]
+    fh5m = sys.argv[4]
 
     e_bounds = get_upper_bounds(fh5m)
 
     wwig_info = get_data(fvtk, e_bounds)
 
-    generate_wwigs(wwig_info, fvtk)
+    generate_wwigs(wwig_info, fvtk, ratio, norm)
