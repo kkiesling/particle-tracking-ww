@@ -5,7 +5,8 @@ from pymoab import core, tag
 from IsogeomGenerator import driver, isg, ivdb
 
 # to run:
-# generate_isogeom full [wwinp-mesh].vtk ww_n_[ID] -gl ratio -lx [MIN] [MAX] -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
+# generate_isogeom full [wwinp-mesh].vtk ww_n_[ID] -gl ratio -lx [MIN] [MAX] \
+# -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
 
 
 def get_upper_bounds(fh5m):
@@ -19,7 +20,7 @@ def get_upper_bounds(fh5m):
         name = tag.get_name()
         if name == 'n_e_upper_bounds':
             e_bounds = mb.tag_get_data(tag, rs)
-            return e_bounds[0]
+            return sorted(e_bounds[0], reverse=True)
 
 
 def get_data(fvtk, e_bounds):
@@ -34,10 +35,10 @@ def get_data(fvtk, e_bounds):
         mindata = min(mf.cell_data['hexahedron'][dataname])
         maxdata = max(mf.cell_data['hexahedron'][dataname])
         e_max = e_bounds[i]
-        if i == 0:
+        if i == len(e_bounds) - 1:
             e_min = 0.0
         else:
-            e_min = e_bounds[i-1]
+            e_min = e_bounds[i+1]
 
         info['e_min'] = e_min
         info['e_max'] = e_max
@@ -76,8 +77,8 @@ def generate_wwigs(wwig_info, fvtk, ratio, norm):
 if __name__ == '__main__':
 
     # get file (expanded_tags.vtk, mesh_with_tags.h5m)
-    ratio = sys.argv[1]
-    norm = sys.argv[2]
+    ratio = float(sys.argv[1])
+    norm = float(sys.argv[2])
     fvtk = sys.argv[3]
     fh5m = sys.argv[4]
 
