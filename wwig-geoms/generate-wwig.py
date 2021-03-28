@@ -40,8 +40,8 @@ def get_data(fvtk, e_bounds):
         else:
             e_min = e_bounds[i+1]
 
-        info['e_min'] = e_min
-        info['e_max'] = e_max
+        info['e_min'] = float(e_min)
+        info['e_max'] = float(e_max)
         info['name'] = dataname
         info['w_min'] = mindata
         info['w_max'] = maxdata
