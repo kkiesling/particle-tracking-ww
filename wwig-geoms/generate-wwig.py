@@ -8,6 +8,10 @@ from IsogeomGenerator import driver, isg, ivdb
 # generate_isogeom full [wwinp-mesh].vtk ww_n_[ID] -gl ratio -lx [MIN] [MAX] \
 # -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
 
+# to run this script w/ cadis:
+# python ../generate-wwig.py 100 8.681593714e-08 expanded_tags.vtk mesh_ww_tags.h5m
+
+
 
 def get_upper_bounds(fh5m):
 
@@ -55,23 +59,25 @@ def generate_wwigs(wwig_info, fvtk, ratio, norm):
 
     for ID, info in wwig_info.items():
 
-        # generate levels
-        minN = info['w_min'] * ratio
-        maxN = info['w_max']
-        levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
+        if ID == '013':
 
-        # generate volumes from visit
-        data = info['name']
-        db = os.getcwd() + '/' + ID
-        iv = ivdb.IvDb(levels=levels, data=data, db=db)
-        driver.generate_volumes(iv, fvtk)
+            # generate levels
+            minN = info['w_min'] * ratio
+            maxN = info['w_max']
+            levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
 
-        # create isogeom with moab
-        ig = isg.IsGm(ivdb=iv)
-        sname = 'wwn_' + ID + '.h5m'
-        tags = {'E_LOW_BOUND': info['e_min'],
-                'E_UP_BOUND': info['e_max']}
-        driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=norm, sname=sname)
+            # generate volumes from visit
+            data = info['name']
+            db = os.getcwd() + '/' + ID
+            iv = ivdb.IvDb(levels=levels, data=data, db=db)
+            driver.generate_volumes(iv, fvtk)
+
+            # create isogeom with moab
+            ig = isg.IsGm(ivdb=iv)
+            sname = 'wwn_' + ID + '.h5m'
+            tags = {'E_LOW_BOUND': info['e_min'],
+                    'E_UP_BOUND': info['e_max']}
+            driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=norm, sname=sname, merge_tol=0.2)
 
 
 if __name__ == '__main__':
