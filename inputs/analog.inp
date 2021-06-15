@@ -1,5 +1,5 @@
 Demo problem: "fusion" reactor
-C to run: mcnp6 i=../../../inputs/demo/analog.inp
+C to run: mcnp6 i=../../inputs/analog.inp
 C Cell Cards
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
