@@ -1,4 +1,4 @@
-Demo problem: "fusion" reactor
+Demo problem: "fusion" reactor - wwinp
 C to run: mcnp6 i=../../inputs/wwinp.inp wwinp=../../inputs/wwinp
 C Cell Cards
 C cell # | mat # | density | surf combos
@@ -80,3 +80,6 @@ sb3    0.00000e+00 5.11615e-02 7.03318e-02 8.92789e-02 1.05020e-01 1.20912e-01
        1.26632e-01 1.20395e-01 1.06676e-01 8.92071e-02 6.87718e-02 5.16140e-02
 C max splits should equal level ratio (100)
 wwp:n 5.0 j 100 j -1 0 8.681593714e-08
+f14:n 2
+c print 20 110
+C dbcn 2j 1 100
