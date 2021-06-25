@@ -54,27 +54,29 @@ def get_data(fvtk, e_bounds):
     return wwig_info
 
 
-def generate_wwigs(wwig_info, fvtk, ratio, norm):
+def generate_wwigs(wwig_info, fvtk, ratio, norm, id_rng):
 
     for ID, info in wwig_info.items():
 
-        # generate levels
-        minN = info['w_min'] * ratio
-        maxN = info['w_max']
-        levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
+        if int(ID) in id_rng:
+            print("GENERATING ID " + ID)
+            # generate levels
+            minN = info['w_min'] * ratio
+            maxN = info['w_max']
+            levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
 
-        # generate volumes from visit
-        data = info['name']
-        db = os.getcwd() + '/' + ID
-        iv = ivdb.IvDb(levels=levels, data=data, db=db)
-        driver.generate_volumes(iv, fvtk)
+            # generate volumes from visit
+            data = info['name']
+            db = os.getcwd() + '/' + ID
+            iv = ivdb.IvDb(levels=levels, data=data, db=db)
+            driver.generate_volumes(iv, fvtk)
 
-        # create isogeom with moab
-        ig = isg.IsGm(ivdb=iv)
-        sname = 'wwn_' + ID + '.h5m'
-        tags = {'E_LOW_BOUND': info['e_min'],
-                'E_UP_BOUND': info['e_max']}
-        driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=norm, sname=sname)
+            # create isogeom with moab
+            ig = isg.IsGm(ivdb=iv)
+            sname = 'wwn_' + ID + '.h5m'
+            tags = {'E_LOW_BOUND': info['e_min'],
+                    'E_UP_BOUND': info['e_max']}
+            driver.create_geometry(ig, tag_for_viz=True, tags=tags, norm=norm, sname=sname)
 
 
 if __name__ == '__main__':
@@ -84,9 +86,10 @@ if __name__ == '__main__':
     norm = float(sys.argv[2])
     fvtk = sys.argv[3]
     fh5m = sys.argv[4]
+    id_rng = [int(x) for x in sys.argv[5:]]
 
     e_bounds = get_upper_bounds(fh5m)
 
     wwig_info = get_data(fvtk, e_bounds)
 
-    generate_wwigs(wwig_info, fvtk, ratio, norm)
+    generate_wwigs(wwig_info, fvtk, ratio, norm, id_rng)
