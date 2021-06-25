@@ -10,7 +10,7 @@ from IsogeomGenerator import driver, isg, ivdb
 
 # to run this script w/ cadis:
 # python ../generate-wwig.py 100 8.681593714e-08 expanded_tags.vtk mesh_ww_tags.h5m
-
+# python ../generate-wwig.py RATIO 8.681593714e-08 ../expanded_tags.vtk ../mesh_ww_tags.h5m
 
 def get_upper_bounds(fh5m):
 
