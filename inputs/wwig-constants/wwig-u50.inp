@@ -1,5 +1,5 @@
 Demo problem: "fusion" reactor - wwig u50
-C to run: mcnp6 i=../../inputs/wwig.inp wcad=../../inputs/geoms
+C to run: mcnp6 i=../../inputs/wwig-u50.inp wcad=../../inputs/geoms-X
 C Cell Cards
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
