@@ -52,7 +52,7 @@ SI2 -100. 10i 100.
 SP2 0 1 10R
 SI3 -100. 10i 100.
 SP3 0 1 10R
-NPS 1e5
+NPS 1e2
 MODE N
 C point detector at outside reactor
 C use energy groups corresponding to WWIG geom
@@ -83,4 +83,4 @@ wwp:n 5 3 100 1 0 0
 C print 110 20
 f14:n 2
 C dbcn 2j 1 100
-PRDMP j 500
+C PRDMP j 500
