@@ -23,7 +23,7 @@ def get_upper_bounds(fh5m):
         name = tag.get_name()
         if name == 'n_e_upper_bounds':
             e_bounds = mb.tag_get_data(tag, rs)
-            return sorted(e_bounds[0], reverse=True)
+            return sorted(e_bounds[0], reverse=False)
 
 
 def get_data(fvtk, e_bounds):
@@ -38,10 +38,10 @@ def get_data(fvtk, e_bounds):
         mindata = min(mf.cell_data['hexahedron'][dataname])
         maxdata = max(mf.cell_data['hexahedron'][dataname])
         e_max = e_bounds[i]
-        if i == len(e_bounds) - 1:
+        if i == 0:
             e_min = 0.0
         else:
-            e_min = e_bounds[i+1]
+            e_min = e_bounds[i-1]
 
         info['e_min'] = float(e_min)
         info['e_max'] = float(e_max)
@@ -86,9 +86,13 @@ if __name__ == '__main__':
     norm = float(sys.argv[2])
     fvtk = sys.argv[3]
     fh5m = sys.argv[4]
-    id_rng = [int(x) for x in sys.argv[5:]]
 
     e_bounds = get_upper_bounds(fh5m)
+
+    if len(sys.argv) > 5:
+        id_rng = [int(x) for x in sys.argv[5:]]
+    else:
+        id_rng = range(len(e_bounds))
 
     wwig_info = get_data(fvtk, e_bounds)
 
