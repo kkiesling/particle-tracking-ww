@@ -4,7 +4,7 @@ C Cell Cards
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
 02  1  -8        (-2  +1) +4 +5
-03  2  -0.214    (-3  +2):-4:-5
+03  3  -0.001    (-3  +2):-4:-5
 100 0                +3
 
 C Surface Cards
@@ -17,7 +17,7 @@ C streaming paths
 
 C Data Cards
 IMP:n 1 1 1 0
-C materials: stainless steel 304 and water
+C materials: stainless steel 304, helium, and air
 m1   6012 -3.9536e-04
      6013 -4.6337e-06
      14028 -4.5933e-03
@@ -44,6 +44,9 @@ m1   6012 -3.9536e-04
      28064 -9.3243e-04
 m2    2003 -1.3400e-06
       2004 -1.0000e+00
+m3    7014 -0.755
+      8016 -0.231
+      18000 -0.013
 C Source definition --- volume source in helium center
 SDEF X=d1 Y=d2 Z=d3 ERG=14 PAR=1
 SI1 -100. 10i 100.
