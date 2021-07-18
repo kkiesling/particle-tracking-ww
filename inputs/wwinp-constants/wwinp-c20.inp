@@ -1,5 +1,5 @@
-Demo problem: "fusion" reactor - wwig u100
-C to run: mcnp6 i=../../inputs/wwig-u100.inp wcad=../../inputs/geoms-X
+Demo problem: "fusion" reactor - wwinp
+C to run: mcnp6 i=../../inputs/wwinp-constants/wwinp-c20.inp wwinp=../../inputs/wwinp
 C Cell Cards
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
@@ -17,7 +17,7 @@ C streaming paths
 
 C Data Cards
 IMP:n 1 1 1 0
-C materials: stainless steel 304 and water
+C materials: stainless steel 304, helium, and air
 m1   6012 -3.9536e-04
      6013 -4.6337e-06
      14028 -4.5933e-03
@@ -81,10 +81,4 @@ sb2    0.00000e+00 1.79896e-02 2.25090e-02 2.80737e-02 3.53209e-02 4.48398e-02
        5.80987e-02 7.62376e-02 1.04030e-01 1.42795e-01 1.98735e-01 2.71371e-01
 sb3    0.00000e+00 6.56251e-02 7.98175e-02 9.21031e-02 1.01185e-01 1.10198e-01
        1.12911e-01 1.08743e-01 1.00236e-01 8.92510e-02 7.60884e-02 6.38415e-02
-C c_u should equal level ratio (100)
-C set wwp(5) = 1 (switchn)
-wwp:n 100 60 100 0 1 0
-C print 110 20
-C f14:n 2
-C dbcn 2j 1 100
-C PRDMP j 5000
+wwp:n 20 12 100 j -1 0 2.270466890e-07
