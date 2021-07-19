@@ -55,7 +55,7 @@ SI2 -100. 10i 100.
 SP2 0 1 10R
 SI3 -100. 10i 100.
 SP3 0 1 10R
-NPS 1e5
+NPS 2e5
 MODE N
 C point detector at outside reactor
 C use energy groups corresponding to WWIG geom
@@ -85,6 +85,6 @@ C c_u should equal level ratio (20)
 C set wwp(5) = 1 (switchn)
 wwp:n 20 12 100 0 1 0
 C print 110 20
-f14:n 2
+C f14:n 2
 C dbcn 2j 1 100
 C PRDMP j 500
