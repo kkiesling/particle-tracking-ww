@@ -58,6 +58,9 @@ analog_color = '#E8F086'
 
 extra_color = '#FF4242'
 
+cs = 5  # cap size
+dpi = 300
+
 # raw results compared to 1, 2, sigma of wwinp value
 plt.figure()
 plt.plot(c_u, wwinp, label='WWINP', ls='', marker='o', lw=.75, color=wwinp_color)
@@ -65,15 +68,15 @@ plt.plot(c_u, wwinp1_upper, label='WWINP +/- 1 sigma', ls='--', lw=.75, color=ww
 plt.plot(c_u, wwinp1_lower, label='', ls='--', lw=.75, color=wwinp_color)
 plt.plot(c_u, wwinp2_upper, label='WWINP +/- 2 sigma', ls=':', lw=.75, color=wwinp_color)
 plt.plot(c_u, wwinp2_lower, label='', ls=':', lw=.75, color=wwinp_color)
-plt.errorbar(c_u, analog, yerr=(analog_err*analog), color=analog_color, label='Analog', ls='', marker='D', lw=.9, capsize=4)
-plt.errorbar(c_u, wwig20, yerr=(wwig20_err*wwig20), color=wwig_color[0], label='WWIG r=20', ls='', marker='d', lw=.9, capsize=4)
-plt.errorbar(c_u, wwig50, yerr=(wwig50_err*wwig50), color=wwig_color[1], label='WWIG r=50', ls='', marker='d', lw=.9, capsize=4)
-plt.errorbar(c_u, wwig100, yerr=(wwig100_err*wwig100), color=wwig_color[2], label='WWIG r=100', ls='', marker='d', lw=.9, capsize=4)
+plt.errorbar(c_u, analog, yerr=(analog_err*analog), color=analog_color, label='Analog', ls='', marker='D', lw=.9, capsize=cs)
+plt.errorbar(c_u, wwig20, yerr=(wwig20_err*wwig20), color=wwig_color[0], label='WWIG r=20', ls='', marker='d', lw=.9, capsize=cs)
+plt.errorbar(c_u, wwig50, yerr=(wwig50_err*wwig50), color=wwig_color[1], label='WWIG r=50', ls='', marker='d', lw=.9, capsize=cs)
+plt.errorbar(c_u, wwig100, yerr=(wwig100_err*wwig100), color=wwig_color[2], label='WWIG r=100', ls='', marker='d', lw=.9, capsize=cs)
 plt.xlabel('WW Upper Bound Constant c_u')
 plt.ylabel('Tally')
 plt.title('Point Detector Tally Results')
 plt.legend(loc='best', ncol=2, fontsize='xx-small')
-plt.savefig('tally15_results.png')
+plt.savefig('tally15_results.png', dpi=dpi)
 
 
 # plot ratios compared to wwinp
@@ -84,19 +87,19 @@ mana, eana = calc_ratios(analog, analog_err, wwinp, wwinp_err)
 
 plt.figure()
 plt.plot(c_u, [1, 1, 1], ls='-', color=wwinp_color, lw=.9)
-plt.errorbar(c_u, m20, yerr=e20, label='WWIG r=20', ls='', marker='d', lw=.9, capsize=4, color=wwig_color[0])
-plt.errorbar(c_u, m50, yerr=e50, label='WWIG r=50', ls='', marker='d', lw=.9, capsize=4, color=wwig_color[1])
-plt.errorbar(c_u, m100, yerr=e100, label='WWIG r=100', ls='', marker='d', lw=.9, capsize=4, color=wwig_color[2])
-plt.errorbar(c_u, mana, yerr=eana, label='WWIG analog', ls='', marker='D', lw=.9, capsize=4, color=analog_color)
+plt.errorbar(c_u, m20, yerr=e20, label='WWIG r=20', ls='', marker='d', lw=.9, capsize=cs, color=wwig_color[0])
+plt.errorbar(c_u, m50, yerr=e50, label='WWIG r=50', ls='', marker='d', lw=.9, capsize=cs, color=wwig_color[1])
+plt.errorbar(c_u, m100, yerr=e100, label='WWIG r=100', ls='', marker='d', lw=.9, capsize=cs, color=wwig_color[2])
+plt.errorbar(c_u, mana, yerr=eana, label='WWIG analog', ls='', marker='D', lw=.9, capsize=cs, color=analog_color)
 plt.xlabel('WW Upper Bound Constant c_u')
 plt.ylabel('Ratio (E/WWINP)')
 plt.title('Point Detector Tally Results, compared to WWINP results')
 plt.legend(loc='best', ncol=4, fontsize='xx-small', title='Comparison Results E')
-plt.savefig('tally15_ratios.png')
+plt.savefig('tally15_ratios.png', dpi=dpi)
 
 # plot relative errors
 plt.figure()
-plt.plot(c_u, analog_err, label='analog', ls='-', marker='D', lw=.9, color=analog_color)
+plt.plot(c_u, analog_err, label='analog', ls='-', marker='', lw=.9, color=analog_color)
 plt.plot(c_u, wwinp_err, label='WWINP', ls='-', marker='o', lw=.9, color=wwinp_color)
 plt.plot(c_u, wwig20_err, label='WWIG r=20', ls='-', marker='d', lw=.9, color=wwig_color[0])
 plt.plot(c_u, wwig50_err, label='WWIG r=50', ls='-', marker='d', lw=.9, color=wwig_color[1])
@@ -105,6 +108,6 @@ plt.xlabel('WW Upper Bound Constant c_u')
 plt.ylabel('Relative Error')
 plt.title('Point Detector Tally Relative Error')
 plt.legend(loc='best', ncol=3, fontsize='xx-small')
-plt.savefig('tally15_error.png')
+plt.savefig('tally15_error.png', dpi=dpi)
 
 plt.show()
