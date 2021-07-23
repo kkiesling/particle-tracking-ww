@@ -5,10 +5,17 @@ import os
 import numpy as np
 
 
-def get_data_info(f, ratio):
+# global min and max
+global_min = 1.e300
+global_max = 0.
+
+
+def get_data_info(f):
     """get data name and min/max vals from wwig geom file f
 
     get minimum non-zero"""
+    global global_min
+    global global_max
 
     mf = meshio.read(f)
 
@@ -24,15 +31,22 @@ def get_data_info(f, ratio):
     min_data = min(mf.cell_data['triangle'][data_name][
                 mf.cell_data['triangle'][data_name][:] > 0])
 
+    data_vals = sorted(set(mf.cell_data['triangle'][data_name]))[1:]
 
-    data_vals = [min_data]
-    while data_vals[-1] < max_data:
-        data_vals.append(data_vals[-1]*ratio)
+    # update global min and max
+    if min_data < global_min:
+        global_min = min_data
+    if max_data > global_max:
+        global_max = max_data
 
     return data_name, max_data, min_data, data_vals
 
 
-def plot_image(f, data_name, min_data, max_data, data_vals):
+def plot_image(data_name, info):
+
+    # unpack info
+    f = info['file']
+    data_vals = info['data']
 
     v.OpenDatabase(f)
     v.AddPlot('Pseudocolor', data_name)
@@ -41,9 +55,9 @@ def plot_image(f, data_name, min_data, max_data, data_vals):
     att = v.PseudocolorAttributes()
     att.scaling = 1  # log
     att.minFlag = 1  # turn on
-    att.min = data_vals[0]
+    att.min = global_min
     att.maxFlag = 1  # turn on
-    att.max = data_vals[-1]
+    att.max = global_max
     att.colorTableName = 'plasma'
     v.SetPlotOptions(att)
 
@@ -78,7 +92,7 @@ def plot_image(f, data_name, min_data, max_data, data_vals):
     vatts.parallelScale = 346.41
     vatts.nearPlane = -692.82
     vatts.farPlane = 692.82
-    vatts.imagePan = (0.045, 0.035)
+    vatts.imagePan = (0.08, 0.03)
     vatts.imageZoom = 1.01
     vatts.perspective = 1
     vatts.eyeAngle = 2
@@ -95,7 +109,7 @@ def plot_image(f, data_name, min_data, max_data, data_vals):
     annobj = v.CreateAnnotationObject('Text2D')
     annobj.visible = 1
     annobj.active = 1
-    annobj.position = (0.05, 0.92)
+    annobj.position = (0.055, 0.92)
     annobj.height = 0.02
     annobj.textColor = (0, 0, 0, 255)
     annobj.useForegroundForTextColor = 1
@@ -114,11 +128,15 @@ def plot_image(f, data_name, min_data, max_data, data_vals):
     legobj = v.GetAnnotationObject(legname)
     legobj.drawTitle = 0
     legobj.drawMinMax = 0
-    legobj.numberFormat = "%# -1.2e"
+    legobj.numberFormat = "%# -1.3e"
     legobj.fontBold = 0
-    legobj.fontHeight = 0.017
+    legobj.fontHeight = 0.021
+    legobj.yScale = 1.5
+    legobj.controlTicks = 0
+    legobj.minMaxInclusive = 0
     legobj.numTicks = len(data_vals)
     legobj.suppliedValues = tuple(data_vals)
+    #legobj.suppliedLabels = tuple(data_vals)
 
     v.DrawPlots()
 
@@ -137,6 +155,10 @@ def plot_image(f, data_name, min_data, max_data, data_vals):
     v.DeleteAllPlots()
 
     annobj.visible = 0  # delete annotation object
+    annobj.active = 0  # delete annotation object
+    legobj.active = 0
+
+    v.CloseDatabase(f)
 
 
 if __name__ == '__main__':
@@ -145,12 +167,28 @@ if __name__ == '__main__':
     fdir = sys.argv[1]
     flist = os.listdir(fdir)
 
-    ratio = float(fdir.split('/')[-3][1:])
-
     v.LaunchNowin()
+
+    fdata_list = {}
 
     for fname in flist:
         f = fdir + '/' + fname
-        data_name, max_data, min_data, data_vals = get_data_info(f, ratio)
-        plot_image(f, data_name, min_data, max_data, data_vals)
-        v.CloseDatabase(f)
+        data_name, max_data, min_data, data_vals = get_data_info(f)
+        fdata_list[data_name] = {'file': f, 'min': min_data, 'max': max_data, 'data': data_vals}
+
+    annobj = v.CreateAnnotationObject('Text2D')
+    annobj.visible = 1
+    annobj.active = 1
+    annobj.position = (0.055, 0.45)
+    annobj.height = 0.015
+    annobj.textColor = (0, 0, 0, 255)
+    annobj.useForegroundForTextColor = 1
+    annobj.text = "Weight Window" + "\n" + "Lower Bound"
+    annobj.fontFamily = 0
+    annobj.fontBold = 0
+    annobj.fontItalic = 0
+    annobj.fontShadow = 0
+
+    for data_name, info in fdata_list.items():
+        plot_image(data_name, info)
+
