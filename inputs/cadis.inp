@@ -4,6 +4,7 @@ anisn_upscatter               false
 
 mcnp_input                    ../../inputs/analog.inp
 mcnp_tallies                  15
+# mcnp_ww_ratio                 100
 
 denovo_x_blocks               1
 denovo_y_blocks               1
