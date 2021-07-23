@@ -26,8 +26,8 @@ def calc_ratios(m1, e1, m2, e2):
 ## Data
 
 ratios = np.array([5, 20, 50, 100])
-wwig_res = np.array([6.82e-8, 6.8638E-08, 6.81e-8, 6.8e-8])  # placeholders
-wwig_err = np.array([.01, 0.0140, .015, .018])  # placeholders
+wwig_res = np.array([6.82e-8, 6.8638E-08, 6.8536E-08, 6.9097E-08])  # placeholders
+wwig_err = np.array([.01, 0.0140, 0.0178, 0.0204])  # placeholders
 wwinp_res = np.array([6.8328E-08, 6.8328E-08, 6.8328E-08, 6.8328E-08])
 wwinp_err = np.array([0.0076, 0.0076, 0.0076, 0.0076])
 analog_res = np.array([6.47480E-08, 6.47480E-08, 6.47480E-08, 6.47480E-08])
