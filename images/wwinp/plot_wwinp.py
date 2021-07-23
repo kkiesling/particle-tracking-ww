@@ -5,6 +5,9 @@ import os
 import numpy as np
 
 
+global global_max
+global global_min
+
 def get_data_names(mf):
     """get energy group names"""
 
@@ -31,9 +34,9 @@ def plot_image(group, mins, maxs):
     att = v.PseudocolorAttributes()
     att.scaling = 1  # log
     att.minFlag = 1  # turn on
-    att.min = mins
+    att.min = global_min
     att.maxFlag = 1  # turn on
-    att.max = maxs
+    att.max = global_max
     att.colorTableName = 'plasma'
     v.SetPlotOptions(att)
 
@@ -68,7 +71,7 @@ def plot_image(group, mins, maxs):
     vatts.parallelScale = 346.41
     vatts.nearPlane = -692.82
     vatts.farPlane = 692.82
-    vatts.imagePan = (0.045, 0.035)
+    vatts.imagePan = (0.08, 0.03)
     vatts.imageZoom = 1.01
     vatts.perspective = 1
     vatts.eyeAngle = 2
@@ -85,7 +88,7 @@ def plot_image(group, mins, maxs):
     annobj = v.CreateAnnotationObject('Text2D')
     annobj.visible = 1
     annobj.active = 1
-    annobj.position = (0.05, 0.92)
+    annobj.position = (0.055, 0.92)
     annobj.height = 0.02
     annobj.textColor = (0, 0, 0, 255)
     annobj.useForegroundForTextColor = 1
@@ -104,11 +107,15 @@ def plot_image(group, mins, maxs):
     legobj = v.GetAnnotationObject(legname)
     legobj.drawTitle = 0
     legobj.drawMinMax = 0
-    legobj.numberFormat = "%# -1.2e"
+    legobj.numberFormat = "%# -1.3e"
     legobj.fontBold = 0
-    legobj.fontHeight = 0.017
-    #legobj.numTicks = len(data_vals)
-    #legobj.suppliedValues = tuple(data_vals)
+    legobj.fontHeight = 0.021
+    legobj.yScale = 1.5
+    legobj.controlTicks = 0
+    legobj.minMaxInclusive = 0
+    legobj.numTicks = 2
+    legobj.suppliedValues = tuple([mins, maxs])
+    #legobj.suppliedLabels = tuple(data_vals)
 
     v.DrawPlots()
 
@@ -138,6 +145,21 @@ if __name__ == '__main__':
 
     mf = meshio.read(f)
     group_names, maxs, mins = get_data_names(mf)
+
+    annobj = v.CreateAnnotationObject('Text2D')
+    annobj.visible = 1
+    annobj.active = 1
+    annobj.position = (0.055, 0.45)
+    annobj.height = 0.015
+    annobj.textColor = (0, 0, 0, 255)
+    annobj.useForegroundForTextColor = 1
+    annobj.text = "Weight Window" + "\n" + "Lower Bound"
+    annobj.fontFamily = 0
+    annobj.fontBold = 0
+    annobj.fontItalic = 0
+
+    global_max = max(maxs)
+    global_min = min(mins)
 
     for i, group in enumerate(group_names):
         plot_image(group, mins[i], maxs[i])
