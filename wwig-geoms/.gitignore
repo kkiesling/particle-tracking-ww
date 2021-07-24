@@ -1,6 +1,7 @@
 expanded_tags.vtk
 mesh_ww_tags.h5m
 wwinp
+viz/
 */viz
 *.h5m
 *.stl
