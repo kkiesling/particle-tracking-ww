@@ -5,20 +5,10 @@ import os
 import numpy as np
 
 
-# global min and max
-global_min = 1.e300
-global_max = 0.
-
-
-def get_data_info(f):
+def get_data_info(mf, extrema):
     """get data name and min/max vals from wwig geom file f
 
     get minimum non-zero"""
-    global global_min
-    global global_max
-
-    mf = meshio.read(f)
-
     # data name
     key_names = mf.cell_data['triangle'].keys()
     for name in key_names:
@@ -31,23 +21,19 @@ def get_data_info(f):
     min_data = min(mf.cell_data['triangle'][data_name][
                 mf.cell_data['triangle'][data_name][:] > 0])
 
+    if min_data < extrema[0]:
+        extrema[0] = min_data
+    if max_data > extrema[1]:
+        extrema[1] = max_data
+
     data_vals = sorted(set(mf.cell_data['triangle'][data_name]))[1:]
 
-    # update global min and max
-    if min_data < global_min:
-        global_min = min_data
-    if max_data > global_max:
-        global_max = max_data
-
-    return data_name, max_data, min_data, data_vals
+    return data_name, data_vals, extrema
 
 
-def plot_image(data_name, info):
+def plot_image(f, data_name, data_vals, extrema, ratio):
 
-    # unpack info
-    f = info['file']
-    data_vals = info['data']
-
+    print(data_name)
     v.OpenDatabase(f)
     v.AddPlot('Pseudocolor', data_name)
 
@@ -55,9 +41,9 @@ def plot_image(data_name, info):
     att = v.PseudocolorAttributes()
     att.scaling = 1  # log
     att.minFlag = 1  # turn on
-    att.min = global_min
+    att.min = extrema[0]
     att.maxFlag = 1  # turn on
-    att.max = global_max
+    att.max = extrema[1]
     att.colorTableName = 'plasma'
     v.SetPlotOptions(att)
 
@@ -74,7 +60,6 @@ def plot_image(data_name, info):
     att_op.plane2Normal = (0, 1, 0)
     att_op.plane3Normal = (0, 0, 1)
     v.SetOperatorOptions(att_op)
-
 
     # annotations
     ann = v.AnnotationAttributes()
@@ -113,7 +98,7 @@ def plot_image(data_name, info):
     annobj.height = 0.02
     annobj.textColor = (0, 0, 0, 255)
     annobj.useForegroundForTextColor = 1
-    annobj.text = "Energy Group {}".format(num)
+    annobj.text = "Energy Group {}, r = {}".format(num, ratio)
     annobj.fontFamily = 0
     annobj.fontBold = 1
     annobj.fontItalic = 0
@@ -143,7 +128,7 @@ def plot_image(data_name, info):
     # save fig
     saveatts = v.SaveWindowAttributes()
     saveatts.outputToCurrentDirectory = 1
-    saveatts.fileName = data_name
+    saveatts.fileName = data_name + '_r{}'.format(ratio)
     saveatts.format = 4  # PNG
     saveatts.screenCapture = 0
     saveatts.resConstraint = 0
@@ -164,18 +149,12 @@ def plot_image(data_name, info):
 if __name__ == '__main__':
 
     # get file list from directory
-    fdir = sys.argv[1]
+    fdir = sys.argv[1]  # dir to all viz .vtk files
     flist = os.listdir(fdir)
 
     v.LaunchNowin()
 
-    fdata_list = {}
-
-    for fname in flist:
-        f = fdir + '/' + fname
-        data_name, max_data, min_data, data_vals = get_data_info(f)
-        fdata_list[data_name] = {'file': f, 'min': min_data, 'max': max_data, 'data': data_vals}
-
+    # add this text only one time
     annobj = v.CreateAnnotationObject('Text2D')
     annobj.visible = 1
     annobj.active = 1
@@ -189,6 +168,27 @@ if __name__ == '__main__':
     annobj.fontItalic = 0
     annobj.fontShadow = 0
 
-    for data_name, info in fdata_list.items():
-        plot_image(data_name, info)
+    ratio_list = [20, 50, 100]
+
+    # get data extrema per energy group
+    for e in range(0, 27):
+        i = '{:03d}'.format(e)
+        print(i)
+        min_start = 1e300
+        max_start = 0
+        extrema = [min_start, max_start]
+        vals_dict = {}
+        data_names = {}
+        for ratio in ratio_list:
+            fname = 'r{}_wwn_{}.h5m.vtk'.format(ratio, i)
+            f = fdir + '/' + fname
+            mf = meshio.read(f)
+            data_name, data_vals, extrema = get_data_info(mf, extrema)
+            vals_dict[ratio] = data_vals
+            data_names[ratio] = data_name
+
+        for ratio in ratio_list:
+            fname = 'r{}_wwn_{}.h5m.vtk'.format(ratio, i)
+            f = fdir + '/' + fname
+            plot_image(f, data_names[ratio], vals_dict[ratio], extrema, ratio)
 
