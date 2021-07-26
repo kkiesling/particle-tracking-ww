@@ -25,13 +25,13 @@ def calc_ratios(m1, e1, m2, e2):
 
 ## Data
 
-ratios = np.array([5, 20, 50, 100])
-wwig_res = np.array([6.82e-8, 6.8638E-08, 6.8536E-08, 6.9097E-08])  # placeholders
-wwig_err = np.array([.01, 0.0140, 0.0178, 0.0204])  # placeholders
-wwinp_res = np.array([6.8328E-08, 6.8328E-08, 6.8328E-08, 6.8328E-08])
-wwinp_err = np.array([0.0076, 0.0076, 0.0076, 0.0076])
-analog_res = np.array([6.47480E-08, 6.47480E-08, 6.47480E-08, 6.47480E-08])
-analog_err = np.array([0.0475, 0.0475, 0.0475, 0.0475])
+ratios = np.array([20, 50, 100])
+wwig_res = np.array([6.8638E-08, 6.8536E-08, 6.9097E-08])
+wwig_err = np.array([0.0140, 0.0178, 0.0204])
+wwinp_res = np.array([6.8328E-08, 6.8328E-08, 6.8328E-08])
+wwinp_err = np.array([0.0076, 0.0076, 0.0076])
+analog_res = np.array([6.47480E-08, 6.47480E-08, 6.47480E-08])
+analog_err = np.array([0.0475, 0.0475, 0.0475])
 
 wwinp1_upper, wwinp1_lower = calc_sigmas(wwinp_res, wwinp_err, 1)
 wwinp2_upper, wwinp2_lower = calc_sigmas(wwinp_res, wwinp_err, 2)
@@ -66,7 +66,7 @@ plt.legend(loc='best', ncol=2, fontsize='x-small')
 plt.savefig('tally15_results.png', dpi=dpi)
 
 # plot wwinp ratio
-r1 = np.array([1, 1, 1, 1])
+r1 = np.array([1, 1, 1])
 
 # ratios compared to wwinp results
 wratio, werr = calc_ratios(wwig_res, wwig_err, wwinp_res, wwinp_err)
