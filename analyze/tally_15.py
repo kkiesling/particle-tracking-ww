@@ -55,9 +55,10 @@ plt.errorbar(ratios, wwig_res, yerr=(wwig_err*wwig_res),
 plt.errorbar([105], analog_res[0], yerr=(analog_err*analog_res)[0],
     color=analog_color, label='Analog', ls='', marker='d', lw=.9, capsize=cs)
 plt.plot(ratios, wwinp_res, label='WWINP', ls='-', marker='', lw=.9, color=wwinp_color)
-plt.plot(ratios, wwinp1_upper, label='WWINP +/- 1 sigma', ls='--', lw=.75, color=wwinp_color)
+plt.plot(ratios, wwinp1_upper, label='WWINP $\pm 1\sigma$', ls='--', lw=.75, color=wwinp_color)
 plt.plot(ratios, wwinp1_lower, label='', ls='--', lw=.75, color=wwinp_color)
-plt.plot(ratios, wwinp2_upper, label='WWINP +/- 2 sigma', ls=':', lw=.75, color=wwinp_color)
+plt.plot(ratios, wwinp2_upper, label='WWINP $\pm 2\sigma$',
+         ls=':', lw=.75, color=wwinp_color)
 plt.plot(ratios, wwinp2_lower, label='', ls=':', lw=.75, color=wwinp_color)
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Tally')
@@ -80,9 +81,11 @@ ar2_upper, ar2_lower = calc_sigmas(r1, aerr, 2)
 plt.figure()
 plt.plot(ratios, r1, label='E/WWINP=1', ls='-', marker='', lw=.9, color=wwinp_color)
 
-plt.plot(ratios, wr1_upper, label='WWIG/WWINP +/- 1 sigma', ls='--', lw=.75, color=wwig_color)
+plt.plot(ratios, wr1_upper, label='WWIG/WWINP $\pm 1\sigma$',
+         ls='--', lw=.75, color=wwig_color)
 plt.plot(ratios, wr1_lower, label='', ls='--', lw=.75, color=wwig_color)
-plt.plot(ratios, wr2_upper, label='WWIG/WWINP +/- 2 sigma', ls=':', lw=.75, color=wwig_color)
+plt.plot(ratios, wr2_upper, label='WWIG/WWINP $\pm 2\sigma$',
+         ls=':', lw=.75, color=wwig_color)
 plt.plot(ratios, wr2_lower, label='', ls=':', lw=.75, color=wwig_color)
 plt.plot(ratios, wratio, label='WWIG/WWINP', ls='', marker='d', lw=.9, color=wwig_color)
 
@@ -93,8 +96,9 @@ plt.plot(ratios, wratio, label='WWIG/WWINP', ls='', marker='d', lw=.9, color=wwi
 #plt.plot(ratios, ar2_lower, label='', ls=':', lw=.75, color=analog_color)
 #plt.plot(ratios, aratio, label='Analog/WWINP', ls='', marker='d', lw=.9, color=analog_color)
 # make this plot a subplot right next to it?
-plt.errorbar([105], [1], yerr=(aratio*aerr)[0], label='analog/WWINP +/- 1 sigma', ls='', marker='', lw=.9, capsize=cs, color=analog_color)
-plt.plot([105], aratio[0], label='analog/WWINP', ls='', marker='d', lw=.9, color=analog_color)
+plt.errorbar([105], [1], yerr=(aratio*aerr)[0], label='Analog/WWINP $\pm 1\sigma$',
+             ls='', marker='', lw=.9, capsize=cs, color=analog_color)
+plt.plot([105], aratio[0], label='Analog/WWINP', ls='', marker='d', lw=.9, color=analog_color)
 
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Ratio (E/WWINP)')
@@ -107,7 +111,7 @@ plt.savefig('tally15_ratios.png', dpi=dpi)
 plt.figure()
 plt.plot(ratios, wwinp_err, label='WWINP', ls='-', marker='', lw=.9, color=wwinp_color)
 plt.plot(ratios, wwig_err, label='WWIG', ls='-', marker='d', lw=.9, color=wwig_color)
-plt.plot(ratios, analog_err, label='analog', ls='-', marker='', lw=.9, color=analog_color)
+plt.plot(ratios, analog_err, label='Analog', ls='-', marker='', lw=.9, color=analog_color)
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Relative Error')
 plt.title('Point Detector Tally Relative Error')
