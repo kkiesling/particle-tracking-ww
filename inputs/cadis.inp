@@ -4,15 +4,14 @@ anisn_upscatter               false
 
 mcnp_input                    ../../inputs/analog.inp
 mcnp_tallies                  15
-# mcnp_ww_ratio                 100
 
 denovo_x_blocks               1
 denovo_y_blocks               1
 denovo_z_blocks               1
 
-mesh_x       -200  -150  -90  -34.5  34.5  90  150  200
-mesh_x_ints       2     40   8     23    8   40   5
-mesh_y       -200  -150  -90  -34.5  34.5  90  150  200
-mesh_y_ints       2     40   8     23    8   40   5
-mesh_z       -200  -150  -90  -34.5  34.5  90  150  200
-mesh_z_ints       2     40   8     23    8   40   5
+mesh_x       -200    200
+mesh_x_ints       50
+mesh_y       -200    200
+mesh_y_ints       50
+mesh_z       -200    200
+mesh_z_ints       50
