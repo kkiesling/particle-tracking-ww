@@ -9,9 +9,9 @@ denovo_x_blocks               1
 denovo_y_blocks               1
 denovo_z_blocks               1
 
-mesh_x       -200    200
-mesh_x_ints       100
-mesh_y       -200    200
-mesh_y_ints       100
-mesh_z       -200    200
-mesh_z_ints       100
+mesh_x       -225    225
+mesh_x_ints       50
+mesh_y       -225    225
+mesh_y_ints       50
+mesh_z       -225    225
+mesh_z_ints       50

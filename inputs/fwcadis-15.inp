@@ -3,15 +3,15 @@ anisn_library                 27n19g
 anisn_upscatter               false
 
 mcnp_input                    ../../inputs/analog.inp
-mcnp_tallies                  15
+mcnp_tallies                  14
 
 denovo_x_blocks               1
 denovo_y_blocks               1
 denovo_z_blocks               1
 
-mesh_x       -200  200
-mesh_x_ints      100
-mesh_y       -200  200
-mesh_y_ints      100
-mesh_z       -200  200
-mesh_z_ints      100
+mesh_x       -126  126
+mesh_x_ints       25
+mesh_y       -126  126
+mesh_y_ints       25
+mesh_z       -126  126
+mesh_z_ints       25
