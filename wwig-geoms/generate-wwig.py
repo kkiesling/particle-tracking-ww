@@ -62,8 +62,8 @@ def generate_wwigs(wwig_info, fvtk, ratio, norm, id_rng):
         if int(ID) in id_rng:
             print("GENERATING ID " + ID)
             # generate levels
-            minN = info['w_min'] * ratio
-            maxN = info['w_max']
+            minN = info['w_min'] * float(ratio)
+            maxN = info['w_max'] / float(ratio)
             levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
 
             # generate volumes from visit
