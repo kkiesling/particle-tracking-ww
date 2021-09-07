@@ -1,10 +1,10 @@
 Demo problem: "fusion" reactor
 C to run: mcnp6 i=../../inputs/analog.inp
 C Cell Cards
-C make wall 50% density (SS 316, regular density -8)
+C make wall 80% density (SS 316, regular density -8)
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
-02  1  -4.0   (-2  +1) +4 +5
+02  1  -8   (-2  +1) +4 +5
 03  3  -0.001    (-3  +2):-4:-5
 100 0                +3
 
@@ -63,7 +63,7 @@ SI2 -100. 10i 100.
 SP2 0 1 10R
 SI3 -100. 10i 100.
 SP3 0 1 10R
-NPS 2e5
+NPS 1e5
 MODE N
 C point detector at outside reactor
 C use energy groups corresponding to WWIG geom
