@@ -1,5 +1,5 @@
 Demo problem: "fusion" reactor
-C to run: mcnp6 i=../../inputs/analog.inp
+C to run: mcnp6 i=../../inputs/wwig.inp wcad=../../inputs/geoms/rX/
 C Cell Cards
 C make wall 100% density (SS 316, regular density -8)
 C cell # | mat # | density | surf combos
