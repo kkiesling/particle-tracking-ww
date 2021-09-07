@@ -1,9 +1,10 @@
 Demo problem: "fusion" reactor
 C to run: mcnp6 i=../../inputs/analog.inp
 C Cell Cards
+C make wall 80% density: 0.5*4.991 = 3.9928
 C cell # | mat # | density | surf combos
 01  2  -0.214    -1
-02  1  -4.4991   (-2  +1) +4 +5
+02  1  -2.4955   (-2  +1) +4 +5
 03  3  -0.001    (-3  +2):-4:-5
 100 0                +3
 
