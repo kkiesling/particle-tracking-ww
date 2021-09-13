@@ -168,7 +168,7 @@ if __name__ == '__main__':
     annobj.fontItalic = 0
     annobj.fontShadow = 0
 
-    ratio_list = [20, 50, 100]
+    ratio_list = [5, 10, 15, 20]
 
     # get data extrema per energy group
     for e in range(0, 27):
@@ -191,4 +191,3 @@ if __name__ == '__main__':
             fname = 'r{}_wwn_{}.h5m.vtk'.format(ratio, i)
             f = fdir + '/' + fname
             plot_image(f, data_names[ratio], vals_dict[ratio], extrema, ratio)
-
