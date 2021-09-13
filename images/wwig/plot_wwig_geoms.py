@@ -128,7 +128,7 @@ def plot_image(f, data_name, data_vals, extrema, ratio):
     # save fig
     saveatts = v.SaveWindowAttributes()
     saveatts.outputToCurrentDirectory = 1
-    saveatts.fileName = data_name + '_r{}'.format(ratio)
+    saveatts.fileName = data_name + 'wwig_r{}'.format(ratio)
     saveatts.format = 4  # PNG
     saveatts.screenCapture = 0
     saveatts.resConstraint = 0
