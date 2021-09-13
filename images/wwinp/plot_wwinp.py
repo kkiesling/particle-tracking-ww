@@ -174,6 +174,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     v.DeleteAllPlots()
 
     annobj.visible = 0  # delete annotation object
+    robj.visible = 0  # delete annotation object
 
 
 if __name__ == '__main__':
