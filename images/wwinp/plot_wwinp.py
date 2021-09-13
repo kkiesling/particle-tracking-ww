@@ -3,12 +3,13 @@ import meshio
 import sys
 import os
 import numpy as np
-
+from IsogeomGenerator import driver
 
 global global_max
 global global_min
 
-def get_data_names(mf):
+
+def get_data_names(mf, ratio):
     """get energy group names"""
 
     # data name
@@ -16,17 +17,21 @@ def get_data_names(mf):
     group_names = []
     mins = []
     maxs = []
+    levels = []
     for name in key_names:
         if 'ww' in name:
             group_names.append(name)
-            maxs.append(max(mf.cell_data['hexahedron'][name]))
-            mins.append(min(mf.cell_data['hexahedron'][name]))
+            minval = min(mf.cell_data['hexahedron'][name])
+            maxval = max(mf.cell_data['hexahedron'][name])
+            maxs.append(maxval)
+            mins.append(minval)
+            lev = driver.generate_levels(ratio, minval, maxval, mode='ratio')
+            levels.append(lev)
 
-    return group_names, maxs, mins
+    return group_names, maxs, mins, levels
 
 
-def plot_image(group, mins, maxs):
-
+def plot_image(group, mins, maxs, levels, ratio):
 
     v.AddPlot('Pseudocolor', group)
 
@@ -53,7 +58,6 @@ def plot_image(group, mins, maxs):
     att_op.plane2Normal = (0, 1, 0)
     att_op.plane3Normal = (0, 0, 1)
     v.SetOperatorOptions(att_op)
-
 
     # annotations
     ann = v.AnnotationAttributes()
@@ -131,6 +135,42 @@ def plot_image(group, mins, maxs):
     v.SetSaveWindowAttributes(saveatts)
     sname = v.SaveWindow()
 
+    # Add contours
+    e = v.AddPlot('Contour', group, 0, 1)
+    catt = v.ContourAttributes()
+    catt.contourMethod = 1  # values
+    catt.contourNLevels = len(levels)
+    catt.contourValue = tuple(levels)
+    catt.minFlag = 0
+    catt.maxFlag = 0
+    catt.colorType = 2  # ColorByColorTable
+    catt.colorTableName = 'viridis_light'
+    catt.invertColorTable = 1
+    catt.wireframe = 1
+    catt.lineWidth = 3
+    catt.lineStyle = 0
+    catt.legendFlag = 0
+    e = v.SetPlotOptions(catt)
+
+    robj = v.CreateAnnotationObject('Text2D')
+    robj.visible = 1
+    robj.active = 1
+    robj.position = (0.055, 0.39)
+    robj.height = 0.015
+    robj.textColor = (0, 0, 0, 255)
+    robj.useForegroundForTextColor = 1
+    robj.text = "Surface Spacing\nRatio = {}".format(ratio)
+    robj.fontFamily = 0
+    robj.fontBold = 0
+    robj.fontItalic = 0
+    robj.fontShadow = 0
+
+    e = v.DrawPlots()
+
+    saveatts.fileName = group + '_r{}'.format(ratio)
+    v.SetSaveWindowAttributes(saveatts)
+    sname = v.SaveWindow()
+
     v.DeleteAllPlots()
 
     annobj.visible = 0  # delete annotation object
@@ -139,12 +179,13 @@ def plot_image(group, mins, maxs):
 if __name__ == '__main__':
 
     f = sys.argv[1]  # expanded_tags.vtk file for wwinp
+    ratio = sys.argv[2]  # ratio for plotting contours
 
     v.LaunchNowin()
     v.OpenDatabase(f)
 
     mf = meshio.read(f)
-    group_names, maxs, mins = get_data_names(mf)
+    group_names, maxs, mins, levels = get_data_names(mf, ratio)
 
     annobj = v.CreateAnnotationObject('Text2D')
     annobj.visible = 1
@@ -162,6 +203,6 @@ if __name__ == '__main__':
     global_min = min(mins)
 
     for i, group in enumerate(group_names):
-        plot_image(group, mins[i], maxs[i])
+        plot_image(group, mins[i], maxs[i], levels[i], ratio)
 
     v.CloseDatabase(f)
