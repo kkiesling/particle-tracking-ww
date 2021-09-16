@@ -71,7 +71,7 @@ plt.plot(ref_xs, ref2_upper, label='Reference $\pm 2\sigma$',
          ls=':', lw=.75, color=ref_color)
 plt.plot(ref_xs, ref2_lower, label='', ls=':', lw=.75, color=ref_color)
 plt.xlabel('WWIG surface spacing ratio $r$')
-plt.ylabel('Tally')
+plt.ylabel('Neutron Flux $[1/cm^2]$')
 plt.title('Point Detector Tally Results')
 plt.legend(bbox_to_anchor=(0.5, -.21), loc='lower center', ncol=6, fontsize='x-small')
 plt.tight_layout()
