@@ -57,7 +57,7 @@ plt.figure()
 plt.errorbar(ratios, wwig_res, yerr=(wwig_err * wwig_res), color=wwig_color,
              label='WWIG', ls='', marker='d', lw=.9, capsize=cs)
 plt.errorbar([ext_x], wwinp_res[0], yerr=(wwinp_err * wwinp_res)[0],
-             color=wwinp_color, label='WWINP', ls='', marker='x', lw=.9,
+             color=wwinp_color, label='CWWM', ls='', marker='x', lw=.9,
              capsize=cs)
 plt.errorbar([ext_x], analog_res[0], yerr=(analog_err * analog_res)[0],
              color=analog_color, label='Analog', ls='', marker='o', lw=.9,
@@ -116,9 +116,9 @@ plt.plot(ratios, wgr2_upper, label='WWIG/Ref $\pm 2\sigma$',
 plt.plot(ratios, wgr2_lower, label='', ls=':', lw=.75, color=wwig_color)
 # wwinp/reference
 plt.errorbar(ext_x, [1], yerr=(wpratio * wperr),
-             label='WWINP/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
+             label='CWWM/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
              capsize=cs, color=wwinp_color)
-plt.plot(ext_x, wpratio, label='WWINP/Ref', ls='',
+plt.plot(ext_x, wpratio, label='CWWM/Ref', ls='',
          marker='x', lw=.9, color=wwinp_color)
 # analog/reference
 plt.errorbar(ext_x, [1], yerr=(aratio * aerr),
@@ -142,7 +142,7 @@ plt.plot(ref_xs[:len(ratios)], ref_err[:len(ratios)], label='Reference',
          ls='-', marker='', lw=.9, color=ref_color)
 plt.plot(ratios, wwig_err, label='WWIG', ls='-', marker='d', lw=.9,
          color=wwig_color)
-plt.plot(ratios, wwinp_err, label='WWINP', ls='--', marker='', lw=.9,
+plt.plot(ratios, wwinp_err, label='CWWM', ls='--', marker='', lw=.9,
          color=wwinp_color)
 plt.plot(ratios, analog_err, label='Analog', ls='-.', marker='', lw=.9,
          color=analog_color)
