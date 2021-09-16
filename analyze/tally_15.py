@@ -22,14 +22,14 @@ def calc_ratios(m1, e1, m2, e2):
     return ratios, sigma_ratio
 
 
-# Data
+# Data - 1e6 particles
 ratios = np.array([5, 10, 15, 20])
-wwinp_res = np.full(len(ratios), 5.7436E-08)
-wwinp_err = np.full(len(ratios), 0.0202)
-wwig_res = np.array([5.7301E-08, 5.7690E-08, 5.7053E-08, 5.9092E-08])
-wwig_err = np.array([0.0282, 0.0398, 0.0434, 0.0416])
-analog_res = np.full(len(ratios), 5.5893E-08)
-analog_err = np.full(len(ratios), 0.0646)
+wwinp_res = np.full(len(ratios), 5.5896E-08)
+wwinp_err = np.full(len(ratios), 0.0100)
+wwig_res = np.array([5.6022E-08, 5.5119E-08, 5.5265E-08, 5.5659E-08])
+wwig_err = np.array([0.0093, 0.0107, 0.0121, 0.0126])
+analog_res = np.full(len(ratios), 5.5739E-08)
+analog_err = np.full(len(ratios), 0.0240)
 
 # reference solutions
 ref_res = np.full(len(ratios) + 1, 5.5894E-08)
@@ -57,10 +57,10 @@ plt.figure()
 plt.errorbar(ratios, wwig_res, yerr=(wwig_err * wwig_res), color=wwig_color,
              label='WWIG', ls='', marker='d', lw=.9, capsize=cs)
 plt.errorbar([ext_x], wwinp_res[0], yerr=(wwinp_err * wwinp_res)[0],
-             color=wwinp_color, label='WWINP', ls='', marker='d', lw=.9,
+             color=wwinp_color, label='WWINP', ls='', marker='x', lw=.9,
              capsize=cs)
 plt.errorbar([ext_x], analog_res[0], yerr=(analog_err * analog_res)[0],
-             color=analog_color, label='Analog', ls='', marker='d', lw=.9,
+             color=analog_color, label='Analog', ls='', marker='o', lw=.9,
              capsize=cs)
 plt.plot(ref_xs, ref_res, label='Reference', ls='-', marker='', lw=.9,
          color=ref_color)
@@ -119,12 +119,12 @@ plt.errorbar(ext_x, [1], yerr=(wpratio * wperr),
              label='WWINP/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
              capsize=cs, color=wwinp_color)
 plt.plot(ext_x, wpratio, label='WWINP/Ref', ls='',
-         marker='d', lw=.9, color=wwinp_color)
+         marker='x', lw=.9, color=wwinp_color)
 # analog/reference
 plt.errorbar(ext_x, [1], yerr=(aratio * aerr),
              label='Analog/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
              capsize=cs, color=analog_color)
-plt.plot(ext_x, aratio, label='Analog/Ref', ls='', marker='d', lw=.9,
+plt.plot(ext_x, aratio, label='Analog/Ref', ls='', marker='o', lw=.9,
          color=analog_color)
 
 plt.xlabel('WWIG surface spacing ratio')
@@ -138,11 +138,11 @@ plt.savefig('tally15_ratios.png', dpi=dpi)
 plt.figure()
 plt.plot(ref_xs[:len(ratios)], ref_err[:len(ratios)], label='Reference',
          ls='-', marker='', lw=.9, color=ref_color)
-plt.plot(ratios, wwinp_err, label='WWINP', ls='-', marker='', lw=.9,
+plt.plot(ratios, wwinp_err, label='WWINP', ls='--', marker='', lw=.9,
          color=wwinp_color)
 plt.plot(ratios, wwig_err, label='WWIG', ls='-', marker='d', lw=.9,
          color=wwig_color)
-plt.plot(ratios, analog_err, label='Analog', ls='-', marker='', lw=.9,
+plt.plot(ratios, analog_err, label='Analog', ls='-.', marker='', lw=.9,
          color=analog_color)
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Relative Error')
