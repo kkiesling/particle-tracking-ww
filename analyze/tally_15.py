@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math as m
+import twosample_ttest as tt
 
 
 def calc_sigmas(means, errors, num):
@@ -153,4 +154,41 @@ plt.legend(bbox_to_anchor=(0.5, -.21), loc='lower center', ncol=4, fontsize='x-s
 plt.tight_layout()
 plt.savefig('tally15_error.png', dpi=dpi)
 
+
+
+## calculate p-value
+# [mean, error, sample size]
+num_hist = 1e6
+ref_hist = 1e7
+ref_sample = {'Tally': [ref_res[0], ref_err[0]*ref_res[0], ref_hist]}
+analog_sample = {'Tally': [analog_res[0], analog_err[0]*analog_res[0], num_hist]}
+wwinp_sample = {'Tally': [wwinp_res[0], wwinp_err[0]*wwinp_res[0], num_hist]}
+wwig_samples = {}
+
+for i, ratio in enumerate(ratios):
+    key = 'r={}'.format(ratio)
+    wwig_dict = {'Tally': [wwig_res[i], wwig_err[i]*wwig_res[i], num_hist]}
+    wwig_samples[key] = wwig_dict
+
+ana_ref_tt = tt.t_test(ref_sample, analog_sample)
+wwinp_ref_tt = tt.t_test(ref_sample, wwinp_sample)
+
+wwig_ref_tt = {}
+for ratio, sample in wwig_samples.items():
+    tt_res = tt.t_test(ref_sample, sample)
+    wwig_ref_tt[ratio] = tt_res
+
+print('Analog')
+print(ana_ref_tt)
+
+print('CWWM')
+print(wwinp_ref_tt)
+
+print('WWIG')
+for ratio, tt_res in wwig_ref_tt.items():
+    print(ratio)
+    print(tt_res)
+    tt.print_rej_summary(tt_res, .05, 0, verbose=2)
+
 plt.show()
+
