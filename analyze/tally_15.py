@@ -70,10 +70,11 @@ plt.plot(ref_xs, ref1_lower, label='', ls='--', lw=.75, color=ref_color)
 plt.plot(ref_xs, ref2_upper, label='Reference $\pm 2\sigma$',
          ls=':', lw=.75, color=ref_color)
 plt.plot(ref_xs, ref2_lower, label='', ls=':', lw=.75, color=ref_color)
-plt.xlabel('WWIG surface spacing ratio')
+plt.xlabel('WWIG surface spacing ratio $r$')
 plt.ylabel('Tally')
 plt.title('Point Detector Tally Results')
-plt.legend(loc='best', ncol=2, fontsize='x-small')
+plt.legend(bbox_to_anchor=(0.5, -.21), loc='lower center', ncol=6, fontsize='x-small')
+plt.tight_layout()
 plt.savefig('tally15_results.png', dpi=dpi)
 
 # plot wwinp ratio
@@ -102,9 +103,8 @@ ar2_upper, ar2_lower = calc_sigmas(r1, aerr, 2)
 plt.figure()
 
 # reference
-plt.plot(ratios, r1, label='E/Ref=1', ls='-', marker='', lw=.9,
+plt.plot(np.append(ratios, ext_x), np.append(r1, 1), label='E/Ref=1', ls='-', marker='', lw=.9,
          color=ref_color)
-
 # wwig/reference
 plt.plot(ratios, wgratio, label='WWIG/Ref', ls='', marker='d', lw=.9,
          color=wwig_color)
@@ -130,24 +130,27 @@ plt.plot(ext_x, aratio, label='Analog/Ref', ls='', marker='o', lw=.9,
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Ratio (E/Reference)')
 plt.title('Point Detector Tally Results,\n compared to reference results')
-plt.legend(loc='best', ncol=3, fontsize='x-small',
-           title='Comparison Results E')
+plt.legend(bbox_to_anchor=(0.5, -.3), loc='lower center', ncol=4,
+           fontsize='x-small')
+plt.tight_layout()
+
 plt.savefig('tally15_ratios.png', dpi=dpi)
 
 # plot relative errors
 plt.figure()
 plt.plot(ref_xs[:len(ratios)], ref_err[:len(ratios)], label='Reference',
          ls='-', marker='', lw=.9, color=ref_color)
-plt.plot(ratios, wwinp_err, label='WWINP', ls='--', marker='', lw=.9,
-         color=wwinp_color)
 plt.plot(ratios, wwig_err, label='WWIG', ls='-', marker='d', lw=.9,
          color=wwig_color)
+plt.plot(ratios, wwinp_err, label='WWINP', ls='--', marker='', lw=.9,
+         color=wwinp_color)
 plt.plot(ratios, analog_err, label='Analog', ls='-.', marker='', lw=.9,
          color=analog_color)
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Relative Error')
 plt.title('Point Detector Tally Relative Error')
-plt.legend(loc='best', fontsize='x-small')
+plt.legend(bbox_to_anchor=(0.5, -.21), loc='lower center', ncol=4, fontsize='x-small')
+plt.tight_layout()
 plt.savefig('tally15_error.png', dpi=dpi)
 
 plt.show()
