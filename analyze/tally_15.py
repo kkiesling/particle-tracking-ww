@@ -158,6 +158,8 @@ plt.savefig('tally15_error.png', dpi=dpi)
 
 ## calculate p-value
 # [mean, error, sample size]
+alpha = 0.001
+print("ALPHA {}".format(alpha))
 num_hist = 1e6
 ref_hist = 1e7
 ref_sample = {'Tally': [ref_res[0], ref_err[0]*ref_res[0], ref_hist]}
@@ -170,12 +172,12 @@ for i, ratio in enumerate(ratios):
     wwig_dict = {'Tally': [wwig_res[i], wwig_err[i]*wwig_res[i], num_hist]}
     wwig_samples[key] = wwig_dict
 
-ana_ref_tt = tt.t_test(ref_sample, analog_sample)
-wwinp_ref_tt = tt.t_test(ref_sample, wwinp_sample)
+ana_ref_tt = tt.t_test(ref_sample, analog_sample, alpha)
+wwinp_ref_tt = tt.t_test(ref_sample, wwinp_sample, alpha)
 
 wwig_ref_tt = {}
 for ratio, sample in wwig_samples.items():
-    tt_res = tt.t_test(ref_sample, sample)
+    tt_res = tt.t_test(ref_sample, sample, alpha)
     wwig_ref_tt[ratio] = tt_res
 
 print('Analog')
@@ -188,7 +190,7 @@ print('WWIG')
 for ratio, tt_res in wwig_ref_tt.items():
     print(ratio)
     print(tt_res)
-    tt.print_rej_summary(tt_res, .05, 0, verbose=2)
+    #tt.print_rej_summary(tt_res, .05, 0, verbose=2)
 
 plt.show()
 
