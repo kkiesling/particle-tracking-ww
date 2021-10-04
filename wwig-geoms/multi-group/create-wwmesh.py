@@ -1,4 +1,6 @@
 from pyne.mesh import Mesh, NativeMeshTag
+from pyne.mcnp import Wwinp
+from pymoab import core
 import numpy as np
 
 # mesh divisions
@@ -36,8 +38,25 @@ for grp, loc in w_loc.items():
 # populate data
 m.ww_n[:] = ww_data
 
+# add egroups
+m.tag('n_e_upper_bounds', tagtype=NativeMeshTag, size=len(w_loc), dtype=float)
+e_bounds = [[1e-2, 1.5e-1, 4e-1, 9e-1, 1.5]]
+e_data = e_bounds * num_mesh
+print(e_data)
+m.n_e_upper_bounds[:] = e_data
+
 # save mesh
 m.write_hdf5('ww-mesh.h5m', write_mats=False)
+
+# save wwinp - read in mesh file
+w = Wwinp()
+w.read_mesh(mesh='ww-mesh.h5m')
+# something isn't working so explicitly set energy groups
+w.e = []
+w.e.append(w.n_e_upper_bounds[0])
+w.ne = []
+w.ne.append(int(len(w.n_e_upper_bounds[0])))
+w.write_wwinp('wwinp')
 
 # To create wwig geoms:
 # generate_isogeom full ww-mesh-expanded.vtk ww_n_004 -lv 0.06 0.012 0.0024 0.00048 -db e4 -t E_LOW_BOUND 9e-1 -t E_UP_BOUND 1.5 -g wwn_4.h5m -v
