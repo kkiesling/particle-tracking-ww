@@ -46,7 +46,7 @@ NPS 1e5
 MODE N
 C mesh tally for global VR
 FMESH4:N  ORIGIN=-125 -125 -125 IMESH=125 JMESH=125 KMESH=125
-          IINTS=25 JINTS=25 KINTS=25
+          IINTS=50 JINTS=50 KINTS=50
           EMESH=1e-5 1e-1 20
 C cell tally
 F14:N 2
