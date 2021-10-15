@@ -104,34 +104,42 @@ ar2_upper, ar2_lower = calc_sigmas(r1, aerr, 2)
 plt.figure()
 
 # reference
-plt.plot(np.append(ratios, ext_x), np.append(r1, 1), label='E/Ref=1', ls='-', marker='', lw=.9,
+plt.plot(np.append(ratios, ext_x), np.append(r1, 1), label='$E/Ref=1$', ls='-', marker='', lw=.9,
+         color=ref_color)
+plt.plot(np.append(ratios, ext_x), ref_err + 1, label='$E/Ref \pm 1\sigma$', ls='--', marker='', lw=.9,
+         color=ref_color)
+plt.plot(np.append(ratios, ext_x), -ref_err + 1, ls='--', marker='', lw=.9,
+         color=ref_color)
+plt.plot(np.append(ratios, ext_x), 2.*ref_err + 1, label='$E/Ref \pm 2\sigma$', ls=':', marker='', lw=.9,
+         color=ref_color)
+plt.plot(np.append(ratios, ext_x), -2.*ref_err + 1, ls=':', marker='', lw=.9,
          color=ref_color)
 # wwig/reference
-plt.plot(ratios, wgratio, label='WWIG/Ref', ls='', marker='d', lw=.9,
-         color=wwig_color)
-plt.plot(ratios, wgr1_upper, label='WWIG/Ref $\pm 1\sigma$',
-         ls='--', lw=.75, color=wwig_color)
-plt.plot(ratios, wgr1_lower, label='', ls='--', lw=.75, color=wwig_color)
-plt.plot(ratios, wgr2_upper, label='WWIG/Ref $\pm 2\sigma$',
-         ls=':', lw=.75, color=wwig_color)
-plt.plot(ratios, wgr2_lower, label='', ls=':', lw=.75, color=wwig_color)
+plt.errorbar(ratios, wgratio, yerr=(wgerr * wgratio), label='$WWIG/Ref$', ls='', marker='d', lw=.9,
+             color=wwig_color, capsize=cs)
+#plt.plot(ratios, wgr1_upper, label='WWIG/Ref $\pm 1\sigma$',
+#         ls='--', lw=.75, color=wwig_color)
+#plt.plot(ratios, wgr1_lower, label='', ls='--', lw=.75, color=wwig_color)
+#plt.plot(ratios, wgr2_upper, label='WWIG/Ref $\pm 2\sigma$',
+#         ls=':', lw=.75, color=wwig_color)
+#plt.plot(ratios, wgr2_lower, label='', ls=':', lw=.75, color=wwig_color)
 # wwinp/reference
-plt.errorbar(ext_x, [1], yerr=(wpratio * wperr),
-             label='CWWM/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
+plt.errorbar(ext_x, wpratio, yerr=(wpratio * wperr),
+             label='$CWWM/Ref \pm 1\sigma$', ls='', marker='x', lw=.9,
              capsize=cs, color=wwinp_color)
-plt.plot(ext_x, wpratio, label='CWWM/Ref', ls='',
-         marker='x', lw=.9, color=wwinp_color)
+#plt.plot(ext_x, wpratio, label='CWWM/Ref', ls='',
+#         marker='x', lw=.9, color=wwinp_color)
 # analog/reference
-plt.errorbar(ext_x, [1], yerr=(aratio * aerr),
-             label='Analog/Ref $\pm 1\sigma$', ls='', marker='', lw=.9,
+plt.errorbar(ext_x, aratio, yerr=(aratio * aerr),
+             label='$Analog/Ref \pm 1\sigma$', ls='', marker='o', lw=.9,
              capsize=cs, color=analog_color)
-plt.plot(ext_x, aratio, label='Analog/Ref', ls='', marker='o', lw=.9,
-         color=analog_color)
+#plt.plot(ext_x, aratio, label='Analog/Ref', ls='', marker='o', lw=.9,
+#         color=analog_color)
 
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Ratio (E/Reference)')
 plt.title('Point Detector Tally Results,\n compared to reference results')
-plt.legend(bbox_to_anchor=(0.5, -.3), loc='lower center', ncol=4,
+plt.legend(bbox_to_anchor=(0.5, -.3), loc='lower center', ncol=6,
            fontsize='x-small')
 plt.tight_layout()
 
@@ -153,8 +161,6 @@ plt.title('Point Detector Tally Relative Error')
 plt.legend(bbox_to_anchor=(0.5, -.21), loc='lower center', ncol=4, fontsize='x-small')
 plt.tight_layout()
 plt.savefig('tally15_error.png', dpi=dpi)
-
-
 
 ## calculate p-value
 # [mean, error, sample size]
@@ -193,4 +199,3 @@ for ratio, tt_res in wwig_ref_tt.items():
     #tt.print_rej_summary(tt_res, .05, 0, verbose=2)
 
 plt.show()
-
