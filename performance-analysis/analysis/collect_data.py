@@ -163,4 +163,4 @@ if __name__ == '__main__':
             # make pandas df and write to file
             info_df = pd.DataFrame(metrics_info)
             save_name = mode + '_data.csv'
-            info_df.to_csv(save_name)
+            info_df.to_csv(save_name, index_label='i')
