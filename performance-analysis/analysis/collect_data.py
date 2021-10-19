@@ -1,5 +1,6 @@
 import sys
 import os
+from numpy.lib.npyio import save
 import pandas as pd
 
 
@@ -37,7 +38,6 @@ def read_outp(fpath):
         outp_info: dictionary containing tally 24 results for each
             energy group and FOM data
     """
-    print(fpath)
     outp_info = {}
     f = open(fpath, "r")
     line = f.readline()
@@ -109,25 +109,45 @@ def iterate_ratios(fdir, factor_name=None, factor_val=None):
 
 if __name__ == '__main__':
 
-    fdir = sys.argv[1]  # path to wwig data
-    for category in os.listdir(fdir):
-        new_dir = fdir + '/' + category
+    fpath = sys.argv[1]  # path to results folder
 
-        if category == 'default':
-            all_info = iterate_ratios(new_dir)
-            default_df = pd.DataFrame(all_info)
-            default_df.to_csv('wwig_default_data.csv', index_label='i')
+    for mode in os.listdir(fpath):
+        fdir = fpath + '/' + mode
 
-        elif category in ['dc', 'sm']:
-            collected_info = []
-            for factor in os.listdir(new_dir):
-                factor_dir = new_dir + '/' + factor
-                # get ratio info from each factor
-                fval = float(factor.split('0')[-1])
-                all_info = iterate_ratios(factor_dir, factor_name=category,
-                                          factor_val=fval)
-                collected_info.extend(all_info)
+        if mode == 'wwig':
+            for category in os.listdir(fdir):
+                new_dir = fdir + '/' + category
 
-            factor_df = pd.DataFrame(collected_info)
-            save_name = 'wwig_' + category + '_data.csv'
-            factor_df.to_csv(save_name, index_label='i')
+                if category == 'default':
+                    all_info = iterate_ratios(new_dir)
+                    default_df = pd.DataFrame(all_info)
+                    default_df.to_csv('wwig_default_data.csv', index_label='i')
+
+                elif category in ['dc', 'sm']:
+                    collected_info = []
+                    for factor in os.listdir(new_dir):
+                        factor_dir = new_dir + '/' + factor
+                        # get ratio info from each factor
+                        fval = float(factor.split('0')[-1])
+                        all_info = iterate_ratios(factor_dir, factor_name=category,
+                                                  factor_val=fval)
+                        collected_info.extend(all_info)
+
+                    factor_df = pd.DataFrame(collected_info)
+                    save_name = 'wwig_' + category + '_data.csv'
+                    factor_df.to_csv(save_name, index_label='i')
+
+        elif mode in ['cwwm', 'analog']:
+            # read outp info for both modes
+            outp_path = fdir + '/' + 'outp'
+            metrics_info = read_outp(outp_path)
+            if mode == 'cwwm':
+                ww_path = fdir + '/' + 'ww_checks'
+                # get ww check info for cwwm mode
+                ww_info = read_wwchecks(ww_path)
+                metrics_info.update(ww_info)
+
+            # make pandas df and write to file
+            info_df = pd.DataFrame(metrics_info)
+            save_name = mode + '_data.csv'
+            info_df.to_csv(save_name)
