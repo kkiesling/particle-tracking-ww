@@ -78,7 +78,20 @@ def read_outp(fpath):
 
 
 def iterate_ratios(fdir, factor_name=None, factor_val=None):
-    """iterate through each ratio directory collecting necessary info"""
+    """Iterate through each ratio directory collecting necessary info
+
+    Inputs:
+    -------
+        fdir: str, ath to folder with ratio folders
+        factor_name: str, dc or sm for decimating or smoothing
+        factor_val: float, value of the dc or sm that was applied
+
+    Returns:
+    --------
+        all_info: dict, collected metrics info from outp and ww_checks
+            files along with run information if applicable for all
+            ratio folders provided
+    """
     all_info = []
     for ratio in os.listdir(fdir):
         new_dir = fdir + '/' + ratio
