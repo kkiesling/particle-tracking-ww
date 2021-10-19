@@ -142,7 +142,8 @@ if __name__ == '__main__':
                         factor_dir = new_dir + '/' + factor
                         # get ratio info from each factor
                         fval = float(factor.split('0')[-1])
-                        all_info = iterate_ratios(factor_dir, factor_name=category,
+                        all_info = iterate_ratios(factor_dir,
+                                                  factor_name=category,
                                                   factor_val=fval)
                         collected_info.extend(all_info)
 
