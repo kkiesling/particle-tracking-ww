@@ -18,4 +18,13 @@ if __name__ == "__main__":
         print(f)
         print('file size (MB): {}'.format(fsize))
         print(gqu._surf_data)
-        print('average: {}'.format(np.average(gqu._surf_data['coarseness'])))
+        print('average coarseness: {}'.format(
+            np.average(gqu._surf_data['coarseness'])))
+
+        gqu.calc_roughness()
+        #print(gqu._vert_data)
+        print('average roughness: {}'.format(
+            np.average(gqu._vert_data['roughness'])))
+
+        print('global averags:')
+        print(gqu._global_averages)
