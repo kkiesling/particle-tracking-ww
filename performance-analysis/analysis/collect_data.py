@@ -121,6 +121,8 @@ def iterate_ratios(fdir, factor_name=None, factor_val=None):
         # concactenate dictionaries and append to total list
         ratio_info = {'ratio': int(ratio[1:])}
         ratio_info.update(collected_info)
+        mode_dir = {'mode': 'wwig'}
+        ratio_info.update(mode_dir)
 
         if factor_name:
             # if smoothing or decimating factor, need to add value to dict
@@ -146,7 +148,7 @@ if __name__ == '__main__':
                 if category == 'default':
                     all_info = iterate_ratios(new_dir)
                     default_df = pd.DataFrame(all_info)
-                    default_df.to_csv('wwig_default_data.csv', index_label='i')
+                    default_df.to_csv('csv/wwig_default_data.csv', index_label='i')
 
                 elif category in ['dc', 'sm']:
                     collected_info = []
@@ -160,12 +162,14 @@ if __name__ == '__main__':
                         collected_info.extend(all_info)
 
                     factor_df = pd.DataFrame(collected_info)
-                    save_name = 'wwig_' + category + '_data.csv'
+                    save_name = 'csv/wwig_' + category + '_data.csv'
                     factor_df.to_csv(save_name, index_label='i')
 
         elif mode in ['cwwm', 'analog']:
             all_info = collect_info(fdir)
+            mode_dir = {'mode': mode}
+            all_info.update(mode_dir)
             # make pandas df and write to file
             info_df = pd.DataFrame([all_info])
-            save_name = mode + '_data.csv'
+            save_name = 'csv/' + mode + '_data.csv'
             info_df.to_csv(save_name, index_label='i')
