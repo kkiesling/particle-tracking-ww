@@ -1,6 +1,5 @@
 import sys
 import os
-from numpy.lib.npyio import save
 import pandas as pd
 
 
@@ -54,10 +53,13 @@ def read_outp(fpath):
                 if data[0] == 'total':
                     energy = data[0]
                 else:
-                    energy = float(data[0])
+                    energy = data[0]
                 result = float(data[1])
                 error = float(data[2])
-                outp_info[energy] = (result, error)
+                res_key = 'tally ' + energy
+                err_key = 'error ' + energy
+                outp_info[res_key] = result
+                outp_info[err_key] = error
 
         if 'nps      mean     error   vov  slope    fom' in line:
             # found FOM data
@@ -164,6 +166,6 @@ if __name__ == '__main__':
         elif mode in ['cwwm', 'analog']:
             all_info = collect_info(fdir)
             # make pandas df and write to file
-            info_df = pd.DataFrame(all_info)
+            info_df = pd.DataFrame([all_info])
             save_name = mode + '_data.csv'
             info_df.to_csv(save_name, index_label='i')
