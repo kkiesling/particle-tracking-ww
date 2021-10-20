@@ -77,6 +77,25 @@ def read_outp(fpath):
     return outp_info
 
 
+def collect_info(fdir):
+
+    # files
+    ww_path = fdir + '/ww_checks'
+    outp_path = fdir + '/outp'
+    meshtal_path = fdir + '/meshtal'
+
+    # get info
+    if os.path.exists(ww_path):
+        ww_info = read_wwchecks(ww_path)
+    else:
+        ww_info = {}
+    outp_info = read_outp(outp_path)
+
+    # consolidate
+    outp_info.update(ww_info)
+    return outp_info
+
+
 def iterate_ratios(fdir, factor_name=None, factor_val=None):
     """Iterate through each ratio directory collecting necessary info
 
@@ -95,20 +114,11 @@ def iterate_ratios(fdir, factor_name=None, factor_val=None):
     all_info = []
     for ratio in os.listdir(fdir):
         new_dir = fdir + '/' + ratio
-        ww_info = {}
-        outp_info = {}
-        for f in os.listdir(new_dir):
-            # find outp and ww_checks files
-            fpath = new_dir + '/' + f
-            if f == 'ww_checks':
-                ww_info = read_wwchecks(fpath)
-            elif f == 'outp':
-                outp_info = read_outp(fpath)
+        collected_info = collect_info(new_dir)
 
         # concactenate dictionaries and append to total list
         ratio_info = {'ratio': int(ratio[1:])}
-        ratio_info.update(ww_info)
-        ratio_info.update(outp_info)
+        ratio_info.update(collected_info)
 
         if factor_name:
             # if smoothing or decimating factor, need to add value to dict
@@ -152,16 +162,8 @@ if __name__ == '__main__':
                     factor_df.to_csv(save_name, index_label='i')
 
         elif mode in ['cwwm', 'analog']:
-            # read outp info for both modes
-            outp_path = fdir + '/' + 'outp'
-            metrics_info = read_outp(outp_path)
-            if mode == 'cwwm':
-                ww_path = fdir + '/' + 'ww_checks'
-                # get ww check info for cwwm mode
-                ww_info = read_wwchecks(ww_path)
-                metrics_info.update(ww_info)
-
+            all_info = collect_info(fdir)
             # make pandas df and write to file
-            info_df = pd.DataFrame(metrics_info)
+            info_df = pd.DataFrame(all_info)
             save_name = mode + '_data.csv'
             info_df.to_csv(save_name, index_label='i')
