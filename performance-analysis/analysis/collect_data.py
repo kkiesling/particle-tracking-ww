@@ -165,7 +165,7 @@ if __name__ == '__main__':
                     save_name = 'csv/wwig_' + category + '_data.csv'
                     factor_df.to_csv(save_name, index_label='i')
 
-        elif mode in ['cwwm', 'analog']:
+        elif mode in ['cwwm', 'analog', 'reference']:
             all_info = collect_info(fdir)
             mode_dir = {'mode': mode}
             all_info.update(mode_dir)
