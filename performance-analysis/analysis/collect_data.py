@@ -126,7 +126,7 @@ def iterate_ratios(fdir, factor_name=None, factor_val=None):
 
         if factor_name:
             # if smoothing or decimating factor, need to add value to dict
-            factor_dict = {factor_name: factor_val}
+            factor_dict = {'refine': factor_name, 'factor': factor_val}
             ratio_info.update(factor_dict)
 
         all_info.append(ratio_info)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
                 new_dir = fdir + '/' + category
 
                 if category == 'default':
-                    all_info = iterate_ratios(new_dir)
+                    all_info = iterate_ratios(new_dir, factor_name=category, factor_val=1)
                     default_df = pd.DataFrame(all_info)
                     default_df.to_csv('csv/wwig_default_data.csv',
                                       index_label='i')
