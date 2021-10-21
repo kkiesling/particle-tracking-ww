@@ -148,7 +148,8 @@ if __name__ == '__main__':
                 if category == 'default':
                     all_info = iterate_ratios(new_dir)
                     default_df = pd.DataFrame(all_info)
-                    default_df.to_csv('csv/wwig_default_data.csv', index_label='i')
+                    default_df.to_csv('csv/wwig_default_data.csv',
+                                      index_label='i')
 
                 elif category in ['dc', 'sm']:
                     collected_info = []
