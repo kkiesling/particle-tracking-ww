@@ -159,5 +159,5 @@ if __name__ == "__main__":
             all_data.extend(ratio_data)
 
         all_data_df = pd.DataFrame(all_data)
-        all_data_df.to_csv('wwig_{}_measurements.csv'.format(mode),
+        all_data_df.to_csv('csv/wwig_{}_measurements.csv'.format(mode),
                            index_label='i')
