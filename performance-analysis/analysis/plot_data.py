@@ -4,7 +4,6 @@ from matplotlib import legend
 import pandas as pd
 import glob
 import matplotlib.pyplot as plt
-from pandas.core.frame import DataFrame
 
 colors = {0: '#FF4242', 1: '#235FA4', 2: '#6FDE6E', 'cwwm': '#E8F086',
           'analog': '#0A284B', 'reference': '#A691AE', 3: '#0A284B'}
@@ -17,7 +16,7 @@ ratios = [5, 6, 7, 8, 9, 10]
 dpi = 600
 lw = .9  # line width for plots
 cs = 5  # error bar cap size
-n_sigma = 3
+n_sigma = 1
 
 
 def calc_ratios(m1, e1, m2, e2):
@@ -199,11 +198,16 @@ def plot_cell_tally(df_refinement, df_output, refine):
     plt.savefig(save_name)
 
 
-def plot_tally_ratios(df_output):
+def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
+
+    if pltratio:
+        sharey = True
+    else:
+        sharey = False
 
     positions = [[0, 0], [0, 1], [1, 0], [1, 1]]
     fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
-                           sharey=False, figsize=(9, 6))
+                           sharey=sharey, figsize=(9, 6))
 
     for i, g in e_bounds.items():
         # subplot positions
@@ -214,11 +218,19 @@ def plot_tally_ratios(df_output):
                                   'reference']['tally ' + g]
         ref_err = df_output.loc[df_output['mode'] ==
                                 'reference']['error ' + g]
-        ref_tally_plt = np.full(2, float(ref_tally))
-        ref_sigma_plt_p = np.full(
-            2, float(ref_tally + ref_err * ref_tally * n_sigma))
-        ref_sigma_plt_n = np.full(
-            2, float(ref_tally - ref_err * ref_tally * n_sigma))
+
+        if pltratio:
+            ref_tally_plt = np.full(2, 1)
+            ref_sigma_plt_p = np.full(
+                2, float(1 + ref_err * n_sigma))
+            ref_sigma_plt_n = np.full(
+                2, float(1 - ref_err * n_sigma))
+        else:
+            ref_tally_plt = np.full(2, float(ref_tally))
+            ref_sigma_plt_p = np.full(
+                2, float(ref_tally + ref_err * ref_tally * n_sigma))
+            ref_sigma_plt_n = np.full(
+                2, float(ref_tally - ref_err * ref_tally * n_sigma))
 
         # get tally results
         df_sub2 = df_output.loc[df_output['mode'] == 'wwig'].loc[
@@ -226,9 +238,29 @@ def plot_tally_ratios(df_output):
                 df_output['tally ' + g].notnull()]
         tally_vals = df_sub2[['tally ' + g, 'error ' + g, 'ratio']]
 
+        # tally ratio
+        if pltratio:
+            tally_vals['tally ratio ' + g] = tally_vals['tally ' + g] / \
+                float(ref_tally)
+
         # plot raw values
-        yerr = tally_vals['tally ' + g] * tally_vals['error ' + g] * n_sigma
-        ax[pr][pc].errorbar(tally_vals['ratio'], tally_vals['tally ' + g], yerr=yerr,
+        if pltratio:
+            m1 = tally_vals['tally ' + g]
+            e1 = tally_vals['error ' + g]
+            m2 = float(ref_tally)
+            e2 = float(ref_err)
+            s1 = m1 * e1
+            s2 = m2 * e2
+            yerr = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
+        else:
+            yerr = tally_vals['tally ' + g] * tally_vals['error ' + g] * n_sigma
+
+        if pltratio:
+            y = tally_vals['tally ratio ' + g]
+        else:
+            tally_vals['tally ' + g]
+
+        ax[pr][pc].errorbar(tally_vals['ratio'], y, yerr=yerr,
                             marker='d', lw=lw, capsize=cs, ls='',
                             color=colors[i], label='')
         ax[pr][pc].plot([ratios[0], ratios[-1]], ref_tally_plt,
@@ -247,7 +279,7 @@ def plot_tally_ratios(df_output):
     # labels
     ylabel = 'Tally'
     xlabel = 'WWIG spacing ratio'
-    title = 'Cell Tally Results'
+    title = 'Cell Tally Results, ${}\sigma$'.format(n_sigma)
     #fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
     #           fontsize='x-small', title='Energy Group')
     fig.suptitle(title)
@@ -255,7 +287,7 @@ def plot_tally_ratios(df_output):
     fig.text(0.5, 0.01, xlabel, ha='center')
     plt.tight_layout(pad=2.7, w_pad=.5)
 
-    save_name = 'raw_tally_results_ratios.png'
+    save_name = 'raw_tally_results_ratios_{}.png'.format(n_sigma)
     plt.savefig(save_name)
 
 
@@ -279,7 +311,10 @@ if __name__ == '__main__':
 
     print(df_refinement.keys())
 
-    plot_tally_ratios(df_output)
+    plot_tally_ratios(df_output, pltratio=True, n_sigma=1)
+    plot_tally_ratios(df_output, pltratio=True, n_sigma=2)
+    plot_tally_ratios(df_output, pltratio=True, n_sigma=3)
+
 
     # plot average interior roughness and coarseness
     plot_interior_averages(df_refinement, 'roughness')
