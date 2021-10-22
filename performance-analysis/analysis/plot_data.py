@@ -16,7 +16,7 @@ ratios = [5, 6, 7, 8, 9, 10]
 dpi = 600
 lw = .9  # line width for plots
 cs = 5  # error bar cap size
-n_sigma = 1
+n_sigma = 3
 
 
 def calc_ratios(m1, e1, m2, e2):
@@ -52,7 +52,7 @@ def plot_interior_averages(df, refine):
         xlabel = 'Smoothing Factor'
         ylabel = 'Roughness'
 
-    for i, r in enumerate([8]):
+    for i, r in enumerate(ratios):
         pr = positions[i][0]
         pc = positions[i][1]
 
@@ -103,7 +103,7 @@ def plot_interior_averages(df, refine):
     plt.savefig(save_name)
 
 
-def plot_cell_tally(df_refinement, df_output, refine):
+def plot_cell_tally_refinement(df_refinement, df_output, refine):
 
     # I don't like these plots, but here we are..
 
@@ -136,7 +136,7 @@ def plot_cell_tally(df_refinement, df_output, refine):
 
         # get refinement measurements
         if g != 'total':
-            for r in ratios:
+            for r in [8]:
                 df_sub1 = df_refinement.loc[
                     df_refinement['energy group'] == i].loc[
                         df_refinement['ratio'] == r].loc[
@@ -188,7 +188,7 @@ def plot_cell_tally(df_refinement, df_output, refine):
     ylabel = 'Tally'
     title = 'Cell Tally Results'
     fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
-               fontsize='x-small', title='Energy Group')
+               fontsize='x-small', title='Ratio')
     fig.suptitle(title)
     fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
     fig.text(0.5, 0.01, xlabel, ha='center')
@@ -358,9 +358,9 @@ if __name__ == '__main__':
     # plot average interior roughness and coarseness
     plot_interior_averages(df_refinement, 'roughness')
     plot_interior_averages(df_refinement, 'coarseness')
-#
-    # # plot tally results as function of smoothness and roughness
-    # plot_cell_tally(df_refinement, df_output, 'roughness')
-    # plot_cell_tally(df_refinement, df_output, 'coarseness')
+
+    # plot tally results as function of smoothness and roughness
+    plot_cell_tally_refinement(df_refinement, df_output, 'roughness')
+    plot_cell_tally_refinement(df_refinement, df_output, 'coarseness')
 
     plt.show()
