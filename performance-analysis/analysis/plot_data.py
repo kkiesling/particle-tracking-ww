@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 from pandas.core.frame import DataFrame
 
 colors = {0: '#FF4242', 1: '#235FA4', 2: '#6FDE6E', 'cwwm': '#E8F086',
-          'analog': '#0A284B', 'reference': '#A691AE'}
+          'analog': '#0A284B', 'reference': '#A691AE', 3: '#0A284B'}
 color_r = {5: '#FF4242', 6: '#235FA4', 7: '#6FDE6E', 8: '#E8F086',
            9: '#0A284B', 10: '#A691AE'}
 markers = {0: 'x', 1: 'x', 2: 'x', 'cwwm': 'o',
            'analog': 'd', 'reference': 'D'}
-e_bounds = {0: '1.0000E-05', 1: '1.0000E-01', 2: '2.0000E+01'}
+e_bounds = {0: '1.0000E-05', 1: '1.0000E-01', 2: '2.0000E+01', 3: 'total'}
 ratios = [5, 6, 7, 8, 9, 10]
 dpi = 600
 lw = .9  # line width for plots
 cs = 5  # error bar cap size
-n_sigma = 2
+n_sigma = 3
 
 
 def calc_ratios(m1, e1, m2, e2):
@@ -64,27 +64,27 @@ def plot_interior_averages(df, refine):
         df_default = df.loc[df['mode'] == 'default'].loc[df['ratio'] == r]
 
         for e in e_bounds.keys():
-            # default wwig value
-            default_val = df_default.loc[
-                df_default['energy group'] == e][
-                    'interior average {}'.format(refine)]
+            if e != 3:
+                # default wwig value
+                default_val = df_default.loc[
+                    df_default['energy group'] == e][
+                        'interior average {}'.format(refine)]
+                # get applied factors and measurements (compared to default)
+                df_sub_sub = df_sub.loc[df_sub['energy group'] == e]
+                factor_list = df_sub_sub['factor']
+                interior_averages = df_sub_sub[
+                    'interior average {}'.format(refine)] / float(default_val)
 
-            # get applied factors and measurements (compared to default)
-            df_sub_sub = df_sub.loc[df_sub['energy group'] == e]
-            factor_list = df_sub_sub['factor']
-            interior_averages = df_sub_sub[
-                'interior average {}'.format(refine)] / float(default_val)
+                # only need legend labels one time
+                if i == 0:
+                    leg = '$E_{}$'.format(e)
+                else:
+                    leg = ''
 
-            # only need legend labels one time
-            if i == 0:
-                leg = '$E_{}$'.format(e)
-            else:
-                leg = ''
-
-            # plot energy group
-            ax[pr][pc].plot(
-                factor_list, interior_averages, linestyle='',
-                marker=markers[e], color=colors[e], label=leg)
+                # plot energy group
+                ax[pr][pc].plot(
+                    factor_list, interior_averages, linestyle='',
+                    marker=markers[e], color=colors[e], label=leg)
 
         # set title and axes labels
         ax[pr][pc].set_title('Ratio = {}'.format(r), fontsize='small')
@@ -119,7 +119,6 @@ def plot_cell_tally(df_refinement, df_output, refine):
     fig, ax = plt.subplots(nrows=2, ncols=2, sharex=False,
                            sharey=False, figsize=(9, 6))
 
-    groups = list(e_bounds.values()) + ['total']
     for i, g in e_bounds.items():
         # subplot positions
         pr = positions[i][0]
@@ -179,9 +178,12 @@ def plot_cell_tally(df_refinement, df_output, refine):
                                     color=color_r[r], label=leg)
                 ax[pr][pc].set_title('$E_{}$'.format(i))
 
-            ax[pr][pc].plot([m_min, m_max], ref_tally_plt)
-            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_n)
-            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_p)
+            ax[pr][pc].plot([m_min, m_max], ref_tally_plt,
+                            color=colors['reference'], ls='-', lw=lw)
+            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_n,
+                            color=colors['reference'], ls=':', lw=lw)
+            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_p,
+                            color=colors['reference'], ls=':', lw=lw)
 
     # labels
     ylabel = 'Tally'
@@ -194,6 +196,66 @@ def plot_cell_tally(df_refinement, df_output, refine):
     plt.tight_layout(pad=2.7, w_pad=.5)
 
     save_name = 'raw_tally_results_{}.png'.format(refine)
+    plt.savefig(save_name)
+
+
+def plot_tally_ratios(df_output):
+
+    positions = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
+                           sharey=False, figsize=(9, 6))
+
+    for i, g in e_bounds.items():
+        # subplot positions
+        pr = positions[i][0]
+        pc = positions[i][1]
+
+        ref_tally = df_output.loc[df_output['mode'] ==
+                                  'reference']['tally ' + g]
+        ref_err = df_output.loc[df_output['mode'] ==
+                                'reference']['error ' + g]
+        ref_tally_plt = np.full(2, float(ref_tally))
+        ref_sigma_plt_p = np.full(
+            2, float(ref_tally + ref_err * ref_tally * n_sigma))
+        ref_sigma_plt_n = np.full(
+            2, float(ref_tally - ref_err * ref_tally * n_sigma))
+
+        # get tally results
+        df_sub2 = df_output.loc[df_output['mode'] == 'wwig'].loc[
+            df_output['refine'] == 'default'].loc[
+                df_output['tally ' + g].notnull()]
+        tally_vals = df_sub2[['tally ' + g, 'error ' + g, 'ratio']]
+
+        # plot raw values
+        yerr = tally_vals['tally ' + g] * tally_vals['error ' + g] * n_sigma
+        ax[pr][pc].errorbar(tally_vals['ratio'], tally_vals['tally ' + g], yerr=yerr,
+                            marker='d', lw=lw, capsize=cs, ls='',
+                            color=colors[i], label='')
+        ax[pr][pc].plot([ratios[0], ratios[-1]], ref_tally_plt,
+                        color=colors['reference'], ls='-', lw=lw)
+        ax[pr][pc].plot([ratios[0], ratios[-1]], ref_sigma_plt_n,
+                        color=colors['reference'], ls=':', lw=lw)
+        ax[pr][pc].plot([ratios[0], ratios[-1]], ref_sigma_plt_p,
+                        color=colors['reference'], ls=':', lw=lw)
+
+        if i == 3:
+            title = '$E_{total}$'
+        else:
+            title = '$E_{}$'.format(i)
+        ax[pr][pc].set_title(title)
+
+    # labels
+    ylabel = 'Tally'
+    xlabel = 'WWIG spacing ratio'
+    title = 'Cell Tally Results'
+    #fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
+    #           fontsize='x-small', title='Energy Group')
+    fig.suptitle(title)
+    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
+    fig.text(0.5, 0.01, xlabel, ha='center')
+    plt.tight_layout(pad=2.7, w_pad=.5)
+
+    save_name = 'raw_tally_results_ratios.png'
     plt.savefig(save_name)
 
 
@@ -216,6 +278,8 @@ if __name__ == '__main__':
         sort=False, ignore_index=True)
 
     print(df_refinement.keys())
+
+    plot_tally_ratios(df_output)
 
     # plot average interior roughness and coarseness
     plot_interior_averages(df_refinement, 'roughness')
