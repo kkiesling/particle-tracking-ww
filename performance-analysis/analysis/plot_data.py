@@ -8,11 +8,16 @@ from pandas.core.frame import DataFrame
 
 colors = {0: '#FF4242', 1: '#235FA4', 2: '#6FDE6E', 'cwwm': '#E8F086',
           'analog': '#0A284B', 'reference': '#A691AE'}
+color_r = {5: '#FF4242', 6: '#235FA4', 7: '#6FDE6E', 8: '#E8F086',
+           9: '#0A284B', 10: '#A691AE'}
 markers = {0: 'x', 1: 'x', 2: 'x', 'cwwm': 'o',
            'analog': 'd', 'reference': 'D'}
 e_bounds = {0: '1.0000E-05', 1: '1.0000E-01', 2: '2.0000E+01'}
 ratios = [5, 6, 7, 8, 9, 10]
 dpi = 600
+lw = .9  # line width for plots
+cs = 5  # error bar cap size
+n_sigma = 2
 
 
 def calc_ratios(m1, e1, m2, e2):
@@ -100,13 +105,15 @@ def plot_interior_averages(df, refine):
 
 
 def plot_cell_tally(df_refinement, df_output, refine):
+
+    # I don't like these plots, but here we are..
+
     if refine == 'coarseness':
         refine_key = 'dc'
+        xlabel = 'Triangle Density'
     elif refine == 'roughness':
         refine_key = 'sm'
-
-    # x = refinement measurement
-    # y = cell tally / reference - per energy group
+        xlabel = 'Roughness'
 
     positions = [[0, 0], [0, 1], [1, 0], [1, 1]]
     fig, ax = plt.subplots(nrows=2, ncols=2, sharex=False,
@@ -122,6 +129,12 @@ def plot_cell_tally(df_refinement, df_output, refine):
                                   'reference']['tally ' + g]
         ref_err = df_output.loc[df_output['mode'] ==
                                 'reference']['error ' + g]
+        ref_tally_plt = np.full(2, float(ref_tally))
+        ref_sigma_plt_p = np.full(2, float(ref_tally + ref_err * ref_tally * n_sigma))
+        ref_sigma_plt_n = np.full(2, float(ref_tally - ref_err * ref_tally * n_sigma))
+
+        m_min = 1e300
+        m_max = 0
 
         # get refinement measurements
         if g != 'total':
@@ -146,8 +159,42 @@ def plot_cell_tally(df_refinement, df_output, refine):
                                       'tally ' + g, 'error ' + g]]
 
                 # merge so we match the correct tally to refinement
-                df_new = pd.merge(tally_vals, refine_vals, on='factor')
-                print(df_new)
+                df_new = pd.merge(tally_vals, refine_vals, on='factor').sort_values(
+                    'interior average ' + refine)
+
+                if min(df_new['interior average ' + refine]) < m_min:
+                    m_min = min(df_new['interior average ' + refine])
+                if max(df_new['interior average ' + refine]) > m_max:
+                    m_max = max(df_new['interior average ' + refine])
+
+                if i == 0:
+                    leg = '$r = {}$'.format(r)
+                else:
+                    leg = ''
+                # plot raw values
+                yerr = df_new['tally ' + g] * df_new['error ' + g] * n_sigma
+                ax[pr][pc].errorbar(df_new['interior average ' + refine],
+                                    df_new['tally ' + g], yerr=yerr,
+                                    marker='d', lw=lw, capsize=cs, ls='',
+                                    color=color_r[r], label=leg)
+                ax[pr][pc].set_title('$E_{}$'.format(i))
+
+            ax[pr][pc].plot([m_min, m_max], ref_tally_plt)
+            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_n)
+            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_p)
+
+    # labels
+    ylabel = 'Tally'
+    title = 'Cell Tally Results'
+    fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
+               fontsize='x-small', title='Energy Group')
+    fig.suptitle(title)
+    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
+    fig.text(0.5, 0.01, xlabel, ha='center')
+    plt.tight_layout(pad=2.7, w_pad=.5)
+
+    save_name = 'raw_tally_results_{}.png'.format(refine)
+    plt.savefig(save_name)
 
 
 if __name__ == '__main__':
@@ -178,4 +225,4 @@ if __name__ == '__main__':
     plot_cell_tally(df_refinement, df_output, 'roughness')
     plot_cell_tally(df_refinement, df_output, 'coarseness')
 
-    #plt.show()
+    plt.show()
