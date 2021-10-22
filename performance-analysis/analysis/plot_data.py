@@ -52,7 +52,7 @@ def plot_interior_averages(df, refine):
         xlabel = 'Smoothing Factor'
         ylabel = 'Roughness'
 
-    for i, r in enumerate(ratios):
+    for i, r in enumerate([8]):
         pr = positions[i][0]
         pc = positions[i][1]
 
@@ -291,6 +291,42 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     plt.savefig(save_name)
 
 
+def plot_ww_efficiency(df_output):
+    # plot as a function of the ratio
+
+    fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
+                           sharey=True, figsize=(9, 6))
+
+    df_wwig = df_output.loc[df_output['mode'] == 'wwig'].loc[
+        df_output['refine'] == 'default']
+    df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+    cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
+    cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
+    cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
+    cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
+
+    # plot overall efficiency
+    ax[0][0].plot([5, 10], cwwm_ww, marker='', ls=':')
+    ax[0][0].plot(df_wwig['ratio'], df_wwig['WW check efficiency'],
+                  marker='d', ls='')
+    ax[0][0].set_title('Total Efficiency')
+
+    ax[0][1].plot([5, 10], cwwm_lt, marker='', ls=':')
+    ax[0][1].plot(df_wwig['ratio'], df_wwig['Splits < C_u'],
+                  marker='d', ls='')
+    ax[0][1].set_title('Splitting Efficiency, $N_{splits}$ < C_u')
+
+    ax[1][0].plot([5, 10], cwwm_eq, marker='', ls=':')
+    ax[1][0].plot(df_wwig['ratio'], df_wwig['Splits = C_u'],
+                  marker='d', ls='')
+    ax[1][0].set_title('Splitting Efficiency, $N_{splits}$ = C_u')
+
+    ax[1][1].plot([5, 10], cwwm_gt, marker='', ls=':')
+    ax[1][1].plot(df_wwig['ratio'], df_wwig['Splits > C_u'],
+                  marker='d', ls='')
+    ax[1][1].set_title('Splitting Efficiency, $N_{splits}$ > C_u')
+
+
 if __name__ == '__main__':
 
     fpath = sys.argv[1]  # path folder of csv files
@@ -311,17 +347,20 @@ if __name__ == '__main__':
 
     print(df_refinement.keys())
 
+    # plot tally results
     plot_tally_ratios(df_output, pltratio=True, n_sigma=1)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=2)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=3)
 
+    # plot ww efficiencies
+    plot_ww_efficiency(df_output)
 
     # plot average interior roughness and coarseness
     plot_interior_averages(df_refinement, 'roughness')
     plot_interior_averages(df_refinement, 'coarseness')
-
-    # plot tally results as function of smoothness and roughness
-    plot_cell_tally(df_refinement, df_output, 'roughness')
-    plot_cell_tally(df_refinement, df_output, 'coarseness')
+#
+    # # plot tally results as function of smoothness and roughness
+    # plot_cell_tally(df_refinement, df_output, 'roughness')
+    # plot_cell_tally(df_refinement, df_output, 'coarseness')
 
     plt.show()
