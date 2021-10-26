@@ -136,7 +136,7 @@ def plot_cell_tally_refinement(df_refinement, df_output, refine):
 
         # get refinement measurements
         if g != 'total':
-            for r in [8]:
+            for r in ratios:
                 df_sub1 = df_refinement.loc[
                     df_refinement['energy group'] == i].loc[
                         df_refinement['ratio'] == r].loc[
