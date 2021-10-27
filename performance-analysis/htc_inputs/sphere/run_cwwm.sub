@@ -1,0 +1,31 @@
+# for submitting mcnp runs
+universe = vanilla
++SingularityImage="/software/kkiesling/dagmcnpww.sing"
+requirements = HasSingularity && HasCHTCSoftware && (TARGET.HasChtcStaging == true) 
+log = logs/cwwm_dagmcnp_$(Cluster).log
+error = logs/cwwm_dagmcnp_$(Cluster)_$(Process).err
+output = logs/cwwm_dagmcnp_$(Cluster)_$(Process).out
+
+# executable environment
+environment = "DATAPATH=/staging/kkiesling/MCNP_DATA"
+executable = run_cwwm.sh
+
+# input/output
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = ../performance-analysis/inputs/cwwm.inp,../performance-analysis/inputs/wwinp_magic,run_cwwm.sh
+#transfer_executable = False
+transfer_output_files = outp,meshtal,runtpe,ww_checks
+# preserve_relative_paths = True
+transfer_output_remaps = "outp=cwwm_results/outp ; meshtal=cwwm_results/meshtal ; runtpe=cwwm_results/runtpe ; ww_checks=cwwm_results/ww_checks"
+
+# request resources
+request_cpus = 1
+request_memory = 5GB
+request_disk = 2GB
+
+# notify by email
+notification = Always
+notify_user = kkiesling@wisc.edu
+
+queue 1

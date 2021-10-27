@@ -1,0 +1,31 @@
+# for submitting mcnp runs
+universe = vanilla
++SingularityImage="/software/kkiesling/dagmcnpww.sing"
+requirements = HasSingularity && HasCHTCSoftware && (TARGET.HasChtcStaging == true)
+log = logs/wwig_dagmcnp_$(Cluster)_r$(r).log
+error = logs/wwig_dagmcnp_$(Cluster)_$(Process)_r$(r).err
+output = logs/wwig_dagmcnp_$(Cluster)_$(Process)_r$(r).out
+
+# executable environment
+environment = "DATAPATH=/staging/kkiesling/MCNP_DATA"
+executable = run_wwig.sh
+
+# input/output
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = ../../inputs/wwig_slab.inp,../../wwigs_slab/r$(r)/000/,run_wwig.sh
+#transfer_executable = False
+transfer_output_files = outp,meshtal,ww_checks
+# preserve_relative_paths = True
+transfer_output_remaps = "outp=wwig_ratio/r$(r)/outp ; meshtal=wwig_ratio/r$(r)/meshtal ; ww_checks=wwig_ratio/r$(r)/ww_checks"
+
+# request resources
+request_cpus = 1
+request_memory = 2GB
+request_disk = 1GB
+
+# notify by email
+notification = Always
+notify_user = kkiesling@wisc.edu
+
+queue r from seq 5 10 |
