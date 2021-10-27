@@ -1,0 +1,58 @@
+Concrete sphere
+C to run: mcnp6 i=../../inputs/analog.inp
+C Cell Cards
+C cell # | mat # | density | surf combos
+C concrete sphere (density=2.3, 100%):
+01  1  -2.3    +1 -2 +3 -4 +5 -6
+C void
+100 0          -1:+2:-3:+4:-5:+6
+
+C Surface Cards - form a rectangle
+1  PX   -25
+2  PX    25
+*3  PY  -50
+*4  PY   50
+*5  PZ  -50
+*6  PZ   50
+
+C Data Cards
+IMP:n 1 0
+C materials: concrete and air
+C name: Concrete, Regular
+C density = 2.30000
+C remove o18: 8018 -2.8219e-03
+m1   1001 -2.2995e-02
+     1002 -5.2853e-06
+     8016 -1.2203e+00
+     8017 -4.9402e-04
+     11023 -6.6700e-02
+     13027 -7.8200e-02
+     14028 -7.1206e-01
+     14029 -3.7465e-02
+     14030 -2.5577e-02
+     20040 -9.7822e-02
+     20042 -6.8549e-04
+     20043 -1.4644e-04
+     20044 -2.3153e-03
+     20046 -4.6415e-06
+     20048 -2.2643e-04
+     26054 -1.8179e-03
+     26056 -2.9592e-02
+     26057 -6.9564e-04
+     26058 -9.4199e-05
+C Source definition --- planar source on -x plane
+SDEF SUR=1 NRM=+1 VEC=1 0 0  X=-25 Y=D1 Z=D2 ERG=1e-8 PAR=1
+SI1 -50 50
+SP1 0 1
+SI2 -50 50
+SP2 0 1
+NPS 1e5
+MODE N
+C mesh tally for global VR
+FMESH4:N  ORIGIN=-25 -50 -50 IMESH=25 JMESH=50 KMESH=50
+          IINTS=25 JINTS=50 KINTS=50
+          EMESH=20
+C surface tally for comparing results - flux on positive x plane
+F2:N  2
+E2  20
+wwp:n 7.0 4 100 j -1 0 6.852250109e-08
