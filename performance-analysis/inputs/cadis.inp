@@ -1,0 +1,17 @@
+method                        cadis
+anisn_library                 27n19g
+anisn_upscatter               false
+
+mcnp_input                    ../../inputs/analog.inp
+mcnp_tallies                  24
+
+denovo_x_blocks               1
+denovo_y_blocks               1
+denovo_z_blocks               1
+
+mesh_x       -125    125
+mesh_x_ints       50
+mesh_y       -125    125
+mesh_y_ints       50
+mesh_z       -125    125
+mesh_z_ints       50
