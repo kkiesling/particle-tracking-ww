@@ -16,6 +16,6 @@ denovo_z_blocks               1
 mesh_x       -25    25
 mesh_x_ints       25
 mesh_y       -50    50
-mesh_y_ints       50
+mesh_y_ints       25
 mesh_z       -50    50
-mesh_z_ints       50
+mesh_z_ints       25
