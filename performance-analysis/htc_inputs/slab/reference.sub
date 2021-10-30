@@ -15,7 +15,7 @@ should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_input_files = ../../inputs/reference_slab.inp,run_reference.sh
 #transfer_executable = False
-transfer_output_files = outp,meshtal,ww_checks
+transfer_output_files = outp,meshtal
 # preserve_relative_paths = True
 transfer_output_remaps = "outp=reference_results/outp ; meshtal=reference_results/meshtal"
 
