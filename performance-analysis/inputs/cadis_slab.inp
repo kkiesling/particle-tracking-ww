@@ -6,7 +6,7 @@ denovo_last_group             26
 
 mcnp_ww_ratio                 7
 
-mcnp_input                    ../../inputs/analog_slab.inp
+mcnp_input                    ../../../inputs/analog_slab.inp
 mcnp_tallies                  2
 
 denovo_x_blocks               1
