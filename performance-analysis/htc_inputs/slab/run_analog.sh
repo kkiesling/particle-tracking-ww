@@ -6,4 +6,5 @@ source /home/cnerg/.bashrc
 # set datapath
 export DATAPATH=/staging/kkiesling/MCNP_DATA
 
-mcnp6 i=wwig_slab.inp wcad=geoms/
+# run mcnp
+mcnp6 i=analog_slab.inp

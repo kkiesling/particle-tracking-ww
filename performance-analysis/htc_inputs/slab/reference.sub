@@ -1,0 +1,31 @@
+# for submitting mcnp runs
+universe = vanilla
++SingularityImage="/software/kkiesling/dagmcnpww.sing"
+requirements = HasSingularity && HasCHTCSoftware && (TARGET.HasChtcStaging == true) 
+log = logs/reference_dagmcnp_$(Cluster).log
+error = logs/reference_dagmcnp_$(Cluster)_$(Process).err
+output = logs/reference_dagmcnp_$(Cluster)_$(Process).out
+
+# executable environment
+environment = "DATAPATH=/staging/kkiesling/MCNP_DATA"
+executable = run_reference.sh
+
+# input/output
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = ../../inputs/reference_slab.inp,run_reference.sh
+#transfer_executable = False
+transfer_output_files = outp,meshtal,ww_checks
+# preserve_relative_paths = True
+transfer_output_remaps = "outp=reference_results/outp ; meshtal=reference_results/meshtal"
+
+# request resources
+request_cpus = 1
+request_memory = 2GB
+request_disk = 1GB
+
+# notify by email
+notification = Always
+notify_user = kkiesling@wisc.edu
+
+queue 1
