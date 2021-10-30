@@ -3,8 +3,8 @@ universe = vanilla
 +SingularityImage="/software/kkiesling/dagmcnpww.sing"
 requirements = HasSingularity && HasCHTCSoftware && (TARGET.HasChtcStaging == true)
 log = logs/wwig_dagmcnp_$(Cluster)_r$(r).log
-error = logs/wwig_dagmcnp_$(Cluster)_$(Process)_r$(r).err
-output = logs/wwig_dagmcnp_$(Cluster)_$(Process)_r$(r).out
+error = logs/wwig_dagmcnp_$(Cluster)_r$(r).err
+output = logs/wwig_dagmcnp_$(Cluster)_r$(r).out
 
 # executable environment
 environment = "DATAPATH=/staging/kkiesling/MCNP_DATA"

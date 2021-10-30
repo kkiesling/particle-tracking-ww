@@ -3,8 +3,8 @@ universe = vanilla
 +SingularityImage="/software/kkiesling/dagmcnpww.sing"
 requirements = HasSingularity && HasCHTCSoftware && (TARGET.HasChtcStaging == true) 
 log = logs/analog_dagmcnp_$(Cluster).log
-error = logs/analog_dagmcnp_$(Cluster)_$(Process).err
-output = logs/analog_dagmcnp_$(Cluster)_$(Process).out
+error = logs/analog_dagmcnp_$(Cluster).err
+output = logs/analog_dagmcnp_$(Cluster).out
 
 # executable environment
 environment = "DATAPATH=/staging/kkiesling/MCNP_DATA"
@@ -15,7 +15,7 @@ should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_input_files = ../../inputs/analog_slab.inp,run_analog.sh
 #transfer_executable = False
-transfer_output_files = outp,meshtal,ww_checks
+transfer_output_files = outp,meshtal
 # preserve_relative_paths = True
 transfer_output_remaps = "outp=analog_results/outp ; meshtal=analog_results/meshtal"
 
