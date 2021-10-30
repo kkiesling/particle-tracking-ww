@@ -41,7 +41,7 @@ m1   1001 -2.2995e-02
      26057 -6.9564e-04
      26058 -9.4199e-05
 C Source definition --- planar source on -x plane
-SDEF DIR=1 VEC=1 0 0  X=-25 Y=D1 Z=D2 ERG=1e-8 PAR=1
+SDEF DIR=1 VEC=1 0 0  X=-25 Y=D1 Z=D2 ERG=1e-9 PAR=1
 SI1 -50 50i 50
 SP1 0 1 50R
 SI2 -50 50i 50
