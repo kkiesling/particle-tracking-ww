@@ -9,7 +9,7 @@ from IsogeomGenerator import driver, isg, ivdb
 # -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
 
 # to run this script w/ cadis:
-# python ../generate_wwigs.py 5 4.026665930e-09 ../mesh_ww_tags.vtk ../mesh_ww_tags.h5m
+# python ../generate_wwigs.py 5 7.236157827e-04 ../mesh_ww_tags.vtk ../mesh_ww_tags.h5m
 # python ../generate_wwigs.py RATIO NORM VTK H5M
 
 
@@ -62,8 +62,8 @@ def generate_wwigs(wwig_info, fvtk, ratio, norm, id_rng):
         if int(ID) in id_rng:
             print("GENERATING ID " + ID)
             # generate levels
-            minN = info['w_min'] * float(ratio)
-            maxN = info['w_max'] / float(ratio)
+            minN = info['w_min'] # * float(ratio)
+            maxN = info['w_max'] #/ float(ratio)
             levels = driver.generate_levels(ratio, minN, maxN, mode='ratio')
 
             # generate volumes from visit
