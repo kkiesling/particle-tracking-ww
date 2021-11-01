@@ -19,18 +19,6 @@ cs = 5  # error bar cap size
 n_sigma = 3
 
 
-def calc_ratios(m1, e1, m2, e2):
-    # m1 = experiment
-    # m2 = accepted
-
-    #ratios = m1 / m2
-    s1 = m1 * e1
-    s2 = m2 * e2
-    sigma_ratio = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2)
-
-    return sigma_ratio
-
-
 def plot_interior_averages(df, refine):
     # x-axis = smoothing factor
     # y-axis = roughness / default
@@ -128,8 +116,10 @@ def plot_cell_tally_refinement(df_refinement, df_output, refine):
         ref_err = df_output.loc[df_output['mode'] ==
                                 'reference']['error ' + g]
         ref_tally_plt = np.full(2, float(ref_tally))
-        ref_sigma_plt_p = np.full(2, float(ref_tally + ref_err * ref_tally * n_sigma))
-        ref_sigma_plt_n = np.full(2, float(ref_tally - ref_err * ref_tally * n_sigma))
+        ref_sigma_plt_p = np.full(
+            2, float(ref_tally + ref_err * ref_tally * n_sigma))
+        ref_sigma_plt_n = np.full(
+            2, float(ref_tally - ref_err * ref_tally * n_sigma))
 
         m_min = 1e300
         m_max = 0
@@ -196,165 +186,3 @@ def plot_cell_tally_refinement(df_refinement, df_output, refine):
 
     save_name = 'raw_tally_results_{}.png'.format(refine)
     plt.savefig(save_name)
-
-
-def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
-
-    plt.figure()
-
-    ref_tally = df_output.loc[df_output['mode'] ==
-                              'reference']['tally total']
-    ref_err = df_output.loc[df_output['mode'] ==
-                            'reference']['error total']
-
-    if pltratio:
-        ref_tally_plt = np.full(2, 1)
-        ref_sigma_plt_p = np.full(
-            2, float(1 + ref_err * n_sigma))
-        ref_sigma_plt_n = np.full(
-            2, float(1 - ref_err * n_sigma))
-    else:
-        ref_tally_plt = np.full(2, float(ref_tally))
-        ref_sigma_plt_p = np.full(
-            2, float(ref_tally + ref_err * ref_tally * n_sigma))
-        ref_sigma_plt_n = np.full(
-            2, float(ref_tally - ref_err * ref_tally * n_sigma))
-
-    # get tally results
-    df_sub2 = df_output.loc[df_output['mode'] == 'wwig'].loc[
-        df_output['tally total'].notnull()]
-    tally_vals = df_sub2[['tally total', 'error total', 'ratio']]
-
-    # tally ratio
-    if pltratio:
-        tally_vals['tally ratio total'] = tally_vals['tally total'] / \
-            float(ref_tally)
-
-    # plot raw values
-    if pltratio:
-        m1 = tally_vals['tally total']
-        e1 = tally_vals['error total']
-        m2 = float(ref_tally)
-        e2 = float(ref_err)
-        s1 = m1 * e1
-        s2 = m2 * e2
-        yerr = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
-    else:
-        yerr = tally_vals['tally total'] * tally_vals['error total'] * n_sigma
-
-    if pltratio:
-        y = tally_vals['tally ratio total']
-    else:
-        y = tally_vals['tally total']
-
-    plt.errorbar(tally_vals['ratio'], y, yerr=yerr,
-                 marker='d', lw=lw, capsize=cs, ls='',
-                 color=colors[0], label='')
-    plt.plot([ratios[0], ratios[-1]], ref_tally_plt,
-             color=colors['reference'], ls='-', lw=lw)
-    plt.plot([ratios[0], ratios[-1]], ref_sigma_plt_n,
-             color=colors['reference'], ls=':', lw=lw)
-    plt.plot([ratios[0], ratios[-1]], ref_sigma_plt_p,
-             color=colors['reference'], ls=':', lw=lw)
-
-    # labels
-    ylabel = 'Tally'
-    xlabel = 'WWIG spacing ratio'
-    title = 'Cell Tally Results, ${}\sigma$'.format(n_sigma)
-    #fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
-    #           fontsize='x-small', title='Energy Group')
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    # plt.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    # plt.text(0.5, 0.01, xlabel, ha='center')
-    plt.tight_layout(pad=2.7, w_pad=.5)
-
-    #save_name = 'raw_tally_results_ratios_{}.png'.format(n_sigma)
-    #plt.savefig(save_name)
-
-
-def plot_ww_efficiency(df_output):
-    # plot as a function of the ratio
-
-    fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
-                           sharey=False, figsize=(9, 6))
-
-    df_wwig = df_output.loc[df_output['mode'] == 'wwig']
-    df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
-    cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
-    cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
-    cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
-    cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
-
-    # plot overall efficiency
-    ax[0][0].plot([5, 10], cwwm_ww, marker='', ls=':', label='CWWM')
-    ax[0][0].plot(df_wwig['ratio'], df_wwig['WW check efficiency'],
-                  marker='d', ls='', label='WWIG')
-    ax[0][0].set_title('Total WW Efficiency', fontsize='small')
-
-    ax[0][1].plot([5, 10], cwwm_lt, marker='', ls=':')
-    ax[0][1].plot(df_wwig['ratio'], df_wwig['Splits < C_u'],
-                  marker='d', ls='', label='')
-    ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
-
-    ax[1][0].plot([5, 10], cwwm_eq, marker='', ls=':')
-    ax[1][0].plot(df_wwig['ratio'], df_wwig['Splits = C_u'],
-                  marker='d', ls='', label='')
-    ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
-
-    ax[1][1].plot([5, 10], cwwm_gt, marker='', ls=':')
-    ax[1][1].plot(df_wwig['ratio'], df_wwig['Splits > C_u'],
-                  marker='d', ls='', label='')
-    ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
-
-    # labels
-    ylabel = 'Efficiency'
-    title = 'Weight Window Efficiency'
-    fig.suptitle(title)
-    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    fig.text(0.5, 0.01, 'WWIG Ratio', ha='center')
-    fig.legend(bbox_to_anchor=(0.9, 0), loc='lower right', ncol=2,
-               fontsize='x-small')
-    plt.tight_layout(pad=2.7, w_pad=.5)
-
-
-if __name__ == '__main__':
-
-    fpath = sys.argv[1]  # path folder of csv files
-
-    # get all output data
-    all_data_files = glob.glob(fpath + '/*_data.csv')
-    df_output = pd.concat((
-        pd.read_csv(f, header=0, index_col=0) for f in all_data_files),
-        sort=False, ignore_index=True)
-
-    print(df_output.keys())
-
-    # # get all wwig measurement data
-    # all_wwig_files = glob.glob(fpath + '/wwig_*_measurements.csv')
-    # df_refinement = pd.concat((
-    #     pd.read_csv(f, header=0, index_col=0) for f in all_wwig_files),
-    #     sort=False, ignore_index=True)
-    # print(df_refinement.keys())
-
-    # plot tally results
-    plot_tally_ratios(df_output, pltratio=True, n_sigma=1)
-    plot_tally_ratios(df_output, pltratio=True, n_sigma=2)
-    plot_tally_ratios(df_output, pltratio=True, n_sigma=3)
-
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=1)
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=2)
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=3)
-
-    # plot ww efficiencies
-    plot_ww_efficiency(df_output)
-
-    # # plot average interior roughness and coarseness
-    # plot_interior_averages(df_refinement, 'roughness')
-    # plot_interior_averages(df_refinement, 'coarseness')
-    # # plot tally results as function of smoothness and roughness
-    # plot_cell_tally_refinement(df_refinement, df_output, 'roughness')
-    # plot_cell_tally_refinement(df_refinement, df_output, 'coarseness')
-
-    plt.show()
