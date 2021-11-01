@@ -2,9 +2,9 @@ method                        cadis
 anisn_library                 27n19g
 anisn_upscatter               false
 denovo_first_group            0
-denovo_last_group             0
+denovo_last_group             26
 
-mcnp_ww_ratio                 5
+mcnp_ww_ratio                 7
 
 mcnp_input                    ../../../inputs/analog_slab.inp
 mcnp_tallies                  2
