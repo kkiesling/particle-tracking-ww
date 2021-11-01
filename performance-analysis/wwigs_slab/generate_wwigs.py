@@ -9,7 +9,7 @@ from IsogeomGenerator import driver, isg, ivdb
 # -N [RATIO] -db [GROUP NUM] - t E_LOW_BOUND [E_LOW] - t E_UP_BOUND [E_HI] -g wwn_[ID].h5m - v
 
 # to run this script w/ cadis:
-# python ../generate_wwigs.py 5 7.236157827e-04 ../mesh_ww_tags.vtk ../mesh_ww_tags.h5m
+# python ../generate_wwigs.py 5 8.738889025e-03 ../mesh_ww_tags.vtk ../mesh_ww_tags.h5m
 # python ../generate_wwigs.py RATIO NORM VTK H5M
 
 
