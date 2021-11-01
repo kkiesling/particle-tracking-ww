@@ -35,7 +35,7 @@ def get_data(fvtk, e_bounds):
     for i in range(len(e_bounds)):
         info = {}
         ID = '{:03d}'.format(i)
-        dataname = 'ww_n'
+        dataname = 'ww_n_' + ID
         mindata = min(mf.cell_data['hexahedron'][dataname])
         maxdata = max(mf.cell_data['hexahedron'][dataname])
         e_max = e_bounds[i]
