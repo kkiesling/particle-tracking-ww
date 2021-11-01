@@ -1,2 +1,2 @@
-i,error 1.0000E-01,error 1.0000E-05,error 2.0000E+01,error total,fom,mode,slope,tally 1.0000E-01,tally 1.0000E-05,tally 2.0000E+01,tally total,vov
-0,0.016,0.0057,0.0094,0.0046,402,reference,6.2,1.90046e-09,1.20168e-08,4.83363e-09,1.87509e-08,0.0001
+i,error total,fom,mode,slope,tally total,vov
+0,0.0042,10558,reference,2.8,1.43835e-05,0.0338

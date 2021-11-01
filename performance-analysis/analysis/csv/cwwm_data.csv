@@ -1,2 +1,2 @@
-i,N_splits < C_u,N_splits = C_u,N_splits > C_u,Splits < C_u,Splits = C_u,Splits > C_u,WW check efficiency,error 1.0000E-01,error 1.0000E-05,error 2.0000E+01,error total,fom,mode,slope,tally 1.0000E-01,tally 1.0000E-05,tally 2.0000E+01,tally total,total no change,total splits,total stochastic termination,total ww checks,vov
-0,19855650.0,23424.0,84563.0,0.994590815290821,0.0011733332959319987,0.004235851413246995,0.0864832143876808,0.1225,0.0548,0.0455,0.0391,23,cwwm,6.5,1.89131e-09,1.19065e-08,4.75712e-09,1.85549e-08,326558973.0,19963637.0,14906053.0,403196045.0,0.0046
+i,N_splits < C_u,N_splits = C_u,N_splits > C_u,Splits < C_u,Splits = C_u,Splits > C_u,WW check efficiency,error total,fom,mode,slope,tally total,total no change,total splits,total stochastic termination,total ww checks,vov
+0,115688.0,1.0,0.0,0.999991356135847,8.643864153030971e-06,0.0,0.060704174539406505,0.0204,15059,cwwm,2.9,1.43243e-05,3072230.0,115689.0,82861.0,3270780.0,0.0499

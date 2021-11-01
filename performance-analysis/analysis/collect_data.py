@@ -42,35 +42,36 @@ def read_outp(fpath):
     line = f.readline()
     end = False
     while not end:
-        if '1tally       24' in line:
+        if '1tally        2' in line:
             # found tally result data
             for i in range(9):
-                # skip some lines
                 f.readline()
-            for i in range(4):
-                # read tally data
+            for i in range(29):
+                # read tally data - get total only
                 data = f.readline().split()
                 if data[0] == 'total':
+                    print(data)
                     energy = data[0]
-                else:
-                    energy = data[0]
-                result = float(data[1])
-                error = float(data[2])
-                res_key = 'tally ' + energy
-                err_key = 'error ' + energy
-                outp_info[res_key] = result
-                outp_info[err_key] = error
+                    result = float(data[1])
+                    error = float(data[2])
+                    res_key = 'tally ' + energy
+                    err_key = 'error ' + energy
+                    outp_info[res_key] = result
+                    outp_info[err_key] = error
 
         if 'nps      mean     error   vov  slope    fom' in line:
             # found FOM data
-            for i in range(13):
+            for i in range(20):
                 # skip to last line of list
                 line = f.readline()
-            # collect data from tall 24 only
-            data = line.split()
-            outp_info['vov'] = data[8]
-            outp_info['slope'] = data[9]
-            outp_info['fom'] = data[10]
+
+                data = line.split()
+                if data[0] in ['10000', '1000000']:
+                    # collect data from tally 2
+                    outp_info['vov'] = data[3]
+                    outp_info['slope'] = data[4]
+                    outp_info['fom'] = data[5]
+                    break
 
             # all info has been collected
             end = True
@@ -98,7 +99,7 @@ def collect_info(fdir):
     return outp_info
 
 
-def iterate_ratios(fdir, factor_name=None, factor_val=None):
+def iterate_ratios(fdir):
     """Iterate through each ratio directory collecting necessary info
 
     Inputs:
@@ -124,11 +125,6 @@ def iterate_ratios(fdir, factor_name=None, factor_val=None):
         mode_dir = {'mode': 'wwig'}
         ratio_info.update(mode_dir)
 
-        if factor_name:
-            # if smoothing or decimating factor, need to add value to dict
-            factor_dict = {'refine': factor_name, 'factor': factor_val}
-            ratio_info.update(factor_dict)
-
         all_info.append(ratio_info)
 
     return all_info
@@ -141,30 +137,10 @@ if __name__ == '__main__':
     for mode in os.listdir(fpath):
         fdir = fpath + '/' + mode
 
-        if mode == 'wwig':
-            for category in os.listdir(fdir):
-                new_dir = fdir + '/' + category
-
-                if category == 'default':
-                    all_info = iterate_ratios(new_dir, factor_name=category, factor_val=1)
-                    default_df = pd.DataFrame(all_info)
-                    default_df.to_csv('csv/wwig_default_data.csv',
-                                      index_label='i')
-
-                elif category in ['dc', 'sm']:
-                    collected_info = []
-                    for factor in os.listdir(new_dir):
-                        factor_dir = new_dir + '/' + factor
-                        # get ratio info from each factor
-                        fval = float(factor.split('0')[-1])
-                        all_info = iterate_ratios(factor_dir,
-                                                  factor_name=category,
-                                                  factor_val=fval)
-                        collected_info.extend(all_info)
-
-                    factor_df = pd.DataFrame(collected_info)
-                    save_name = 'csv/wwig_' + category + '_data.csv'
-                    factor_df.to_csv(save_name, index_label='i')
+        if mode == 'wwigs':
+            all_info = iterate_ratios(fdir)
+            wwig_df = pd.DataFrame(all_info)
+            wwig_df.to_csv('csv/wwig_data.csv', index_label='i')
 
         elif mode in ['cwwm', 'analog', 'reference']:
             all_info = collect_info(fdir)
