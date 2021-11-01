@@ -45,7 +45,7 @@ def perturb_verts(mb, surfs, geom_ext, pertub_max):
                 # don't perturb edge verts
                 continue
 
-            perturbation = random.random() * 2. + -abs(pertub_max)
+            perturbation = random.random() * 2.*pertub_max + -abs(pertub_max)
             new_x = coords[0] + perturbation
             new_coords = np.array([new_x, coords[1], coords[2]])
             mb.set_coords(vert, new_coords)
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     pertub_max = float(sys.argv[1])
 
     # geometric extents
-    geom_ext = {'x': [-25, 25], 'y': [50, 50], 'z': [50, 50]}
+    geom_ext = {'x': [-25, 25], 'y': [-50, 50], 'z': [-50, 50]}
 
     for f in all_wwigs:
 
