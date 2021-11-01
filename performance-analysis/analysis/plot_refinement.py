@@ -19,170 +19,52 @@ cs = 5  # error bar cap size
 n_sigma = 3
 
 
-def plot_interior_averages(df, refine):
-    # x-axis = smoothing factor
-    # y-axis = roughness / default
-    # one line per energy group
-    # one plot per ratio [5 -> 10]
+def plot_fsize(df):
+    # plot total file size
+    plt.figure()
+    title = 'File Size'
+    xlabel = 'Decimation Factor'
+    ylabel = 'Total File Size (MB)'
 
-    positions = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2]]
-    fig, ax = plt.subplots(nrows=2, ncols=3, sharex=True,
-                           sharey=True, figsize=(9, 6))
+    plt.plot(df.loc[df['group'] == 'total']['dc factor'],
+             df.loc[df['group'] == 'total']['size'],
+             linestyle='', marker='d', color=colors[0])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
 
-    if refine == 'coarseness':
-        refine_key = 'dc'
-        title = 'Average Coarseness'
-        xlabel = 'Decimation Factor'
-        ylabel = 'Triangle Density'
-    elif refine == 'roughness':
-        refine_key = 'sm'
-        title = 'Average Roughness'
-        xlabel = 'Smoothing Factor'
-        ylabel = 'Roughness'
+    save_name = 'fsize_decimated.png'
+    plt.savefig(save_name)
+    # eventually need to add line for WWINP file size!!
 
-    for i, r in enumerate(ratios):
-        pr = positions[i][0]
-        pc = positions[i][1]
 
-        # get factor applied
-        df_sub = df.loc[df['mode'] == refine_key].loc[df['ratio'] == r]
+def plot_average_coarseness(df):
+    # just plot averages for each decimation factor
+    plt.figure()
+    title = 'Average Coarseness'
+    xlabel = 'Decimation Factor'
+    ylabel = 'Triangle Density'
 
-        # get default averages
-        df_default = df.loc[df['mode'] == 'default'].loc[df['ratio'] == r]
+    plt.plot(df.loc[df['group'] == 'total']['dc factor'],
+             df.loc[df['group'] == 'total']['average coarseness'],
+             linestyle='', marker='d', color=colors[0])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
 
-        for e in e_bounds.keys():
-            if e != 3:
-                # default wwig value
-                default_val = df_default.loc[
-                    df_default['energy group'] == e][
-                        'interior average {}'.format(refine)]
-                # get applied factors and measurements (compared to default)
-                df_sub_sub = df_sub.loc[df_sub['energy group'] == e]
-                factor_list = df_sub_sub['factor']
-                interior_averages = df_sub_sub[
-                    'interior average {}'.format(refine)] / float(default_val)
-
-                # only need legend labels one time
-                if i == 0:
-                    leg = '$E_{}$'.format(e)
-                else:
-                    leg = ''
-
-                # plot energy group
-                ax[pr][pc].plot(
-                    factor_list, interior_averages, linestyle='',
-                    marker=markers[e], color=colors[e], label=leg)
-
-        # set title and axes labels
-        ax[pr][pc].set_title('Ratio = {}'.format(r), fontsize='small')
-
-        # set x label one time on center plot
-        if pr == 1 and pc == 1:
-            ax[pr][pc].set_xlabel(xlabel)
-
-    # labels
-    fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
-               fontsize='x-small', title='Energy Group')
-    fig.suptitle(title)
-    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    plt.tight_layout(pad=2.7, w_pad=.5)
-
-    save_name = 'interior_averages_{}.png'.format(refine)
+    save_name = 'average_coarseness.png'
     plt.savefig(save_name)
 
 
-def plot_cell_tally_refinement(df_refinement, df_output, refine):
+if __name__ == '__main__':
 
-    # I don't like these plots, but here we are..
+    fdeci = 'csv/wwig_coarseness_measurements.csv'
+    df_deci = pd.read_csv(fdeci, header=0, index_col=0)
 
-    if refine == 'coarseness':
-        refine_key = 'dc'
-        xlabel = 'Triangle Density'
-    elif refine == 'roughness':
-        refine_key = 'sm'
-        xlabel = 'Roughness'
+    print(df_deci.keys())
+    plot_average_coarseness(df_deci)
+    plot_fsize(df_deci)
 
-    positions = [[0, 0], [0, 1], [1, 0], [1, 1]]
-    fig, ax = plt.subplots(nrows=2, ncols=2, sharex=False,
-                           sharey=False, figsize=(9, 6))
-
-    for i, g in e_bounds.items():
-        # subplot positions
-        pr = positions[i][0]
-        pc = positions[i][1]
-
-        ref_tally = df_output.loc[df_output['mode'] ==
-                                  'reference']['tally ' + g]
-        ref_err = df_output.loc[df_output['mode'] ==
-                                'reference']['error ' + g]
-        ref_tally_plt = np.full(2, float(ref_tally))
-        ref_sigma_plt_p = np.full(
-            2, float(ref_tally + ref_err * ref_tally * n_sigma))
-        ref_sigma_plt_n = np.full(
-            2, float(ref_tally - ref_err * ref_tally * n_sigma))
-
-        m_min = 1e300
-        m_max = 0
-
-        # get refinement measurements
-        if g != 'total':
-            for r in ratios:
-                df_sub1 = df_refinement.loc[
-                    df_refinement['energy group'] == i].loc[
-                        df_refinement['ratio'] == r].loc[
-                            df_refinement['mode'].isin(
-                                [refine_key, 'default'])]
-
-                # replace the NaN value for default with value 1 so it
-                # can be merged later
-                df_sub1['factor'] = df_sub1['factor'].replace(np.nan, 1.0)
-                refine_vals = df_sub1[['factor', 'interior average ' + refine]]
-
-                # get tally results
-                df_sub2 = df_output.loc[df_output['mode'] == 'wwig'].loc[
-                    df_output['ratio'] == r].loc[
-                        df_output['refine'].isin([refine_key, 'default'])].loc[
-                            df_output['tally ' + g].notnull()]
-                tally_vals = df_sub2[['refine', 'factor',
-                                      'tally ' + g, 'error ' + g]]
-
-                # merge so we match the correct tally to refinement
-                df_new = pd.merge(tally_vals, refine_vals, on='factor').sort_values(
-                    'interior average ' + refine)
-
-                if min(df_new['interior average ' + refine]) < m_min:
-                    m_min = min(df_new['interior average ' + refine])
-                if max(df_new['interior average ' + refine]) > m_max:
-                    m_max = max(df_new['interior average ' + refine])
-
-                if i == 0:
-                    leg = '$r = {}$'.format(r)
-                else:
-                    leg = ''
-                # plot raw values
-                yerr = df_new['tally ' + g] * df_new['error ' + g] * n_sigma
-                ax[pr][pc].errorbar(df_new['interior average ' + refine],
-                                    df_new['tally ' + g], yerr=yerr,
-                                    marker='d', lw=lw, capsize=cs, ls='',
-                                    color=color_r[r], label=leg)
-                ax[pr][pc].set_title('$E_{}$'.format(i))
-
-            ax[pr][pc].plot([m_min, m_max], ref_tally_plt,
-                            color=colors['reference'], ls='-', lw=lw)
-            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_n,
-                            color=colors['reference'], ls=':', lw=lw)
-            ax[pr][pc].plot([m_min, m_max], ref_sigma_plt_p,
-                            color=colors['reference'], ls=':', lw=lw)
-
-    # labels
-    ylabel = 'Tally'
-    title = 'Cell Tally Results'
-    fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
-               fontsize='x-small', title='Ratio')
-    fig.suptitle(title)
-    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    fig.text(0.5, 0.01, xlabel, ha='center')
-    plt.tight_layout(pad=2.7, w_pad=.5)
-
-    save_name = 'raw_tally_results_{}.png'.format(refine)
-    plt.savefig(save_name)
+    plt.show()
