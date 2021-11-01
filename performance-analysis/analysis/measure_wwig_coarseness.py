@@ -53,7 +53,7 @@ if __name__ == "__main__":
         all_data = query_coarseness(fdir, factor)
         complete_data.extend(all_data)
     # default data (r8)
-    default_data = query_coarseness(fdef, 1.0)
+    default_data = query_coarseness(fdef, 0.0)
 
     complete_data.extend(default_data)
 
