@@ -101,7 +101,8 @@ def plot_ww_efficiency(df_output):
     fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
                            sharey=False, figsize=(9, 6))
 
-    df_wwig = df_output.loc[df_output['mode'] == 'wwig']
+    df_wwig = df_output.loc[df_output['mode'] ==
+                            'wwig'].loc[~df_output['ratio'].isnull()]
     df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
     cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
     cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
