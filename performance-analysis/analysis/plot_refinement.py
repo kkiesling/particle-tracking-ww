@@ -20,7 +20,7 @@ n_sigma = 3
 
 
 def plot_fsize(df):
-    # plot total file size
+    # plot total file size - decimated sizes only
     plt.figure()
     title = 'File Size'
     xlabel = 'Decimation Factor'
@@ -58,13 +58,67 @@ def plot_average_coarseness(df):
     plt.savefig(save_name)
 
 
+def subplot_roughness(df, group_min, group_max):
+    fig, ax = plt.subplots(nrows=3, ncols=3, sharex=True,
+                           sharey=False, figsize=(9, 9))
+    positions = [[0, 0], [0, 1], [0, 2],
+                 [1, 0], [1, 1], [1, 2],
+                 [2, 0], [2, 1], [2, 2]]
+    for i, group in enumerate(range(group_min, group_max)):
+        pr = positions[i][0]
+        pc = positions[i][1]
+        df_sub = df.loc[df['group'] == str(group)]
+        ax[pr][pc].plot(df_sub['perturbation'],
+                        df_sub['average roughness'],
+                        linestyle='', marker='d', color=colors[0])
+        title_str = 'E_{}'.format(group)
+        ax[pr][pc].set_title('$E_{' + str(group) + '}$')
+
+    save_name = 'group_roughness_{}_{}.png'.format(group_min, group_max)
+    plt.savefig(save_name)
+
+
+def plot_roughness_per_group(df):
+    # measured roughness vs applied perturbation
+    subplot_roughness(df, 0, 9)
+    subplot_roughness(df, 9, 18)
+    subplot_roughness(df, 18, 27)
+
+
+def plot_average_roughness(df):
+    plt.figure()
+    title = 'Average Roughness'
+    xlabel = 'Maximum Perturbation'
+    ylabel = 'Roughness'
+
+    plt.plot(df.loc[df['group'] == 'total']['perturbation'],
+             df.loc[df['group'] == 'total']['average roughness'],
+             linestyle='', marker='d', color=colors[0])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+
+    save_name = 'average_roughness.png'
+    plt.savefig(save_name)
+
+
 if __name__ == '__main__':
 
+    # coarseness
     fdeci = 'csv/wwig_coarseness_measurements.csv'
     df_deci = pd.read_csv(fdeci, header=0, index_col=0)
-
     print(df_deci.keys())
     plot_average_coarseness(df_deci)
     plot_fsize(df_deci)
+
+    # get all wwig roughness measurement data
+    all_rough_files = glob.glob('csv/wwig_roughness_measurements_*.csv')
+    df_rough = pd.concat((
+        pd.read_csv(f, header=0, index_col=0) for f in all_rough_files),
+        sort=False, ignore_index=True)
+    print(df_rough.keys())
+    plot_roughness_per_group(df_rough)
+    plot_average_roughness(df_rough)
 
     plt.show()
