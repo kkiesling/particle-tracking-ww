@@ -1,2 +1,2 @@
 i,N_splits < C_u,N_splits = C_u,N_splits > C_u,Splits < C_u,Splits = C_u,Splits > C_u,WW check efficiency,error total,fom,mode,slope,tally total,total no change,total splits,total stochastic termination,total ww checks,vov
-0,115688.0,1.0,0.0,0.999991356135847,8.643864153030971e-06,0.0,0.060704174539406505,0.0204,15059,cwwm,2.9,1.43243e-05,3072230.0,115689.0,82861.0,3270780.0,0.0499
+0,577427.0,2.0,0.0,0.9999965363707053,3.4636292946838486e-06,0.0,0.0607951853233566,0.0108,2930,cwwm,2.7,1.43015e-05,15304195.0,577429.0,413219.0,16294843.0,0.1796

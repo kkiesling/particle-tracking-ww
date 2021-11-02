@@ -50,7 +50,6 @@ def read_outp(fpath):
                 # read tally data - get total only
                 data = f.readline().split()
                 if data[0] == 'total':
-                    print(data)
                     energy = data[0]
                     result = float(data[1])
                     error = float(data[2])
@@ -64,9 +63,8 @@ def read_outp(fpath):
             for i in range(20):
                 # skip to last line of list
                 line = f.readline()
-
                 data = line.split()
-                if data[0] in ['10000', '1000000']:
+                if data[0] in ['50000', '1000000']:
                     # collect data from tally 2
                     outp_info['vov'] = data[3]
                     outp_info['slope'] = data[4]
@@ -120,12 +118,43 @@ def iterate_ratios(fdir):
         collected_info = collect_info(new_dir)
 
         # concactenate dictionaries and append to total list
-        ratio_info = {'ratio': int(ratio[1:])}
-        ratio_info.update(collected_info)
+        info = {'ratio': int(ratio[1:])}
+        info.update(collected_info)
         mode_dir = {'mode': 'wwig'}
-        ratio_info.update(mode_dir)
+        info.update(mode_dir)
 
-        all_info.append(ratio_info)
+        all_info.append(info)
+
+    return all_info
+
+
+def iterate_decimation(fdir):
+    """Iterate through each ratio directory collecting necessary info
+
+    Inputs:
+    -------
+        fdir: str, ath to folder with ratio folders
+        factor_name: str, dc or sm for decimating or smoothing
+        factor_val: float, value of the dc or sm that was applied
+
+    Returns:
+    --------
+        all_info: dict, collected metrics info from outp and ww_checks
+            files along with run information if applicable for all
+            ratio folders provided
+    """
+    all_info = []
+    for factor in os.listdir(fdir):
+        new_dir = fdir + '/' + factor
+        collected_info = collect_info(new_dir)
+
+        # concactenate dictionaries and append to total list
+        info = {'ratio': float(factor)}
+        info.update(collected_info)
+        mode_dir = {'mode': 'wwig'}
+        info.update(mode_dir)
+
+        all_info.append(info)
 
     return all_info
 
@@ -138,9 +167,13 @@ if __name__ == '__main__':
         fdir = fpath + '/' + mode
 
         if mode == 'wwigs':
-            all_info = iterate_ratios(fdir)
-            wwig_df = pd.DataFrame(all_info)
-            wwig_df.to_csv('csv/wwig_data.csv', index_label='i')
+            ratio_info = iterate_ratios(fdir + '/ratios')
+            wwig_df = pd.DataFrame(ratio_info)
+            wwig_df.to_csv('csv/wwig_ratio_data.csv', index_label='i')
+
+            deci_info = iterate_decimation(fdir + '/decimate')
+            wwig_df = pd.DataFrame(deci_info)
+            wwig_df.to_csv('csv/wwig_deci_data.csv', index_label='i')
 
         elif mode in ['cwwm', 'analog', 'reference']:
             all_info = collect_info(fdir)
