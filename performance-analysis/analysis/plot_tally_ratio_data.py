@@ -23,10 +23,17 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
 
     plt.figure()
 
+    xmax = 11  # for location of the analog and cwwm results
+
     ref_tally = df_output.loc[df_output['mode'] ==
                               'reference']['tally total']
     ref_err = df_output.loc[df_output['mode'] ==
                             'reference']['error total']
+
+    cwwm_tally = df_output.loc[df_output['mode'] ==
+                               'cwwm']
+    ana_tally = df_output.loc[df_output['mode'] ==
+                              'analog']
 
     if pltratio:
         ref_tally_plt = np.full(2, 1)
@@ -50,33 +57,68 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     if pltratio:
         tally_vals['tally ratio total'] = tally_vals['tally total'] / \
             float(ref_tally)
+        cwwm_tally['tally ratio total'] = cwwm_tally['tally total'] / \
+            float(ref_tally)
+        ana_tally['tally ratio total'] = ana_tally['tally total'] / \
+            float(ref_tally)
 
     # plot raw values
     if pltratio:
-        m1 = tally_vals['tally total']
-        e1 = tally_vals['error total']
         m2 = float(ref_tally)
         e2 = float(ref_err)
+
+        # wwig
+        m1 = tally_vals['tally total']
+        e1 = tally_vals['error total']
         s1 = m1 * e1
         s2 = m2 * e2
         yerr = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
+
+        # cwwm
+        m1 = cwwm_tally['tally total']
+        e1 = cwwm_tally['error total']
+        s1 = m1 * e1
+        s2 = m2 * e2
+        y_cwwm_err = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
+
+        # analog
+        m1 = ana_tally['tally total']
+        e1 = ana_tally['error total']
+        s1 = m1 * e1
+        s2 = m2 * e2
+        y_ana_err = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
     else:
         yerr = tally_vals['tally total'] * tally_vals['error total'] * n_sigma
+        y_cwwm_err = cwwm_tally['total tally'] * \
+            cwwm_tally['error total'] * n_sigma
+        y_ana_err = ana_tally['total tally'] * \
+            ana_tally['error total'] * n_sigma
 
     if pltratio:
         y = tally_vals['tally ratio total']
+        cwwm_y = cwwm_tally['tally ratio total']
+        ana_y = ana_tally['tally ratio total']
     else:
         y = tally_vals['tally total']
+        cwwm_y = cwwm_tally['tally total']
+        ana_y = ana_tally['tally total']
 
     plt.errorbar(tally_vals['ratio'], y, yerr=yerr,
                  marker='d', lw=lw, capsize=cs, ls='',
-                 color=colors[0], label='')
-    plt.plot([ratios[0], ratios[-1]], ref_tally_plt,
-             color=colors['reference'], ls='-', lw=lw)
-    plt.plot([ratios[0], ratios[-1]], ref_sigma_plt_n,
-             color=colors['reference'], ls=':', lw=lw)
-    plt.plot([ratios[0], ratios[-1]], ref_sigma_plt_p,
-             color=colors['reference'], ls=':', lw=lw)
+                 color=colors[0], label='WWIG')
+    plt.errorbar([xmax], cwwm_y, yerr=y_cwwm_err,
+                 marker='o', lw=lw, capsize=cs, ls='',
+                 color=colors['cwwm'], label='CWWM')
+    plt.errorbar([xmax], ana_y, yerr=y_ana_err,
+                 marker='o', lw=lw, capsize=cs, ls='',
+                 color=colors['analog'], label='Analog')
+    plt.plot([ratios[0], xmax], ref_tally_plt,
+             color=colors['reference'], ls='-', lw=lw, label='Reference')
+    plt.plot([ratios[0], xmax], ref_sigma_plt_n,
+             color=colors['reference'], ls=':', lw=lw,
+             label='Reference $\pm {} \sigma$'.format(n_sigma))
+    plt.plot([ratios[0], xmax], ref_sigma_plt_p,
+             color=colors['reference'], ls=':', lw=lw, label='')
 
     # labels
     ylabel = 'Tally'
@@ -85,9 +127,9 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    # plt.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    # plt.text(0.5, 0.01, xlabel, ha='center')
-    plt.tight_layout(pad=2.7, w_pad=.5)
+    plt.legend(loc='best', ncol=2,
+               fontsize='x-small')
+    plt.tight_layout()
 
     save_name = 'images/surface_tally_results_ratios_{}.png'.format(n_sigma)
     plt.savefig(save_name)
