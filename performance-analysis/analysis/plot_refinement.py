@@ -34,7 +34,7 @@ def plot_fsize(df):
     plt.ylabel(ylabel)
     plt.tight_layout()
 
-    save_name = 'fsize_decimated.png'
+    save_name = 'images/fsize_decimated.png'
     plt.savefig(save_name)
     # eventually need to add line for WWINP file size!!
 
@@ -54,7 +54,7 @@ def plot_average_coarseness(df):
     plt.ylabel(ylabel)
     plt.tight_layout()
 
-    save_name = 'average_coarseness.png'
+    save_name = 'images/average_coarseness.png'
     plt.savefig(save_name)
 
 
@@ -74,7 +74,7 @@ def subplot_roughness(df, group_min, group_max):
         title_str = 'E_{}'.format(group)
         ax[pr][pc].set_title('$E_{' + str(group) + '}$')
 
-    save_name = 'group_roughness_{}_{}.png'.format(group_min, group_max)
+    save_name = 'images/group_roughness_{}_{}.png'.format(group_min, group_max)
     plt.savefig(save_name)
 
 
@@ -99,7 +99,7 @@ def plot_average_roughness(df):
     plt.ylabel(ylabel)
     plt.tight_layout()
 
-    save_name = 'average_roughness.png'
+    save_name = 'images/average_roughness.png'
     plt.savefig(save_name)
 
 
