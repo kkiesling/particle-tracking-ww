@@ -82,8 +82,6 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     ylabel = 'Tally'
     xlabel = 'WWIG spacing ratio'
     title = 'Cell Tally Results, ${}\sigma$'.format(n_sigma)
-    #fig.legend(bbox_to_anchor=(0.95, 0), loc='lower right', ncol=3,
-    #           fontsize='x-small', title='Energy Group')
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -91,8 +89,8 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     # plt.text(0.5, 0.01, xlabel, ha='center')
     plt.tight_layout(pad=2.7, w_pad=.5)
 
-    #save_name = 'raw_tally_results_ratios_{}.png'.format(n_sigma)
-    #plt.savefig(save_name)
+    save_name = 'images/surface_tally_results_ratios_{}.png'.format(n_sigma)
+    plt.savefig(save_name)
 
 
 def plot_ww_efficiency(df_output):
@@ -140,6 +138,9 @@ def plot_ww_efficiency(df_output):
                fontsize='x-small')
     plt.tight_layout(pad=2.7, w_pad=.5)
 
+    save_name = 'images/ww_efficiency_ratios.png'
+    plt.savefig(save_name)
+
 
 if __name__ == '__main__':
 
@@ -157,10 +158,6 @@ if __name__ == '__main__':
     plot_tally_ratios(df_output, pltratio=True, n_sigma=1)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=2)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=3)
-
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=1)
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=2)
-    plot_tally_ratios(df_output, pltratio=False, n_sigma=3)
 
     # plot ww efficiencies
     plot_ww_efficiency(df_output)
