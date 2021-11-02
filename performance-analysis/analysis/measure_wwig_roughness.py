@@ -55,22 +55,16 @@ def query_roughness(fdir, factor):
 
 if __name__ == "__main__":
 
-    fdec = sys.argv[1]  # path to wwig roughness folder
-    fdef = sys.argv[2]  # path to default geoms
+    fdir = sys.argv[1]  # path to a single factor folder
+    factor_string = fdir.strip('/').split('/')[-1]
+    print(factor_string)
 
-    complete_data = []
-    # decimated data
-    for factor in os.listdir(fdec):
-        fdir = fdec + '/' + factor
-        print(factor)
-        all_data = query_roughness(fdir, factor)
-        complete_data.extend(all_data)
+    if factor_string == 'geoms':
+        factor = 0.0
+    else:
+        factor = float(factor_string)
+    all_data = query_roughness(fdir, factor)
 
-    # default data (r8)
-    default_data = query_roughness(fdef, 0.0)
-
-    complete_data.extend(default_data)
-
-    all_data_df = pd.DataFrame(complete_data)
-    all_data_df.to_csv('csv/wwig_roughness_measurements.csv',
+    all_data_df = pd.DataFrame(all_data)
+    all_data_df.to_csv('csv/wwig_roughness_measurements_{}.csv'.format(factor),
                        index_label='i')
