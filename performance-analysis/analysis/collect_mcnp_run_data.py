@@ -128,7 +128,7 @@ def iterate_ratios(fdir):
     return all_info
 
 
-def iterate_decimation(fdir):
+def iterate_refine(fdir, refine):
     """Iterate through each ratio directory collecting necessary info
 
     Inputs:
@@ -149,7 +149,7 @@ def iterate_decimation(fdir):
         collected_info = collect_info(new_dir)
 
         # concactenate dictionaries and append to total list
-        info = {'ratio': float(factor)}
+        info = {refine: float(factor)}
         info.update(collected_info)
         mode_dir = {'mode': 'wwig'}
         info.update(mode_dir)
@@ -171,9 +171,13 @@ if __name__ == '__main__':
             wwig_df = pd.DataFrame(ratio_info)
             wwig_df.to_csv('csv/wwig_ratio_data.csv', index_label='i')
 
-            deci_info = iterate_decimation(fdir + '/decimate')
+            deci_info = iterate_refine(fdir + '/decimate', 'decimation')
             wwig_df = pd.DataFrame(deci_info)
             wwig_df.to_csv('csv/wwig_deci_data.csv', index_label='i')
+
+            rough_info = iterate_refine(fdir + '/rough', 'perturbation')
+            wwig_df = pd.DataFrame(rough_info)
+            wwig_df.to_csv('csv/wwig_rough_data.csv', index_label='i')
 
         elif mode in ['cwwm', 'analog', 'reference']:
             all_info = collect_info(fdir)
