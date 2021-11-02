@@ -25,7 +25,7 @@ def read_wwchecks(fpath):
     return ww_info
 
 
-def read_outp(fpath):
+def read_outp(fpath, mode):
     """read tally info and performance info from outp file
 
     Input:
@@ -37,6 +37,11 @@ def read_outp(fpath):
         outp_info: dictionary containing tally 24 results for each
             energy group and FOM data
     """
+    if mode == 'reference':
+        nps = '100000'
+    else:
+        nps = '50000'
+
     outp_info = {}
     f = open(fpath, "r")
     line = f.readline()
@@ -64,7 +69,7 @@ def read_outp(fpath):
                 # skip to last line of list
                 line = f.readline()
                 data = line.split()
-                if data[0] in ['50000', '1000000']:
+                if data[0] == nps:
                     # collect data from tally 2
                     outp_info['vov'] = data[3]
                     outp_info['slope'] = data[4]
@@ -78,7 +83,7 @@ def read_outp(fpath):
     return outp_info
 
 
-def collect_info(fdir):
+def collect_info(fdir, mode=None):
 
     # files
     ww_path = fdir + '/ww_checks'
@@ -90,7 +95,7 @@ def collect_info(fdir):
         ww_info = read_wwchecks(ww_path)
     else:
         ww_info = {}
-    outp_info = read_outp(outp_path)
+    outp_info = read_outp(outp_path, mode)
 
     # consolidate
     outp_info.update(ww_info)
@@ -180,7 +185,7 @@ if __name__ == '__main__':
             wwig_df.to_csv('csv/wwig_rough_data.csv', index_label='i')
 
         elif mode in ['cwwm', 'analog', 'reference']:
-            all_info = collect_info(fdir)
+            all_info = collect_info(fdir, mode=mode)
             mode_dir = {'mode': mode}
             all_info.update(mode_dir)
             # make pandas df and write to file
