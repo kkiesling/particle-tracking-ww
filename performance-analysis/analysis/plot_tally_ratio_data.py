@@ -16,7 +16,7 @@ ratios = [5, 6, 7, 8, 9, 10]
 dpi = 600
 lw = .9  # line width for plots
 cs = 5  # error bar cap size
-n_sigma = 3
+n_sigma = 1
 
 
 def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
@@ -123,7 +123,7 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     # labels
     ylabel = 'Tally'
     xlabel = 'WWIG spacing ratio'
-    title = 'Cell Tally Results, ${}\sigma$'.format(n_sigma)
+    title = 'Surface Tally Results, ${}\sigma$'.format(n_sigma)
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -135,7 +135,70 @@ def plot_tally_ratios(df_output, pltratio=True, n_sigma=n_sigma):
     plt.savefig(save_name)
 
 
-def plot_ww_efficiency(df_output):
+def plot_tally_refinement(df_output, df_measure, refinement,
+                          pltratio=True, n_sigma=n_sigma):
+
+    # reference
+    ref_tally = df_output.loc[df_output['mode'] ==
+                              'reference']['tally total']
+    ref_err = df_output.loc[df_output['mode'] ==
+                            'reference']['error total']
+    ref_tally_plt = np.full(2, float(ref_tally))
+    ref_sigma_plt_p = np.full(
+        2, float(ref_tally + ref_err * ref_tally * n_sigma))
+    ref_sigma_plt_n = np.full(
+        2, float(ref_tally - ref_err * ref_tally * n_sigma))
+
+    if refinement == 'coarseness':
+        measurement = 'average coarseness'
+        refine_key = 'dc factor'
+        output_key = 'decimation'
+        xlabel = 'Triangle Density'
+    elif refinement == 'roughness':
+        measurement = 'average roughness'
+        refine_key = 'perturbation'
+        output_key = 'perturbation'
+        xlabel = 'Surface Roughness'
+
+    # get the output data for total tally
+    df_tally = df_output.loc[~df_output[output_key].isnull()][
+        ['tally total', 'error total', output_key]]
+
+    # get measurement data for total only
+    df_refine = df_measure.loc[df_measure['group'] == 'total'][
+        [refine_key, measurement]]
+
+    # join with the measurement tally on the output_key and refine_key
+    df = pd.merge(df_tally, df_refine, how='left', left_on=[
+                  output_key], right_on=[refine_key])
+
+    plt.figure()
+    plt.errorbar(df[measurement], df['tally total'],
+                 yerr=df['tally total']*df['error total'],
+                 marker='d', lw=lw, capsize=cs, ls='',
+                 color=colors[0], label='WWIG')
+    xmin = min(df[measurement])
+    xmax = max(df[measurement])
+    plt.plot([xmin, xmax], ref_tally_plt,
+             color=colors['reference'], ls='-', lw=lw, label='Reference')
+    plt.plot([xmin, xmax], ref_sigma_plt_n,
+             color=colors['reference'], ls=':', lw=lw,
+             label='Reference $\pm {} \sigma$'.format(n_sigma))
+    plt.plot([xmin, xmax], ref_sigma_plt_p,
+             color=colors['reference'], ls=':', lw=lw, label='')
+
+    # labels
+    ylabel = 'Tally'
+    title = 'Surface Tally Results'
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    save_name = 'images/tally_vs_{}.png'.format(refinement)
+    plt.savefig(save_name)
+
+
+def plot_ww_efficiency_ratio(df_output):
     # plot as a function of the ratio
 
     fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
@@ -150,24 +213,25 @@ def plot_ww_efficiency(df_output):
     cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
 
     # plot overall efficiency
-    ax[0][0].plot([5, 10], cwwm_ww, marker='', ls=':', label='CWWM')
+    ax[0][0].plot([5, 10], cwwm_ww, marker='', ls=':',
+                  label='CWWM', color=colors['cwwm'])
     ax[0][0].plot(df_wwig['ratio'], df_wwig['WW check efficiency'],
-                  marker='d', ls='', label='WWIG')
+                  marker='d', ls='', label='WWIG', color=colors[0])
     ax[0][0].set_title('Total WW Efficiency', fontsize='small')
 
-    ax[0][1].plot([5, 10], cwwm_lt, marker='', ls=':')
+    ax[0][1].plot([5, 10], cwwm_lt, marker='', ls=':', color=colors['cwwm'])
     ax[0][1].plot(df_wwig['ratio'], df_wwig['Splits < C_u'],
-                  marker='d', ls='', label='')
+                  marker='d', ls='', label='', color=colors[0])
     ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
 
-    ax[1][0].plot([5, 10], cwwm_eq, marker='', ls=':')
+    ax[1][0].plot([5, 10], cwwm_eq, marker='', ls=':', color=colors['cwwm'])
     ax[1][0].plot(df_wwig['ratio'], df_wwig['Splits = C_u'],
-                  marker='d', ls='', label='')
+                  marker='d', ls='', label='', color=colors[0])
     ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
 
-    ax[1][1].plot([5, 10], cwwm_gt, marker='', ls=':')
+    ax[1][1].plot([5, 10], cwwm_gt, marker='', ls=':', color=colors['cwwm'])
     ax[1][1].plot(df_wwig['ratio'], df_wwig['Splits > C_u'],
-                  marker='d', ls='', label='')
+                  marker='d', ls='', label='', color=colors[0])
     ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
 
     # labels
@@ -175,7 +239,7 @@ def plot_ww_efficiency(df_output):
     title = 'Weight Window Efficiency'
     fig.suptitle(title)
     fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
-    fig.text(0.5, 0.01, 'WWIG Ratio', ha='center')
+    fig.text(0.5, 0.01, 'WWIG Surface Spacing Ratio', ha='center')
     fig.legend(bbox_to_anchor=(0.9, 0), loc='lower right', ncol=2,
                fontsize='x-small')
     plt.tight_layout(pad=2.7, w_pad=.5)
@@ -184,24 +248,101 @@ def plot_ww_efficiency(df_output):
     plt.savefig(save_name)
 
 
+def plot_ww_efficiency_refine(df_output, df_rough):
+    # plot as a function of the ratio
+
+    fig, ax = plt.subplots(nrows=2, ncols=2, sharex=True,
+                           sharey=False, figsize=(9, 6))
+
+    df_out = df_output.loc[
+        df_output['mode'] == 'wwig'].loc[
+            ~df_output['perturbation'].isnull()]
+    df_refine = df_rough.loc[df_rough['group'] == 'total'][
+        ['average roughness', 'perturbation']]
+    df_wwig = pd.merge(df_out, df_refine, how='left',
+                       left_on=['perturbation'], right_on=['perturbation'])
+
+    # df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+    # cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
+    # cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
+    # cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
+    # cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
+    # xmin = min(df_wwig['average roughness'])
+    # xmax = max(df_wwig['average roughness'])
+
+    # plot overall efficiency
+    # ax[0][0].plot([xmin, xmax], cwwm_ww, marker='', ls=':',
+    #               label='CWWM', color=colors['cwwm'])
+    ax[0][0].plot(df_wwig['average roughness'], df_wwig['WW check efficiency'],
+                  marker='d', ls='', label='WWIG', color=colors[0])
+    ax[0][0].set_title('Total WW Efficiency', fontsize='small')
+
+    # ax[0][1].plot([xmin, xmax], cwwm_lt, marker='',
+    #               ls=':', color=colors['cwwm'])
+    ax[0][1].plot(df_wwig['average roughness'], df_wwig['Splits < C_u'],
+                  marker='d', ls='', label='', color=colors[0])
+    ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
+
+    # ax[1][0].plot([xmin, xmax], cwwm_eq, marker='',
+    #               ls=':', color=colors['cwwm'])
+    ax[1][0].plot(df_wwig['average roughness'], df_wwig['Splits = C_u'],
+                  marker='d', ls='', label='', color=colors[0])
+    ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
+
+    # ax[1][1].plot([xmin, xmax], cwwm_gt, marker='',
+    #               ls=':', color=colors['cwwm'])
+    ax[1][1].plot(df_wwig['average roughness'], df_wwig['Splits > C_u'],
+                  marker='d', ls='', label='', color=colors[0])
+    ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
+
+    # labels
+    ylabel = 'Efficiency'
+    title = 'Weight Window Efficiency'
+    fig.suptitle(title)
+    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
+    fig.text(0.5, 0.01, 'Average Surface Roughness', ha='center')
+    # fig.legend(bbox_to_anchor=(0.9, 0), loc='lower right', ncol=2,
+    #            fontsize='x-small')
+    plt.tight_layout(pad=2.7, w_pad=.5)
+
+    save_name = 'images/ww_efficiency_roughness.png'
+    plt.savefig(save_name)
+
+
 if __name__ == '__main__':
 
-    fpath = sys.argv[1]  # path folder of csv files
-
     # get all output data
-    all_data_files = glob.glob(fpath + '/*_data.csv')
+    all_data_files = glob.glob('csv/*_data.csv')
     df_output = pd.concat((
         pd.read_csv(f, header=0, index_col=0) for f in all_data_files),
         sort=False, ignore_index=True)
 
-    print(df_output.keys())
+    # get coarseness data
+    fdeci = 'csv/wwig_coarseness_measurements.csv'
+    df_coarse = pd.read_csv(fdeci, header=0, index_col=0)
 
-    # plot tally results
+    # get roughness data
+    all_rough_files = glob.glob('csv/wwig_roughness_measurements_*.csv')
+    df_rough = pd.concat((
+        pd.read_csv(f, header=0, index_col=0) for f in all_rough_files),
+        sort=False, ignore_index=True)
+
+    print(df_output.keys())
+    print(df_coarse.keys())
+    print(df_rough.keys())
+
+    # plot tally results - as a function of wwig surface spacing
     plot_tally_ratios(df_output, pltratio=True, n_sigma=1)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=2)
     plot_tally_ratios(df_output, pltratio=True, n_sigma=3)
 
     # plot ww efficiencies
-    plot_ww_efficiency(df_output)
+    plot_ww_efficiency_ratio(df_output)
 
+    # plot tally results vs coarseness / coarseness
+    plot_tally_refinement(df_output, df_coarse, 'coarseness')
+    plot_tally_refinement(df_output, df_rough, 'roughness')
+
+    # ww efficiency vs roughness
+    plot_ww_efficiency_refine(df_output, df_rough)
     plt.show()
