@@ -43,7 +43,7 @@ def read_outp(fpath):
     tally_line = all_lines[-15]
     data = tally_line.split()
     outp_info['tally total'] = float(data[1])
-    outp_info['tally error'] = float(data[2])
+    outp_info['error total'] = float(data[2])
     outp_info['vov'] = float(data[3])
     outp_info['slope'] = float(data[4])
     outp_info['fom'] = float(data[5])
@@ -51,7 +51,6 @@ def read_outp(fpath):
 
 
 def collect_info(fdir):
-
     # files
     ww_path = fdir + '/ww_checks'
     outp_path = fdir + '/outp'
@@ -117,6 +116,8 @@ def iterate_refine(fdir, refine):
     """
     all_info = []
     for factor in os.listdir(fdir):
+        if factor[-3:] == '.sh':
+            continue
         new_dir = fdir + '/' + factor
         collected_info = collect_info(new_dir)
 

@@ -5,6 +5,10 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 
+colors = {'wwig': '#FF4242', 'analog': '#E8F086',
+          'cwwm': '#0A284B', 'reference': '#6FDE6E'}
+
+
 def plot_dens_pdf(bins, data, title, color):
     vals = np.clip(data, bins[0], bins[-1])
     sns.distplot(vals, kde=True, hist=False, norm_hist=False,
@@ -45,19 +49,18 @@ if __name__ == '__main__':
 
     # files should be the h5m files for the meshtally
 
-    for fh5m in sys.argv[1:]:
-        name, title = get_name(fh5m)
+    for i, fh5m in enumerate(sys.argv[1:]):
+        #name, title = get_name(fh5m)
+        name = 'wwig ' + str(i)
+        title = 'wwig ' + str(i)
         legends[name] = title
         all_data[name] = get_data(fh5m)
 
-    colors = {'cwwm': '#A691AE',
-              'analog': '#FF4242',
-              'wwig': '#6FDE6E'}
     bins = np.linspace(0.0, 1.0, num=11)
 
     # plot PDFs
     for name, data in all_data.items():
-        plot_dens_pdf(bins, data, legends[name], colors[name])
+        plot_dens_pdf(bins, data, legends[name], colors['wwig'])
 
     plt.xlim([0, bins[-1]])
     plt.xlabel('relative error R')
@@ -70,7 +73,7 @@ if __name__ == '__main__':
 
     # plot CDFs
     for name, data in all_data.items():
-        plot_dens_cdf(bins, data, legends[name], colors[name])
+        plot_dens_cdf(bins, data, legends[name], colors['wwig'])
 
     plt.xlim([0, bins[-1]])
     plt.xlabel('relative error R')
@@ -81,4 +84,3 @@ if __name__ == '__main__':
     plt.savefig('rel-error-CDF.png')
     plt.clf()
 
-    #plt.show()
