@@ -309,6 +309,45 @@ def plot_ww_efficiency_refine(df_output, df_rough):
     plt.savefig(save_name)
 
 
+def plot_fom(df_output, df_measure, refinement):
+    if refinement == 'coarseness':
+        measurement = 'average coarseness'
+        refine_key = 'dc factor'
+        output_key = 'decimation'
+        xlabel = 'Triangle Density'
+    elif refinement == 'roughness':
+        measurement = 'average roughness'
+        refine_key = 'perturbation'
+        output_key = 'perturbation'
+        xlabel = 'Surface Roughness'
+
+    # get the output data for total tally
+    df_tally = df_output.loc[~df_output[output_key].isnull()][
+        ['fom', output_key]]
+
+    # get measurement data for total only
+    df_refine = df_measure.loc[df_measure['group'] == 'total'][
+        [refine_key, measurement]]
+
+    # join with the measurement tally on the output_key and refine_key
+    df = pd.merge(df_tally, df_refine, how='left', left_on=[
+                  output_key], right_on=[refine_key])
+
+    plt.figure()
+    plt.plot(df[measurement], df['fom'], marker='d', ls='',
+             color=colors[0], label='WWIG')
+
+    # labels
+    ylabel = 'FOM'
+    title = 'Figure of Merit'
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    save_name = 'images/fom_{}.png'.format(refinement)
+    plt.savefig(save_name)
+
+
 if __name__ == '__main__':
 
     # get all output data
@@ -345,4 +384,9 @@ if __name__ == '__main__':
 
     # ww efficiency vs roughness
     plot_ww_efficiency_refine(df_output, df_rough)
+
+    # plot fom vs coarseness / coarseness
+    plot_fom(df_output, df_coarse, 'coarseness')
+    plot_fom(df_output, df_rough, 'roughness')
+
     plt.show()
