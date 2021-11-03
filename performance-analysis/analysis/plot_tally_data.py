@@ -5,6 +5,7 @@ import pandas as pd
 import glob
 import matplotlib.pyplot as plt
 
+
 # colors: '#FF4242' '#A691AE' '#235FA4' '#E8F086',
 #         '#0A284B' '#6FDE6E' '#0A284B'
 colors = {'wwig': '#FF4242', 'analog': '#E8F086',
@@ -173,7 +174,7 @@ def plot_tally_refinement(df_output, df_measure, refinement,
 
     plt.figure()
     plt.errorbar(df[measurement], df['tally total'],
-                 yerr=df['tally total']*df['error total'],
+                 yerr=df['tally total'] * df['error total'],
                  marker=markers['wwig'], lw=lw, capsize=cs, ls='',
                  color=colors['wwig'], label='WWIG')
     xmin = min(df[measurement])
@@ -215,22 +216,26 @@ def plot_ww_efficiency_ratio(df_output):
     ax[0][0].plot([5, 10], cwwm_ww, marker='', ls=':',
                   label='CWWM', color=colors['cwwm'])
     ax[0][0].plot(df_wwig['ratio'], df_wwig['WW check efficiency'],
-                  marker=markers['wwig'], ls='', label='WWIG', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='WWIG',
+                  color=colors['wwig'])
     ax[0][0].set_title('Total WW Efficiency', fontsize='small')
 
     ax[0][1].plot([5, 10], cwwm_lt, marker='', ls=':', color=colors['cwwm'])
     ax[0][1].plot(df_wwig['ratio'], df_wwig['Splits < C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
 
     ax[1][0].plot([5, 10], cwwm_eq, marker='', ls=':', color=colors['cwwm'])
     ax[1][0].plot(df_wwig['ratio'], df_wwig['Splits = C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
 
     ax[1][1].plot([5, 10], cwwm_gt, marker='', ls=':', color=colors['cwwm'])
     ax[1][1].plot(df_wwig['ratio'], df_wwig['Splits > C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
 
     # labels
@@ -273,25 +278,29 @@ def plot_ww_efficiency_refine(df_output, df_rough):
     # ax[0][0].plot([xmin, xmax], cwwm_ww, marker='', ls=':',
     #               label='CWWM', color=colors['cwwm'])
     ax[0][0].plot(df_wwig['average roughness'], df_wwig['WW check efficiency'],
-                  marker=markers['wwig'], ls='', label='WWIG', color=colors['wwig'])
+                  marker=markers['wwig'], ls='',
+                  label='WWIG', color=colors['wwig'])
     ax[0][0].set_title('Total WW Efficiency', fontsize='small')
 
     # ax[0][1].plot([xmin, xmax], cwwm_lt, marker='',
     #               ls=':', color=colors['cwwm'])
     ax[0][1].plot(df_wwig['average roughness'], df_wwig['Splits < C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
 
     # ax[1][0].plot([xmin, xmax], cwwm_eq, marker='',
     #               ls=':', color=colors['cwwm'])
     ax[1][0].plot(df_wwig['average roughness'], df_wwig['Splits = C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
 
     # ax[1][1].plot([xmin, xmax], cwwm_gt, marker='',
     #               ls=':', color=colors['cwwm'])
     ax[1][1].plot(df_wwig['average roughness'], df_wwig['Splits > C_u'],
-                  marker=markers['wwig'], ls='', label='', color=colors['wwig'])
+                  marker=markers['wwig'], ls='', label='',
+                  color=colors['wwig'])
     ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
 
     # labels
