@@ -21,8 +21,8 @@ transfer_output_remaps = "outp=reference_results/outp ; meshtal=reference_result
 
 # request resources
 request_cpus = 1
-request_memory = 2GB
-request_disk = 1GB
+request_memory = 1GB
+request_disk = 500MB
 
 # notify by email
 notification = Always

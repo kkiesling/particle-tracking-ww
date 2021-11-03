@@ -23,7 +23,7 @@ transfer_output_remaps = "outp=wwig_deci/$(r)/outp ; meshtal=wwig_deci/$(r)/mesh
 # request resources
 request_cpus = 1
 request_memory = 1GB
-request_disk = 100MB
+request_disk = 500MB
 
 # notify by email
 notification = Always
