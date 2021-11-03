@@ -25,7 +25,7 @@ def read_wwchecks(fpath):
     return ww_info
 
 
-def read_outp(fpath, mode):
+def read_outp(fpath):
     """read tally info and performance info from outp file
 
     Input:
@@ -37,53 +37,20 @@ def read_outp(fpath, mode):
         outp_info: dictionary containing tally 24 results for each
             energy group and FOM data
     """
-    if mode == 'reference':
-        nps = '100000'
-    else:
-        nps = '50000'
-
     outp_info = {}
     f = open(fpath, "r")
-    line = f.readline()
-    end = False
-    while not end:
-        if '1tally        2' in line:
-            # found tally result data
-            for i in range(9):
-                f.readline()
-            for i in range(29):
-                # read tally data - get total only
-                data = f.readline().split()
-                if data[0] == 'total':
-                    energy = data[0]
-                    result = float(data[1])
-                    error = float(data[2])
-                    res_key = 'tally ' + energy
-                    err_key = 'error ' + energy
-                    outp_info[res_key] = result
-                    outp_info[err_key] = error
-
-        if 'nps      mean     error   vov  slope    fom' in line:
-            # found FOM data
-            for i in range(20):
-                # skip to last line of list
-                line = f.readline()
-                data = line.split()
-                if data[0] == nps:
-                    # collect data from tally 2
-                    outp_info['vov'] = data[3]
-                    outp_info['slope'] = data[4]
-                    outp_info['fom'] = data[5]
-                    break
-
-            # all info has been collected
-            end = True
-        line = f.readline()
-
+    all_lines = f.readlines()
+    tally_line = all_lines[-15]
+    data = tally_line.split()
+    outp_info['tally total'] = float(data[1])
+    outp_info['tally error'] = float(data[2])
+    outp_info['vov'] = float(data[3])
+    outp_info['slope'] = float(data[4])
+    outp_info['fom'] = float(data[5])
     return outp_info
 
 
-def collect_info(fdir, mode=None):
+def collect_info(fdir):
 
     # files
     ww_path = fdir + '/ww_checks'
@@ -95,7 +62,7 @@ def collect_info(fdir, mode=None):
         ww_info = read_wwchecks(ww_path)
     else:
         ww_info = {}
-    outp_info = read_outp(outp_path, mode)
+    outp_info = read_outp(outp_path)
 
     # consolidate
     outp_info.update(ww_info)
@@ -185,7 +152,7 @@ if __name__ == '__main__':
             wwig_df.to_csv('csv/wwig_rough_data.csv', index_label='i')
 
         elif mode in ['cwwm', 'analog', 'reference']:
-            all_info = collect_info(fdir, mode=mode)
+            all_info = collect_info(fdir)
             mode_dir = {'mode': mode}
             all_info.update(mode_dir)
             # make pandas df and write to file
