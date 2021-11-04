@@ -363,30 +363,55 @@ def plot_fom(df_output, df_measure, refinement):
 def plot_relative_error_ratio(df_output):
     plt.figure()
 
-    xmax = 11  # for location of the analog, reference, and cwwm results
-    ref_err = df_output.loc[df_output['mode'] == 'reference']['error total']
-    cwwm_err = df_output.loc[df_output['mode'] == 'cwwm']['error total']
-    ana_err = df_output.loc[df_output['mode'] == 'analog']['error total']
-    ref_err_plt = np.full(2, float(ref_err))
-    cwwm_err_plt = np.full(2, float(cwwm_err))
-    ana_err_plt = np.full(2, float(ana_err))
+    ref_err = df_output.loc[df_output['mode'] ==
+                            'reference'][['error total', 'vov']]
+    cwwm_err = df_output.loc[df_output['mode']
+                             == 'cwwm'][['error total', 'vov']]
+    ana_err = df_output.loc[df_output['mode']
+                            == 'analog'][['error total', 'vov']]
+    ref_err_plt = np.full(2, float(ref_err['error total']))
+    cwwm_err_plt = np.full(2, float(cwwm_err['error total']))
+    ana_err_plt = np.full(2, float(ana_err['error total']))
+
+    ref_vov_p = np.full(2, ref_err_plt + float(ref_err['vov']))
+    ref_vov_m = np.full(2, ref_err_plt - float(ref_err['vov']))
+    cwwm_vov_p = np.full(2, cwwm_err_plt + float(cwwm_err['vov']))
+    cwwm_vov_m = np.full(2, cwwm_err_plt - float(cwwm_err['vov']))
+    ana_vov_p = np.full(2, ana_err_plt + float(ana_err['vov']))
+    ana_vov_m = np.full(2, ana_err_plt - float(ana_err['vov']))
 
     # get wwig relative errors
     df_sub2 = df_output.loc[df_output['mode'] == 'wwig'].loc[
         df_output['tally total'].notnull()]
-    wwig_err = df_sub2[['error total', 'ratio']]
+    wwig_err = df_sub2[['error total', 'ratio', 'vov']]
 
-    plt.plot(wwig_err['ratio'], wwig_err['error total'],
-             marker=markers['wwig'],
-             color=colors['wwig'], ls='', lw=lw, label='WWIG')
-    plt.plot([ratios[0], xmax], ref_err_plt,
-             color=colors['reference'], ls=':', lw=lw, label='Reference')
-    plt.plot([ratios[0], xmax], cwwm_err_plt,
-             color=colors['cwwm'], ls=':', lw=lw,
-             label='CWWM')
-    plt.plot([ratios[0], xmax], ana_err_plt,
-             color=colors['analog'], ls=':', lw=lw, label='Analog')
+    xmin = min(wwig_err['ratio'])
+    xmax = max(wwig_err['ratio']) + 1
 
+    plt.errorbar(wwig_err['ratio'], wwig_err['error total'],
+                 yerr=wwig_err['vov'],
+                 marker=markers['wwig'],
+                 color=colors['wwig'], ls='', lw=lw, capsize=cs,
+                 label='WWIG')
+    plt.plot([xmin, xmax], ref_err_plt,
+             color=colors['reference'], ls='-', lw=lw, label='Reference')
+    plt.plot([xmin, xmax], cwwm_err_plt,
+             color=colors['cwwm'], ls='-', lw=lw, label='CWWM')
+    plt.plot([xmin, xmax], ana_err_plt,
+             color=colors['analog'], ls='-', lw=lw, label='Analog')
+
+    plt.plot([xmin, xmax], ref_vov_p,
+             color=colors['reference'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], cwwm_vov_p,
+             color=colors['cwwm'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ana_vov_p,
+             color=colors['analog'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ref_vov_m,
+             color=colors['reference'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], cwwm_vov_m,
+             color=colors['cwwm'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ana_vov_m,
+             color=colors['analog'], ls=':', lw=lw, label='')
     # labels
     ylabel = 'Relative Error'
     xlabel = 'WWIG spacing ratio'
@@ -416,17 +441,27 @@ def plot_relative_error_refine(df_output, df_measure, refinement):
 
     plt.figure()
 
-    ref_err = df_output.loc[df_output['mode'] == 'reference']['error total']
-    cwwm_err = df_output.loc[df_output['mode'] == 'cwwm']['error total']
-    ana_err = df_output.loc[df_output['mode'] == 'analog']['error total']
-    ref_err_plt = np.full(2, float(ref_err))
-    cwwm_err_plt = np.full(2, float(cwwm_err))
-    ana_err_plt = np.full(2, float(ana_err))
+    ref_err = df_output.loc[df_output['mode'] ==
+                            'reference'][['error total', 'vov']]
+    cwwm_err = df_output.loc[df_output['mode']
+                             == 'cwwm'][['error total', 'vov']]
+    ana_err = df_output.loc[df_output['mode']
+                            == 'analog'][['error total', 'vov']]
+    ref_err_plt = np.full(2, float(ref_err['error total']))
+    cwwm_err_plt = np.full(2, float(cwwm_err['error total']))
+    ana_err_plt = np.full(2, float(ana_err['error total']))
+
+    ref_vov_p = np.full(2, ref_err_plt + float(ref_err['vov']))
+    ref_vov_m = np.full(2, ref_err_plt - float(ref_err['vov']))
+    cwwm_vov_p = np.full(2, cwwm_err_plt + float(cwwm_err['vov']))
+    cwwm_vov_m = np.full(2, cwwm_err_plt - float(cwwm_err['vov']))
+    ana_vov_p = np.full(2, ana_err_plt + float(ana_err['vov']))
+    ana_vov_m = np.full(2, ana_err_plt - float(ana_err['vov']))
 
     # get wwig relative errors
     # get the output data for total tally
     df_tally = df_output.loc[~df_output[output_key].isnull()][
-        ['error total', output_key]]
+        ['error total', output_key, 'vov']]
 
     # get measurement data for total only
     df_refine = df_measure.loc[df_measure['group'] == 'total'][
@@ -439,16 +474,30 @@ def plot_relative_error_refine(df_output, df_measure, refinement):
     xmin = min(wwig_err[measurement])
     xmax = max(wwig_err[measurement])
 
-    plt.plot(wwig_err[measurement], wwig_err['error total'],
-             marker=markers['wwig'],
-             color=colors['wwig'], ls='', lw=lw, label='WWIG')
+    plt.errorbar(wwig_err[measurement], wwig_err['error total'],
+                 yerr=wwig_err['vov'],
+                 marker=markers['wwig'],
+                 color=colors['wwig'], ls='', lw=lw, capsize=cs,
+                 label='WWIG')
     plt.plot([xmin, xmax], ref_err_plt,
-             color=colors['reference'], ls=':', lw=lw, label='Reference')
+             color=colors['reference'], ls='-', lw=lw, label='Reference')
     plt.plot([xmin, xmax], cwwm_err_plt,
-             color=colors['cwwm'], ls=':', lw=lw,
-             label='CWWM')
+             color=colors['cwwm'], ls='-', lw=lw, label='CWWM')
     plt.plot([xmin, xmax], ana_err_plt,
-             color=colors['analog'], ls=':', lw=lw, label='Analog')
+             color=colors['analog'], ls='-', lw=lw, label='Analog')
+
+    plt.plot([xmin, xmax], ref_vov_p,
+             color=colors['reference'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], cwwm_vov_p,
+             color=colors['cwwm'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ana_vov_p,
+             color=colors['analog'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ref_vov_m,
+             color=colors['reference'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], cwwm_vov_m,
+             color=colors['cwwm'], ls=':', lw=lw, label='')
+    plt.plot([xmin, xmax], ana_vov_m,
+             color=colors['analog'], ls=':', lw=lw, label='')
 
     # labels
     ylabel = 'Relative Error'
