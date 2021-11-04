@@ -331,7 +331,7 @@ def plot_fom(df_output, df_measure, refinement):
 
     # get the output data for total tally
     df_tally = df_output.loc[~df_output[output_key].isnull()][
-        ['fom', output_key]]
+        ['fom', output_key, 'cpu time']]
 
     # get measurement data for total only
     df_refine = df_measure.loc[df_measure['group'] == 'total'][
@@ -341,16 +341,20 @@ def plot_fom(df_output, df_measure, refinement):
     df = pd.merge(df_tally, df_refine, how='left', left_on=[
                   output_key], right_on=[refine_key])
 
-    plt.figure()
-    plt.plot(df[measurement], df['fom'], marker=markers['wwig'], ls='',
-             color=colors['wwig'], label='WWIG')
+    fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True,
+                           sharey=False, figsize=(5, 6))
+
+    ax[0].plot(df[measurement], df['fom'], marker=markers['wwig'], ls='',
+               color=colors['wwig'], label='WWIG')
+    ax[0].set_ylabel('FOM')
+    ax[1].plot(df[measurement], df['cpu time'], marker=markers['wwig'], ls='',
+               color=colors['wwig'], label='WWIG')
+    ax[1].set_ylabel('CPU time (min)')
 
     # labels
-    ylabel = 'FOM'
     title = 'Figure of Merit'
     plt.title(title)
     plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
     plt.tight_layout()
     save_name = 'images/fom_{}.png'.format(refinement)
     plt.savefig(save_name)

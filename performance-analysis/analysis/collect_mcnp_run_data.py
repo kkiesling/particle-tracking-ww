@@ -47,6 +47,7 @@ def read_outp(fpath):
     outp_info['vov'] = float(data[3])
     outp_info['slope'] = float(data[4])
     outp_info['fom'] = float(data[5])
+    outp_info['cpu time'] = float(all_lines[-3].split(' ')[-2])
     return outp_info
 
 

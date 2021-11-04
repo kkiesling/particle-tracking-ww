@@ -1,2 +1,2 @@
-i,error total,fom,mode,slope,tally total,vov
-0,0.0042,12300.0,reference,2.8,1.4383e-05,0.0338
+i,cpu time,error total,fom,mode,slope,tally total,vov
+0,4.58,0.0042,12300.0,reference,2.8,1.4383e-05,0.0338
