@@ -262,13 +262,11 @@ def plot_fom(df_output, df_measure, refinement):
         xlabel = 'Surface Roughness'
 
     # get the output data for total tally
-    df_tally = df_output.loc[~df_output[output_key].isnull()][
+    df_tally = df_output.loc[df_output[output_key].notnull()][
         ['fom', output_key, 'cpu time', 'error total', 'vov']]
 
     df_tally['fom error'] = (2. * df_tally['vov']**0.5) / \
         (df_tally['error total']**2 * df_tally['cpu time'])
-
-    print(df_tally)
 
     # get measurement data for total only
     df_refine = df_measure.loc[df_measure['group'] == 'total'][
@@ -393,6 +391,10 @@ if __name__ == '__main__':
     df_output = pd.concat((
         pd.read_csv(f, header=0, index_col=0) for f in all_data_files),
         sort=False, ignore_index=True)
+
+    # update the perturbation/decimation info on the r=8 ratio entry
+    df_output.loc[df_output['ratio'] == 8, 'perturbation'] = 0.0
+    df_output.loc[df_output['ratio'] == 8, 'decimation'] = 0.0
 
     # get coarseness data
     fdeci = 'csv/wwig_coarseness_measurements.csv'
