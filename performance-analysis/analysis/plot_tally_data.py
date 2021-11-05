@@ -263,7 +263,12 @@ def plot_fom(df_output, df_measure, refinement):
 
     # get the output data for total tally
     df_tally = df_output.loc[~df_output[output_key].isnull()][
-        ['fom', output_key, 'cpu time']]
+        ['fom', output_key, 'cpu time', 'error total', 'vov']]
+
+    df_tally['fom error'] = (2. * df_tally['vov']**0.5) / \
+        (df_tally['error total']**2 * df_tally['cpu time'])
+
+    print(df_tally)
 
     # get measurement data for total only
     df_refine = df_measure.loc[df_measure['group'] == 'total'][
@@ -276,8 +281,9 @@ def plot_fom(df_output, df_measure, refinement):
     fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True,
                            sharey=False, figsize=(5, 6))
 
-    ax[0].plot(df[measurement], df['fom'], marker=markers['wwig'], ls='',
-               color=colors['wwig'], label='WWIG')
+    ax[0].errorbar(df[measurement], df['fom'], yerr=df['fom error'],
+                   marker=markers['wwig'], ls='', lw=lw, capsize=cs,
+                   color=colors['wwig'], label='WWIG')
     ax[0].set_ylabel('Figure of Merit')
     ax[1].plot(df[measurement], df['cpu time'], marker=markers['wwig'], ls='',
                color=colors['wwig'], label='WWIG')
@@ -312,13 +318,17 @@ def plot_relative_error(df_output, refinement, df_measure=None):
 
     ref_err = df_output.loc[df_output['mode'] ==
                             'reference'][['error total', 'vov']]
-    cwwm_err = df_output.loc[df_output['mode']
-                             == 'cwwm'][['error total', 'vov']]
-    ana_err = df_output.loc[df_output['mode']
-                            == 'analog'][['error total', 'vov']]
+    cwwm_err = df_output.loc[df_output['mode'] ==
+                             'cwwm'][['error total', 'vov']]
+    ana_err = df_output.loc[df_output['mode'] ==
+                            'analog'][['error total', 'vov']]
+    # get error of relative error
+    sigma_r = ref_err['vov']**0.5 * ref_err['error total']
     ref_err_plt = np.full(2, float(ref_err['error total']))
-    ref_vov_p = np.full(2, ref_err_plt + float(ref_err['vov']))
-    ref_vov_m = np.full(2, ref_err_plt - float(ref_err['vov']))
+    ref_vov_p = np.full(2, ref_err['error total'] + sigma_r)
+    ref_vov_m = np.full(2, ref_err['error total'] - sigma_r)
+    cwwm_err['vov error'] = cwwm_err['vov']**0.5 * cwwm_err['error total']
+    ana_err['vov error'] = ana_err['vov']**0.5 * ana_err['error total']
 
     # get measurement data for total only
     if df_measure is not None:
@@ -334,6 +344,7 @@ def plot_relative_error(df_output, refinement, df_measure=None):
                                 'wwig'].loc[df_output[output_key].notnull()]
 
     wwig_err = df_wwig[['error total', measurement, 'vov']]
+    wwig_err['vov error'] = wwig_err['vov']**0.5 * wwig_err['error total']
 
     if refinement == 'roughness':
         ext = 1.03
@@ -350,14 +361,14 @@ def plot_relative_error(df_output, refinement, df_measure=None):
     plt.plot([xmin, xmax], ref_vov_p,
              color=colors['reference'], ls=':', lw=lw, label='')
     plt.errorbar(wwig_err[measurement], wwig_err['error total'],
-                 yerr=wwig_err['vov'],
+                 yerr=wwig_err['vov error'],
                  marker=markers['wwig'],
                  color=colors['wwig'], ls='', lw=lw, capsize=cs,
                  label='WWIG')
-    plt.errorbar([xmax], cwwm_err['error total'], yerr=cwwm_err['vov'],
+    plt.errorbar([xmax], cwwm_err['error total'], yerr=cwwm_err['vov error'],
                  color=colors['cwwm'], ls='-', lw=lw, label='CWWM',
                  marker=markers['cwwm'], capsize=cs)
-    plt.errorbar([xmax], ana_err['error total'], yerr=ana_err['vov'],
+    plt.errorbar([xmax], ana_err['error total'], yerr=ana_err['vov error'],
                  color=colors['analog'], ls='-', lw=lw, label='Analog',
                  marker=markers['analog'], capsize=cs)
 
