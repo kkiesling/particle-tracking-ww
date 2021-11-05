@@ -278,16 +278,16 @@ def plot_fom(df_output, df_measure, refinement):
 
     ax[0].plot(df[measurement], df['fom'], marker=markers['wwig'], ls='',
                color=colors['wwig'], label='WWIG')
-    ax[0].set_ylabel('FOM')
+    ax[0].set_ylabel('Figure of Merit')
     ax[1].plot(df[measurement], df['cpu time'], marker=markers['wwig'], ls='',
                color=colors['wwig'], label='WWIG')
     ax[1].set_ylabel('CPU time (min)')
 
     # labels
-    title = 'Figure of Merit'
-    plt.title(title)
+    title = 'Performance'
+    plt.suptitle(title)
     plt.xlabel(xlabel)
-    plt.tight_layout()
+    plt.tight_layout(pad=2.7, w_pad=.5)
     save_name = 'images/fom_{}.png'.format(refinement)
     plt.savefig(save_name)
 
