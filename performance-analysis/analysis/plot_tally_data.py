@@ -18,6 +18,112 @@ cs = 5  # error bar cap size
 n_sigma = 1
 
 
+def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
+                    n_sigma=n_sigma):
+
+    if refinement == 'coarseness':
+        measurement = 'average coarseness'
+        refine_key = 'dc factor'
+        output_key = 'decimation'
+        xlabel = 'Triangle Density'
+    elif refinement == 'roughness':
+        measurement = 'average roughness'
+        refine_key = 'perturbation'
+        output_key = 'perturbation'
+        xlabel = 'Surface Roughness'
+    elif refinement == 'ratio':
+        measurement = 'ratio'
+        output_key = 'ratio'
+        xlabel = 'WWIG Surface Spacing Ratio'
+
+    plt.figure()
+
+    ref_tally = df_output.loc[df_output['mode'] ==
+                              'cwwm']['tally total']
+    ref_err = df_output.loc[df_output['mode'] ==
+                            'cwwm']['error total']
+
+    # get reference values
+    if pltratio:
+        ref_tally_plt = np.full(2, 1)
+        ref_sigma_plt_p = np.full(
+            2, float(1 + ref_err * n_sigma))
+        ref_sigma_plt_n = np.full(
+            2, float(1 - ref_err * n_sigma))
+    else:
+        ref_tally_plt = np.full(2, float(ref_tally))
+        ref_sigma_plt_p = np.full(
+            2, float(ref_tally + ref_err * ref_tally * n_sigma))
+        ref_sigma_plt_n = np.full(
+            2, float(ref_tally - ref_err * ref_tally * n_sigma))
+
+    # get tally results
+
+    tally_vals = df_output.loc[df_output[output_key].notnull()][
+        ['tally total', 'error total', output_key]]
+
+    if df_measure is not None:
+        # get measurement data for total only
+        df_refine = df_measure.loc[df_measure['group'] == 'total'][
+            [refine_key, measurement]]
+        tally_vals = pd.merge(tally_vals, df_refine, how='left', left_on=[
+            output_key], right_on=[refine_key])
+
+    # tally ratio
+    if pltratio:
+        tally_vals['tally ratio total'] = tally_vals['tally total'] / \
+            float(ref_tally)
+
+    # get error bars for ratio
+    if pltratio:
+        m2 = float(ref_tally)
+        e2 = float(ref_err)
+
+        # wwig
+        m1 = tally_vals['tally total']
+        e1 = tally_vals['error total']
+        s1 = m1 * e1
+        s2 = m2 * e2
+        yerr = np.sqrt((s1 / m2)**2 + (m1 * s2 / (m2 * m2))**2) * n_sigma
+
+    else:
+        yerr = tally_vals['tally total'] * tally_vals['error total'] * n_sigma
+
+    if pltratio:
+        y = tally_vals['tally ratio total']
+    else:
+        y = tally_vals['tally total']
+
+    xmax = max(tally_vals[measurement])
+    xmin = min(tally_vals[measurement])
+
+    plt.errorbar(tally_vals[measurement], y, yerr=yerr,
+                 marker=markers['wwig'], lw=lw, capsize=cs, ls='',
+                 color=colors['wwig'], label='WWIG')
+
+    plt.plot([xmin, xmax], ref_tally_plt,
+             color=colors['cwwm'], ls='-', lw=lw, label='CWWM')
+    plt.plot([xmin, xmax], ref_sigma_plt_n,
+             color=colors['cwwm'], ls=':', lw=lw,
+             label='CWWM $\pm {} \sigma$'.format(n_sigma))
+    plt.plot([xmin, xmax], ref_sigma_plt_p,
+             color=colors['cwwm'], ls=':', lw=lw, label='')
+
+    # labels
+    ylabel = 'Tally'
+    title = 'Surface Tally Results, ${}\sigma$'.format(n_sigma)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.legend(loc='best', ncol=2,
+               fontsize='x-small')
+    plt.tight_layout()
+
+    save_name = 'images/surface_tally_results_cwwm_ratios_{}_{}.png'.format(
+        n_sigma, refinement)
+    plt.savefig(save_name)
+
+
 def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
                n_sigma=n_sigma):
 
@@ -427,6 +533,25 @@ if __name__ == '__main__':
                df_measure=df_coarse, pltratio=True, n_sigma=2)
     plot_tally(df_output, 'coarseness',
                df_measure=df_coarse, pltratio=True, n_sigma=3)
+
+    # plot tally results
+    plot_tally_cwwm(df_output, 'ratio', pltratio=True, n_sigma=1)
+    plot_tally_cwwm(df_output, 'ratio', pltratio=True, n_sigma=2)
+    plot_tally_cwwm(df_output, 'ratio', pltratio=True, n_sigma=3)
+
+    plot_tally_cwwm(df_output, 'roughness',
+                    df_measure=df_rough, pltratio=True, n_sigma=1)
+    plot_tally_cwwm(df_output, 'roughness',
+                    df_measure=df_rough, pltratio=True, n_sigma=2)
+    plot_tally_cwwm(df_output, 'roughness',
+                    df_measure=df_rough, pltratio=True, n_sigma=3)
+
+    plot_tally_cwwm(df_output, 'coarseness',
+                    df_measure=df_coarse, pltratio=True, n_sigma=1)
+    plot_tally_cwwm(df_output, 'coarseness',
+                    df_measure=df_coarse, pltratio=True, n_sigma=2)
+    plot_tally_cwwm(df_output, 'coarseness',
+                    df_measure=df_coarse, pltratio=True, n_sigma=3)
 
     # plot ww efficiencies
     plot_ww_efficiency(df_output, 'ratio')
