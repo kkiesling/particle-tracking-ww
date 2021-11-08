@@ -98,19 +98,19 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
 
     plt.errorbar(tally_vals[measurement], y, yerr=yerr,
                  marker=markers['wwig'], lw=lw, capsize=cs, ls='',
-                 color=colors['wwig'], label='WWIG')
+                 color=colors['wwig'], label='WWIG/CWWM')
 
     plt.plot([xmin, xmax], ref_tally_plt,
-             color=colors['cwwm'], ls='-', lw=lw, label='CWWM')
+             color=colors['cwwm'], ls='-', lw=lw, label='WWIG/CWWM$= 1$')
     plt.plot([xmin, xmax], ref_sigma_plt_n,
              color=colors['cwwm'], ls=':', lw=lw,
-             label='CWWM $\pm {} \sigma$'.format(n_sigma))
+             label='WWIG/CWWM $=1 \pm {} \sigma$'.format(n_sigma))
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['cwwm'], ls=':', lw=lw, label='')
 
     # labels
-    ylabel = 'Tally'
-    title = 'Surface Tally Results, ${}\sigma$'.format(n_sigma)
+    ylabel = 'Tally (WWIG/CWWM)'
+    title = 'Surface Tally Results'
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -238,24 +238,24 @@ def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
 
     plt.errorbar(tally_vals[measurement], y, yerr=yerr,
                  marker=markers['wwig'], lw=lw, capsize=cs, ls='',
-                 color=colors['wwig'], label='WWIG')
+                 color=colors['wwig'], label='WWIG/Ref')
     plt.errorbar([xmax], cwwm_y, yerr=y_cwwm_err,
                  marker=markers['cwwm'], lw=lw, capsize=cs, ls='',
-                 color=colors['cwwm'], label='CWWM')
+                 color=colors['cwwm'], label='CWWM/Ref')
     plt.errorbar([xmax], ana_y, yerr=y_ana_err,
                  marker=markers['analog'], lw=lw, capsize=cs, ls='',
-                 color=colors['analog'], label='Analog')
+                 color=colors['analog'], label='Analog/Ref')
     plt.plot([xmin, xmax], ref_tally_plt,
-             color=colors['reference'], ls='-', lw=lw, label='Reference')
+             color=colors['reference'], ls='-', lw=lw, label='E/Ref$=1$')
     plt.plot([xmin, xmax], ref_sigma_plt_n,
              color=colors['reference'], ls=':', lw=lw,
-             label='Reference $\pm {} \sigma$'.format(n_sigma))
+             label='E/Ref $\pm {} \sigma$'.format(n_sigma))
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['reference'], ls=':', lw=lw, label='')
 
     # labels
-    ylabel = 'Tally'
-    title = 'Surface Tally Results, ${}\sigma$'.format(n_sigma)
+    ylabel = 'Tally (Experimental/Reference)'
+    title = 'Surface Tally Results'
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -304,26 +304,30 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     ax[0][0].plot(df_wwig[measurement], df_wwig['WW check efficiency'],
                   marker=markers['wwig'], ls='',
                   label='WWIG', color=colors['wwig'])
-    ax[0][0].set_title('Total WW Efficiency', fontsize='small')
+    ax[0][0].set_title('Overall Efficiency')
+    ax[0][0].set_ylabel('$\eta_{ww}$')
 
     ax[0][1].plot(df_wwig[measurement], df_wwig['Splits < C_u'],
                   marker=markers['wwig'], ls='', label='',
                   color=colors['wwig'])
-    ax[0][1].set_title('$N_{splits}$ < C_u', fontsize='small')
+    ax[0][1].set_title('$S_{< C_u}$')
+    ax[0][1].set_ylabel('$f_{< C_U}$')
 
     ax[1][0].plot(df_wwig[measurement], df_wwig['Splits = C_u'],
                   marker=markers['wwig'], ls='', label='',
                   color=colors['wwig'])
-    ax[1][0].set_title('$N_{splits}$ = C_u', fontsize='small')
+    ax[1][0].set_title('$S_{= C_u}$')
+    ax[1][0].set_ylabel('$f_{= C_U}$')
 
     ax[1][1].plot(df_wwig[measurement], df_wwig['Splits > C_u'],
                   marker=markers['wwig'], ls='', label='',
                   color=colors['wwig'])
-    ax[1][1].set_title('$N_{splits}$ > C_u', fontsize='small')
+    ax[1][1].set_title('$S_{> C_u}$')
+    ax[1][1].set_ylabel('$f_{> C_U}$')
 
     if df_measure is None:
         # also plot cwwm results
-        xmax = max(df_wwig[output_key]) * 1.1
+        xmax = max(df_wwig[output_key])
         xmin = min(df_wwig[output_key])
         df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
         cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
@@ -342,12 +346,11 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
                    fontsize='x-small')
 
     # labels
-    ylabel = 'Efficiency'
     title = 'Weight Window Efficiency'
-    fig.suptitle(title)
-    fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
+    fig.suptitle(title, fontsize='x-large')
+    #fig.text(0.01, 0.5, ylabel, va='center', rotation='vertical')
     fig.text(0.5, 0.01, xlabel, ha='center')
-    plt.tight_layout(pad=2.7, w_pad=.5)
+    plt.tight_layout(pad=2.7, w_pad=1.0)
 
     save_name = 'images/ww_efficiency_{}.png'.format(refinement)
     plt.savefig(save_name)
@@ -400,7 +403,7 @@ def plot_fom(df_output, df_measure, refinement):
     plt.savefig(save_name)
 
 
-def plot_ratio(df_output):
+def plot_fom_ratio(df_output):
 
     # get the output data for total tally
     df = df_output.loc[df_output['ratio'].notnull()][
@@ -454,10 +457,7 @@ def plot_relative_error(df_output, refinement, df_measure=None):
     ana_err = df_output.loc[df_output['mode'] ==
                             'analog'][['error total', 'vov']]
     # get error of relative error
-    sigma_r = ref_err['vov']**0.5 * ref_err['error total']
-    ref_err_plt = np.full(2, float(ref_err['error total']))
-    ref_vov_p = np.full(2, ref_err['error total'] + sigma_r)
-    ref_vov_m = np.full(2, ref_err['error total'] - sigma_r)
+    ref_err['vov error'] = ref_err['vov']**0.5 * ref_err['error total']
     cwwm_err['vov error'] = cwwm_err['vov']**0.5 * cwwm_err['error total']
     ana_err['vov error'] = ana_err['vov']**0.5 * ana_err['error total']
 
@@ -482,20 +482,15 @@ def plot_relative_error(df_output, refinement, df_measure=None):
     else:
         ext = 1.1
     xmax = max(wwig_err[measurement]) * ext
-    xmin = min(wwig_err[measurement])
 
-    plt.plot([xmin, xmax], ref_err_plt,
-             color=colors['reference'], ls='-', lw=lw, label='Reference')
-    plt.plot([xmin, xmax], ref_vov_m,
-             color=colors['reference'], ls=':', lw=lw,
-             label='Reference $\pm$ VOV')
-    plt.plot([xmin, xmax], ref_vov_p,
-             color=colors['reference'], ls=':', lw=lw, label='')
     plt.errorbar(wwig_err[measurement], wwig_err['error total'],
                  yerr=wwig_err['vov error'],
                  marker=markers['wwig'],
                  color=colors['wwig'], ls='', lw=lw, capsize=cs,
                  label='WWIG')
+    plt.errorbar([xmax], ref_err['error total'], yerr=ref_err['vov error'],
+                 color=colors['reference'], ls='-', lw=lw, label='Reference',
+                 marker=markers['reference'], capsize=cs)
     plt.errorbar([xmax], cwwm_err['error total'], yerr=cwwm_err['vov error'],
                  color=colors['cwwm'], ls='-', lw=lw, label='CWWM',
                  marker=markers['cwwm'], capsize=cs)
@@ -589,11 +584,11 @@ if __name__ == '__main__':
     # plot fom vs coarseness / coarseness
     plot_fom(df_output, df_coarse, 'coarseness')
     plot_fom(df_output, df_rough, 'roughness')
-    plot_ratio(df_output)
+    plot_fom_ratio(df_output)
 
     # plot relative error for surface tally
     plot_relative_error(df_output, 'ratio')
     plot_relative_error(df_output, 'coarseness', df_measure=df_coarse)
     plot_relative_error(df_output, 'roughness', df_measure=df_rough)
 
-    plt.show()
+    #plt.show()
