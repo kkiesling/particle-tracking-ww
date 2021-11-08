@@ -6,7 +6,6 @@ import glob
 import matplotlib.pyplot as plt
 
 
-# colors: '#FF4242' '#E8F086' '#0A284B' '#6FDE6E' '#0A284B' '#A691AE' '#235FA4'
 colors = {'wwig': '#C11D59', 'analog': '#7CC145',
           'cwwm': '#247F03', 'reference': '#24E2A5'}
 markers = {'wwig': 'd', 'cwwm': 'o',
