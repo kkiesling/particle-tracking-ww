@@ -400,6 +400,35 @@ def plot_fom(df_output, df_measure, refinement):
     plt.savefig(save_name)
 
 
+def plot_ratio(df_output):
+
+    # get the output data for total tally
+    df = df_output.loc[df_output['ratio'].notnull()][
+        ['fom', 'ratio', 'cpu time', 'error total', 'vov']]
+
+    df['fom error'] = (2. * df['vov']**0.5) / \
+        (df['error total']**2 * df['cpu time'])
+
+    fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True,
+                           sharey=False, figsize=(5, 6))
+
+    ax[0].errorbar(df['ratio'], df['fom'], yerr=df['fom error'],
+                   marker=markers['wwig'], ls='', lw=lw, capsize=cs,
+                   color=colors['wwig'], label='WWIG')
+    ax[0].set_ylabel('Figure of Merit')
+    ax[1].plot(df['ratio'], df['cpu time'], marker=markers['wwig'], ls='',
+               color=colors['wwig'], label='WWIG')
+    ax[1].set_ylabel('CPU time (min)')
+
+    # labels
+    title = 'Performance'
+    plt.suptitle(title)
+    plt.xlabel('WWIG Surface Spacing Ratio')
+    plt.tight_layout(pad=2.7, w_pad=.5)
+    save_name = 'images/fom_ratio.png'
+    plt.savefig(save_name)
+
+
 def plot_relative_error(df_output, refinement, df_measure=None):
     if refinement == 'coarseness':
         measurement = 'average coarseness'
@@ -560,6 +589,7 @@ if __name__ == '__main__':
     # plot fom vs coarseness / coarseness
     plot_fom(df_output, df_coarse, 'coarseness')
     plot_fom(df_output, df_rough, 'roughness')
+    plot_ratio(df_output)
 
     # plot relative error for surface tally
     plot_relative_error(df_output, 'ratio')
