@@ -86,8 +86,6 @@ def iterate_ratios(fdir):
     """
     all_info = []
     for ratio in os.listdir(fdir):
-        if (int(ratio[1:]) >= 11):
-            continue
         new_dir = fdir + '/' + ratio
         collected_info = collect_info(new_dir)
 
