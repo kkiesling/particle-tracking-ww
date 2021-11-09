@@ -10,14 +10,12 @@ def query_size(fdir, ratio):
         data = {}
         ID = '{:03d}'.format(group)
         fpath = fdir + '/geoms/wwn_{}.h5m'.format(ID)
-        print(fpath)
         data['group'] = int(group)
         data['ratio'] = int(ratio)
         # get file size
         fsize = os.path.getsize(fpath) / (1024.**2)
         data['size'] = fsize
         size_total += fsize
-        print(data)
         all_data.append(data)
 
     data = {}

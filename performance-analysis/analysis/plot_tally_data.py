@@ -591,4 +591,4 @@ if __name__ == '__main__':
     plot_relative_error(df_output, 'coarseness', df_measure=df_coarse)
     plot_relative_error(df_output, 'roughness', df_measure=df_rough)
 
-    #plt.show()
+    plt.show()
