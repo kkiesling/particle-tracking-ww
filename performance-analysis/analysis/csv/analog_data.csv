@@ -1,2 +1,2 @@
-i,cpu time,error total,fom,mode,slope,tally total,vov
-0,0.67,0.0144,7850.0,analog,2.4,1.4401e-05,0.1412
+i,cpu time,error total,fom,mode,slope,tally total,vov,ww creation,ww loss
+0,0.67,0.0144,7850.0,analog,2.4,1.4401e-05,0.1412,0,0

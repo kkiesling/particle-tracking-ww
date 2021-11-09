@@ -114,7 +114,7 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.legend(loc='best', ncol=2,
+    plt.legend(loc='best', ncol=1,
                fontsize='x-small')
     plt.tight_layout()
 
@@ -383,12 +383,12 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
             2, float(df_cwwm['total stochastic termination'] / 10**6))
         ax[0].plot([xmin, xmax], cwwm_ww, marker='',
                    ls=':', color=colors['cwwm'], label='CWWM')
-        # ax[1].plot([xmin, xmax], cwwm_total, marker='',
-        #            ls=':', color=colors['cwwm'], label='')
-        # ax[2].plot([xmin, xmax], cwwm_splits, marker='',
-        #            ls=':', color=colors['cwwm'], label='')
-        # ax2.plot([xmin, xmax], cwwm_term, marker='',
-        #          ls='-', color=colors['cwwm'], label='')
+        ax[1].plot([xmin, xmax], cwwm_total, marker='',
+                   ls=':', color=colors['cwwm'], label='')
+        ax[2].plot([xmin, xmax], cwwm_splits, marker='',
+                   ls=':', color=colors['cwwm'], label='')
+        ax2.plot([xmin, xmax], cwwm_term, marker='',
+                 ls='', color=colors['cwwm'], label='')
 
     title = 'Weight Window Efficiency'
     fig.suptitle(title, fontsize='x-large')
@@ -396,6 +396,38 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
                fontsize='x-small')
     fig.tight_layout(pad=2.5, h_pad=0)
     save_name = 'images/ww_efficiency_{}.png'.format(refinement)
+    plt.savefig(save_name)
+
+    fig, ax = plt.subplots()
+    ax2 = ax.twinx()
+    if df_measure is None:
+        # also plot cwwm results
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+        cwwm_create = np.full(2, float(df_cwwm['ww creation']) / 10**5)
+        cwwm_loss = np.full(2, float(df_cwwm['ww loss']) / 10**5)
+        ax.plot([xmin, xmax], cwwm_create, marker='',
+                ls=':', color=colors['cwwm'], label='CWWM')
+        ax2.plot([xmin, xmax], cwwm_loss, marker='',
+                 ls='', color=colors['cwwm'], label='')
+
+    ax.plot(df_wwig[measurement], df_wwig['ww creation'] / 10**5,
+            marker=markers['wwig'], ls='',
+            label='Creation', color=colors['wwig'])
+    ax.set_ylabel(r'Neutron Creation ($\times 10^5$)')
+    ax.set_xlabel(xlabel)
+    ax2.plot(df_wwig[measurement],
+             df_wwig['ww loss'] / 10**5,
+             marker=markers['analog'], ls='',
+             label='Loss', color=colors['analog'])
+    ax2.set_ylabel(r'Neutron Loss ($\times 10^5$)')
+
+    fig.suptitle('Neutron Creation/Loss by Weight Window')
+    fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=3,
+               fontsize='x-small')
+    fig.tight_layout(pad=2.5)
+    save_name = 'images/ww_creationloss_{}.png'.format(refinement)
     plt.savefig(save_name)
 
 

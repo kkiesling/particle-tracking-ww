@@ -48,6 +48,13 @@ def read_outp(fpath):
     outp_info['slope'] = float(data[4])
     outp_info['fom'] = float(data[5])
     outp_info['cpu time'] = float(all_lines[-3].split(' ')[-2])
+
+    # get production/destruction info:
+    header = ' neutron creation    tracks      weight        energy            neutron loss        tracks      weight        energy\n'
+    hindex = all_lines.index(header)
+    ww_line = all_lines[hindex + 6].split()
+    outp_info['ww creation'] = int(ww_line[2])
+    outp_info['ww loss'] = int(ww_line[7])
     return outp_info
 
 
