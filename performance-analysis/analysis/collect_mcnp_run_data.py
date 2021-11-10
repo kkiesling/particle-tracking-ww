@@ -62,7 +62,6 @@ def collect_info(fdir):
     # files
     ww_path = fdir + '/ww_checks'
     outp_path = fdir + '/outp'
-    meshtal_path = fdir + '/meshtal'
 
     # get info
     if os.path.exists(ww_path):
@@ -93,6 +92,8 @@ def iterate_ratios(fdir):
     """
     all_info = []
     for ratio in os.listdir(fdir):
+        if (ratio[-1] == 'd'):
+            continue
         new_dir = fdir + '/' + ratio
         collected_info = collect_info(new_dir)
 
@@ -125,6 +126,8 @@ def iterate_refine(fdir, refine):
     all_info = []
     for factor in os.listdir(fdir):
         if factor[-3:] == '.sh':
+            continue
+        if (factor[-1] == 'd'):
             continue
         new_dir = fdir + '/' + factor
         collected_info = collect_info(new_dir)
