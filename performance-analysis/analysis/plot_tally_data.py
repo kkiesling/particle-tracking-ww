@@ -15,6 +15,7 @@ dpi = 600
 lw = .9  # line width for plots
 cs = 5  # error bar cap size
 n_sigma = 1
+gray = '#C7C7C7'
 
 
 def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
@@ -107,6 +108,9 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
              label='WWIG/CWWM $=1 \pm {} \sigma$'.format(n_sigma))
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['cwwm'], ls=':', lw=lw, label='')
+
+    if df_measure is None:
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
 
     # labels
     ylabel = 'Tally (WWIG/CWWM)'
@@ -253,6 +257,11 @@ def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['reference'], ls=':', lw=lw, label='')
 
+    if df_measure is None:
+        xmax = max(tally_vals[measurement])
+        xmin = min(tally_vals[measurement])
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
+
     # labels
     ylabel = 'Tally (Experimental/Reference)'
     title = 'Surface Tally Results'
@@ -298,7 +307,33 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
 
     # plot
     fig, ax = plt.subplots(nrows=3, ncols=1, sharex=True,
-                           sharey=False, figsize=(5, 8))
+                           sharey=False, figsize=(6, 8))
+
+    if df_measure is None:
+        # add vertical lines
+        ax[0].axvline(x=7, color=gray)
+        ax[1].axvline(x=7, color=gray)
+        ax[2].axvline(x=7, color=gray)
+
+        ax[0].axvline(x=11, color=gray)
+        ax[1].axvline(x=11, color=gray)
+        ax[2].axvline(x=11, color=gray)
+
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
+
+        # also plot cwwm results
+        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+        cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
+        cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
+        cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
+        ax[0].plot([xmin, xmax], cwwm_lt, marker='',
+                   ls=':', color=colors['cwwm'], label='CWWM')
+        ax[1].plot([xmin, xmax], cwwm_eq, marker='',
+                   ls=':', color=colors['cwwm'])
+        ax[2].plot([xmin, xmax], cwwm_gt, marker='',
+                   ls=':', color=colors['cwwm'])
 
     ax[0].plot(df_wwig[measurement], df_wwig['Splits < C_u'],
                marker=markers['wwig'], ls='', label='WWIG',
@@ -317,19 +352,6 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     ax[2].set_ylabel('$f_{> C_U}$')
 
     if df_measure is None:
-        # also plot cwwm results
-        xmax = max(df_wwig[output_key])
-        xmin = min(df_wwig[output_key])
-        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
-        cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
-        cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
-        cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
-        ax[0].plot([xmin, xmax], cwwm_lt, marker='',
-                   ls=':', color=colors['cwwm'], label='CWWM')
-        ax[1].plot([xmin, xmax], cwwm_eq, marker='',
-                   ls=':', color=colors['cwwm'])
-        ax[2].plot([xmin, xmax], cwwm_gt, marker='',
-                   ls=':', color=colors['cwwm'])
         fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=2,
                    fontsize='x-small')
 
@@ -350,6 +372,19 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
 
     # plot overall efficiency
     if df_measure is None:
+        # add vertical lines
+        ax[0].axvline(x=7, color=gray)
+        ax[1].axvline(x=7, color=gray)
+        ax[2].axvline(x=7, color=gray)
+
+        ax[0].axvline(x=11, color=gray)
+        ax[1].axvline(x=11, color=gray)
+        ax[2].axvline(x=11, color=gray)
+
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
+
         # also plot cwwm results
         xmax = max(df_wwig[output_key])
         xmin = min(df_wwig[output_key])
@@ -361,21 +396,26 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
             2, float(df_cwwm['total stochastic termination']))
         ax[0].plot([xmin, xmax], cwwm_ww, marker='',
                    ls=':', color=colors['cwwm'], label='CWWM')
-        ax[1].plot([xmin, xmax], cwwm_total / 10**6, marker='',
-                   ls=':', color=colors['cwwm'], label='')
+        #ax[1].plot([xmin, xmax], cwwm_total / 10**6, marker='',
+        #           ls=':', color=colors['cwwm'], label='')
         ax[2].plot([xmin, xmax], cwwm_splits / cwwm_total, marker='',
                    ls=':', color=colors['cwwm'], label='')
         ax2.plot([xmin, xmax], cwwm_term / cwwm_total, marker='',
                  ls=':', color=colors['cwwm'], label='')
+        ax[1].plot(df_wwig[measurement], df_wwig['total ww checks'] / cwwm_total[0],
+                   marker=markers['reference'], ls='',
+                   label='Total Checks', color=colors['wwig'])
+        ax[1].set_ylabel(r'Total WW Checks (WWIG/CWWM)')
+    else:
+        ax[1].plot(df_wwig[measurement], df_wwig['total ww checks'] / 10**6,
+                   marker=markers['reference'], ls='',
+                   label='Total Checks', color=colors['wwig'])
+        ax[1].set_ylabel(r'Total WW Checks ($\times 10^6$)')
+
     ax[0].plot(df_wwig[measurement], df_wwig['WW check efficiency'],
                marker=markers['wwig'], ls='',
                label='Overall Efficiency', color=colors['wwig'])
     ax[0].set_ylabel('$\eta_{ww}$')
-
-    ax[1].plot(df_wwig[measurement], df_wwig['total ww checks'] / 10**6,
-               marker=markers['reference'], ls='',
-               label='Total Checks', color=colors['wwig'])
-    ax[1].set_ylabel(r'Total WW Checks ($\times 10^6$)')
 
     ax[2].plot(df_wwig[measurement], df_wwig['total splits'] / df_wwig['total ww checks'],
                marker=markers['cwwm'], ls='',
@@ -387,8 +427,6 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
              marker=markers['analog'], ls='',
              label='Stochatistic Termination', color=colors['analog'])
     ax2.set_ylabel(r'$f_{term}$')
-
-
 
     title = 'Weight Window Efficiency'
     fig.suptitle(title, fontsize='x-large')
@@ -422,6 +460,10 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
              marker=markers['analog'], ls='',
              label='Loss', color=colors['analog'])
     ax2.set_ylabel(r'Neutron Loss ($\times 10^5$)')
+    if df_measure is None:
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
 
     fig.suptitle('Neutron Creation/Loss by Weight Window')
     fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=3,
@@ -498,6 +540,10 @@ def plot_fom_ratio(df_output):
                color=colors['wwig'], label='WWIG')
     ax[1].set_ylabel('CPU time (min)')
 
+    xmax = max(df['ratio'])
+    xmin = min(df['ratio'])
+    plt.xticks(np.arange(xmin, xmax+2, step=2))
+
     # labels
     title = 'Performance'
     plt.suptitle(title)
@@ -572,6 +618,11 @@ def plot_relative_error(df_output, refinement, df_measure=None):
     plt.errorbar([xmax], ana_err['error total'], yerr=ana_err['vov error'],
                  color=colors['analog'], ls='-', lw=lw, label='Analog',
                  marker=markers['analog'], capsize=cs)
+
+    if df_measure is None:
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        plt.xticks(np.arange(xmin, xmax+2, step=2))
 
     # labels
     ylabel = 'Relative Error'
