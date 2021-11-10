@@ -346,8 +346,27 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     # overall efficiency
     fig, ax = plt.subplots(nrows=3, ncols=1, sharex=True,
                            sharey=False, figsize=(6, 8))
+    ax2 = ax[2].twinx()
 
     # plot overall efficiency
+    if df_measure is None:
+        # also plot cwwm results
+        xmax = max(df_wwig[output_key])
+        xmin = min(df_wwig[output_key])
+        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+        cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
+        cwwm_total = np.full(2, float(df_cwwm['total ww checks']))
+        cwwm_splits = np.full(2, float(df_cwwm['total splits']))
+        cwwm_term = np.full(
+            2, float(df_cwwm['total stochastic termination']))
+        ax[0].plot([xmin, xmax], cwwm_ww, marker='',
+                   ls=':', color=colors['cwwm'], label='CWWM')
+        ax[1].plot([xmin, xmax], cwwm_total / 10**6, marker='',
+                   ls=':', color=colors['cwwm'], label='')
+        ax[2].plot([xmin, xmax], cwwm_splits / cwwm_total, marker='',
+                   ls=':', color=colors['cwwm'], label='')
+        ax2.plot([xmin, xmax], cwwm_term / cwwm_total, marker='',
+                 ls=':', color=colors['cwwm'], label='')
     ax[0].plot(df_wwig[measurement], df_wwig['WW check efficiency'],
                marker=markers['wwig'], ls='',
                label='Overall Efficiency', color=colors['wwig'])
@@ -358,37 +377,18 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
                label='Total Checks', color=colors['wwig'])
     ax[1].set_ylabel(r'Total WW Checks ($\times 10^6$)')
 
-    ax[2].plot(df_wwig[measurement], df_wwig['total splits'] / 10**6,
+    ax[2].plot(df_wwig[measurement], df_wwig['total splits'] / df_wwig['total ww checks'],
                marker=markers['cwwm'], ls='',
                label='Splits', color=colors['reference'])
     ax[2].set_xlabel(xlabel)
-    ax[2].set_ylabel(r'Splits ($\times 10^6$)')
-
-    ax2 = ax[2].twinx()
+    ax[2].set_ylabel(r'$f_{splits}$')
     ax2.plot(df_wwig[measurement],
-             df_wwig['total stochastic termination'] / 10**6,
+             df_wwig['total stochastic termination'] / df_wwig['total ww checks'],
              marker=markers['analog'], ls='',
              label='Stochatistic Termination', color=colors['analog'])
-    ax2.set_ylabel(r'Stochastic Termination ($\times 10^6$)')
+    ax2.set_ylabel(r'$f_{term}$')
 
-    if df_measure is None:
-        # also plot cwwm results
-        xmax = max(df_wwig[output_key])
-        xmin = min(df_wwig[output_key])
-        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
-        cwwm_ww = np.full(2, float(df_cwwm['WW check efficiency']))
-        cwwm_total = np.full(2, float(df_cwwm['total ww checks'] / 10**6))
-        cwwm_splits = np.full(2, float(df_cwwm['total splits'] / 10**6))
-        cwwm_term = np.full(
-            2, float(df_cwwm['total stochastic termination'] / 10**6))
-        ax[0].plot([xmin, xmax], cwwm_ww, marker='',
-                   ls=':', color=colors['cwwm'], label='CWWM')
-        ax[1].plot([xmin, xmax], cwwm_total, marker='',
-                   ls=':', color=colors['cwwm'], label='')
-        ax[2].plot([xmin, xmax], cwwm_splits, marker='',
-                   ls=':', color=colors['cwwm'], label='')
-        ax2.plot([xmin, xmax], cwwm_term, marker='',
-                 ls='', color=colors['cwwm'], label='')
+
 
     title = 'Weight Window Efficiency'
     fig.suptitle(title, fontsize='x-large')
