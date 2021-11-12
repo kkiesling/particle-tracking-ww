@@ -52,7 +52,7 @@ def plot_image(f, data_name, data_vals, extrema, ratio):
     v.AddOperator('Clip')
     att_op = v.ClipAttributes()
     att_op.plane1Status = 0
-    att_op.plane2Status = 1
+    att_op.plane2Status = 0
     att_op.plane3Status = 1
     att_op.plane1Origin = (0, 0, 0)
     att_op.plane2Origin = (0, 0, 0)
@@ -65,13 +65,14 @@ def plot_image(f, data_name, data_vals, extrema, ratio):
     v.AddPlot('Mesh', 'mesh')
     matt = v.MeshAttributes()
     matt.legendFlag = 0
+    matt.lineWidth = 2
     v.SetPlotOptions(matt)
 
     # operator options
     v.AddOperator('Clip')
     att_op = v.ClipAttributes()
     att_op.plane1Status = 0
-    att_op.plane2Status = 1
+    att_op.plane2Status = 0
     att_op.plane3Status = 1
     att_op.plane1Origin = (0, 0, 0)
     att_op.plane2Origin = (0, 0, 0)

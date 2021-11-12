@@ -126,7 +126,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     # save fig
     saveatts = v.SaveWindowAttributes()
     saveatts.outputToCurrentDirectory = 1
-    saveatts.fileName = 'cwwm_' + group
+    saveatts.fileName = 'cwwm/cwwm_' + group
     saveatts.format = 4  # PNG
     saveatts.screenCapture = 0
     saveatts.resConstraint = 0
@@ -147,7 +147,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     catt.colorTableName = 'viridis_light'
     catt.invertColorTable = 1
     catt.wireframe = 1
-    catt.lineWidth = 3
+    catt.lineWidth = 6
     catt.lineStyle = 0
     catt.legendFlag = 0
     e = v.SetPlotOptions(catt)
@@ -167,7 +167,7 @@ def plot_image(group, mins, maxs, levels, ratio):
 
     e = v.DrawPlots()
 
-    saveatts.fileName = 'cwwm_' + group + '_r{}'.format(ratio)
+    saveatts.fileName = 'cwwm/cwwm_' + group + '_r{}'.format(ratio)
     v.SetSaveWindowAttributes(saveatts)
     sname = v.SaveWindow()
 
@@ -180,34 +180,34 @@ def plot_image(group, mins, maxs, levels, ratio):
 if __name__ == '__main__':
 
     f = sys.argv[1]  # expanded_tags.vtk file for wwinp
-    ratio = sys.argv[2]  # ratio for plotting contours
+    #ratio = sys.argv[2]  # ratio for plotting contours
 
-    v.LaunchNowin()
-    v.OpenDatabase(f)
+    for ratio in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 25]:
+        v.LaunchNowin()
+        v.OpenDatabase(f)
 
-    mf = meshio.read(f)
-    data, maxs, mins = get_data_names(mf, ratio)
+        mf = meshio.read(f)
+        data, maxs, mins = get_data_names(mf, ratio)
 
-    annobj = v.CreateAnnotationObject('Text2D')
-    annobj.visible = 1
-    annobj.active = 1
-    annobj.position = (0.055, 0.45)
-    annobj.height = 0.015
-    annobj.textColor = (0, 0, 0, 255)
-    annobj.useForegroundForTextColor = 1
-    annobj.text = "Weight Window" + "\n" + "Lower Bound"
-    annobj.fontFamily = 0
-    annobj.fontBold = 0
-    annobj.fontItalic = 0
+        annobj = v.CreateAnnotationObject('Text2D')
+        annobj.visible = 1
+        annobj.active = 1
+        annobj.position = (0.055, 0.45)
+        annobj.height = 0.015
+        annobj.textColor = (0, 0, 0, 255)
+        annobj.useForegroundForTextColor = 1
+        annobj.text = "Weight Window" + "\n" + "Lower Bound"
+        annobj.fontFamily = 0
+        annobj.fontBold = 0
+        annobj.fontItalic = 0
 
-    global_max = max(maxs)
-    global_min = min(mins)
+        global_max = max(maxs)
+        global_min = min(mins)
 
-    for name, info in data.items():
-        plot_image(name, info['min'], info['max'], info['levels'], ratio)
+        for name, info in data.items():
+            plot_image(name, info['min'], info['max'], info['levels'], ratio)
+            if name == 'ww_n_008':
+                # redo # 8 because it is weird
+                plot_image(name, info['min'], info['max'], info['levels'], ratio)
 
-    # redo # 8 because it is weird
-    plot_image('ww_n_008', data['ww_n_008']['min'], data['ww_n_008']['max'],
-               data['ww_n_008']['levels'], ratio)
-
-    v.CloseDatabase(f)
+        v.CloseDatabase(f)
