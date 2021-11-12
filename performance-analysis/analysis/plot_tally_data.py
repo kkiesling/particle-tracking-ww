@@ -311,9 +311,9 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
 
     if df_measure is None:
         # add vertical lines
-        ax[0].axvline(x=7, color=gray)
-        ax[1].axvline(x=7, color=gray)
-        ax[2].axvline(x=7, color=gray)
+        ax[0].axvline(x=6, color=gray)
+        ax[1].axvline(x=6, color=gray)
+        ax[2].axvline(x=6, color=gray)
 
         ax[0].axvline(x=11, color=gray)
         ax[1].axvline(x=11, color=gray)
@@ -373,9 +373,9 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     # plot overall efficiency
     if df_measure is None:
         # add vertical lines
-        ax[0].axvline(x=7, color=gray)
-        ax[1].axvline(x=7, color=gray)
-        ax[2].axvline(x=7, color=gray)
+        ax[0].axvline(x=6, color=gray)
+        ax[1].axvline(x=6, color=gray)
+        ax[2].axvline(x=6, color=gray)
 
         ax[0].axvline(x=11, color=gray)
         ax[1].axvline(x=11, color=gray)
@@ -717,4 +717,4 @@ if __name__ == '__main__':
     plot_relative_error(df_output, 'coarseness', df_measure=df_coarse)
     plot_relative_error(df_output, 'roughness', df_measure=df_rough)
 
-    plt.show()
+    #plt.show()
