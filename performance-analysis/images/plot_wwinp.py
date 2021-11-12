@@ -180,12 +180,11 @@ def plot_image(group, mins, maxs, levels, ratio):
 if __name__ == '__main__':
 
     f = sys.argv[1]  # expanded_tags.vtk file for wwinp
-    #ratio = sys.argv[2]  # ratio for plotting contours
+
+    v.LaunchNowin()
+    v.OpenDatabase(f)
 
     for ratio in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 25]:
-        v.LaunchNowin()
-        v.OpenDatabase(f)
-
         mf = meshio.read(f)
         data, maxs, mins = get_data_names(mf, ratio)
 
@@ -210,4 +209,4 @@ if __name__ == '__main__':
                 # redo # 8 because it is weird
                 plot_image(name, info['min'], info['max'], info['levels'], ratio)
 
-        v.CloseDatabase(f)
+    v.CloseDatabase(f)
