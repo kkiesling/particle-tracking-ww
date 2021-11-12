@@ -43,5 +43,5 @@ if data_name is not None:
         mb.tag_set_data(data_tag, all_tris, data)
 
 # write new file
-sname = filename.split('.')[0] + '_viz.h5m'
+sname = filename.split('.h')[0] + '_viz.h5m'
 mb.write_file(sname)
