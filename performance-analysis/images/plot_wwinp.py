@@ -101,14 +101,10 @@ def plot_image(group, mins, maxs, levels, ratio):
     legobj.minMaxInclusive = 0
     legobj.numTicks = 2
     legobj.suppliedValues = tuple([mins, maxs])
-    #legobj.suppliedLabels = tuple(data_vals)
 
     # view angle and lighting
     vatts = v.View3DAttributes()
-    vatts.viewNormal = (-0.5,
-                        0.2, 0.6)
-    #vatts.viewUp = (0.1151167015834829,
-    #                0.8378881066657335, -0.5335650529454227)
+    vatts.viewNormal = (-0.5, 0.2, 0.6)
     vatts.viewUp = (0, 1, 0)
     vatts.parallelScale = 346.41
     vatts.nearPlane = -692.82
@@ -123,7 +119,6 @@ def plot_image(group, mins, maxs, levels, ratio):
     vatts.shear = (0, 0, 1)
     vatts.windowValid = 0
     vatts.imageZoom = 4.5
-
     v.SetView3D(vatts)
 
     v.DrawPlots()
@@ -191,7 +186,6 @@ if __name__ == '__main__':
     v.OpenDatabase(f)
 
     mf = meshio.read(f)
-    #group_names, maxs, mins, levels = get_data_names(mf, ratio)
     data, maxs, mins = get_data_names(mf, ratio)
 
     annobj = v.CreateAnnotationObject('Text2D')
@@ -213,6 +207,7 @@ if __name__ == '__main__':
         plot_image(name, info['min'], info['max'], info['levels'], ratio)
 
     # redo # 8 because it is weird
-    plot_image('ww_n_008', data['ww_n_008']['min'], data['ww_n_008']['max'], data['ww_n_008']['levels'], ratio)
+    plot_image('ww_n_008', data['ww_n_008']['min'], data['ww_n_008']['max'],
+               data['ww_n_008']['levels'], ratio)
 
     v.CloseDatabase(f)
