@@ -147,7 +147,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     catt.colorTableName = 'viridis_light'
     catt.invertColorTable = 1
     catt.wireframe = 1
-    catt.lineWidth = 3
+    catt.lineWidth = 6
     catt.lineStyle = 0
     catt.legendFlag = 0
     e = v.SetPlotOptions(catt)
