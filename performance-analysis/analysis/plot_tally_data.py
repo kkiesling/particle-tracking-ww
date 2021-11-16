@@ -25,12 +25,12 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
         measurement = 'average coarseness'
         refine_key = 'dc factor'
         output_key = 'decimation'
-        xlabel = 'Triangle Density'
+        xlabel = 'Average Mesh Coarseness'
     elif refinement == 'roughness':
         measurement = 'average roughness'
         refine_key = 'perturbation'
         output_key = 'perturbation'
-        xlabel = 'Surface Roughness'
+        xlabel = 'Average Surface Roughness'
     elif refinement == 'ratio':
         measurement = 'ratio'
         output_key = 'ratio'
@@ -102,10 +102,10 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
                  color=colors['wwig'], label='WWIG/CWWM')
 
     plt.plot([xmin, xmax], ref_tally_plt,
-             color=colors['cwwm'], ls='-', lw=lw, label='WWIG/CWWM$= 1$')
+             color=colors['cwwm'], ls='-', lw=lw, label='E/CWWM $= 1$')
     plt.plot([xmin, xmax], ref_sigma_plt_n,
              color=colors['cwwm'], ls=':', lw=lw,
-             label='WWIG/CWWM $=1 \pm {} \sigma$'.format(n_sigma))
+             label='E/CWWM $=1 \pm {} \sigma$'.format(n_sigma))
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['cwwm'], ls=':', lw=lw, label='')
 
@@ -134,12 +134,12 @@ def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
         measurement = 'average coarseness'
         refine_key = 'dc factor'
         output_key = 'decimation'
-        xlabel = 'Triangle Density'
+        xlabel = 'Average Mesh Coarseness'
     elif refinement == 'roughness':
         measurement = 'average roughness'
         refine_key = 'perturbation'
         output_key = 'perturbation'
-        xlabel = 'Surface Roughness'
+        xlabel = 'Average Surface Roughness'
     elif refinement == 'ratio':
         measurement = 'ratio'
         output_key = 'ratio'
@@ -253,7 +253,7 @@ def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
              color=colors['reference'], ls='-', lw=lw, label='E/Ref$=1$')
     plt.plot([xmin, xmax], ref_sigma_plt_n,
              color=colors['reference'], ls=':', lw=lw,
-             label='E/Ref $\pm {} \sigma$'.format(n_sigma))
+             label='E/Ref $= 1 \pm {} \sigma$'.format(n_sigma))
     plt.plot([xmin, xmax], ref_sigma_plt_p,
              color=colors['reference'], ls=':', lw=lw, label='')
 
@@ -282,12 +282,12 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
         measurement = 'average coarseness'
         refine_key = 'dc factor'
         output_key = 'decimation'
-        xlabel = 'Triangle Density'
+        xlabel = 'Average Mesh Coarseness'
     elif refinement == 'roughness':
         measurement = 'average roughness'
         refine_key = 'perturbation'
         output_key = 'perturbation'
-        xlabel = 'Surface Roughness'
+        xlabel = 'Average Surface Roughness'
     elif refinement == 'ratio':
         measurement = 'ratio'
         output_key = 'ratio'
@@ -470,7 +470,7 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
                fontsize='x-small')
     fig.tight_layout(pad=2.5)
     save_name = 'images/ww_creationloss_{}.png'.format(refinement)
-    plt.savefig(save_name)
+    #plt.savefig(save_name)
 
 
 def plot_fom(df_output, df_measure, refinement):
@@ -478,12 +478,12 @@ def plot_fom(df_output, df_measure, refinement):
         measurement = 'average coarseness'
         refine_key = 'dc factor'
         output_key = 'decimation'
-        xlabel = 'Triangle Density'
+        xlabel = 'Average Mesh Coarseness'
     elif refinement == 'roughness':
         measurement = 'average roughness'
         refine_key = 'perturbation'
         output_key = 'perturbation'
-        xlabel = 'Surface Roughness'
+        xlabel = 'Average Surface Roughness'
 
     # get the output data for total tally
     df_tally = df_output.loc[df_output[output_key].notnull()][
@@ -558,12 +558,12 @@ def plot_relative_error(df_output, refinement, df_measure=None):
         measurement = 'average coarseness'
         refine_key = 'dc factor'
         output_key = 'decimation'
-        xlabel = 'Triangle Density'
+        xlabel = 'Average Mesh Coarseness'
     elif refinement == 'roughness':
         measurement = 'average roughness'
         refine_key = 'perturbation'
         output_key = 'perturbation'
-        xlabel = 'Surface Roughness'
+        xlabel = 'Average Surface Roughness'
     elif refinement == 'ratio':
         measurement = 'ratio'
         output_key = 'ratio'
@@ -717,4 +717,4 @@ if __name__ == '__main__':
     plot_relative_error(df_output, 'coarseness', df_measure=df_coarse)
     plot_relative_error(df_output, 'roughness', df_measure=df_rough)
 
-    #plt.show()
+    plt.show()

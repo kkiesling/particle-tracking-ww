@@ -27,8 +27,8 @@ cwwm_size = os.path.getsize(fcwwm) / (1024.**2)
 def plot_fsize(df):
     # plot total file size - decimated sizes only
     plt.figure()
-    title = 'File Size'
-    xlabel = 'Decimation Factor'
+    title = 'Memory Footprint'
+    xlabel = r'Decimation Factor $d$'
     ylabel = 'Total File Size (MB)'
 
     plt.plot(df.loc[df['group'] == 'total']['dc factor'],
@@ -51,7 +51,7 @@ def plot_fsize(df):
 def plot_fsize_ratio(df):
     # plot total file size - decimated sizes only
     plt.figure()
-    title = 'File Size'
+    title = 'Memory Footprint'
     xlabel = 'WWIG Surface Spacing Ratio'
     ylabel = 'Total File Size (MB)'
 
@@ -75,9 +75,9 @@ def plot_fsize_ratio(df):
 def plot_average_coarseness(df):
     # just plot averages for each decimation factor
     plt.figure()
-    title = 'Average Coarseness'
-    xlabel = 'Decimation Factor'
-    ylabel = 'Triangle Density'
+    title = 'Mesh Coarseness'
+    xlabel = r'Decimation Factor $d$'
+    ylabel = 'Average Global Coarseness'
 
     plt.plot(df.loc[df['group'] == 'total']['dc factor'],
              df.loc[df['group'] == 'total']['average coarseness'],
@@ -120,9 +120,9 @@ def plot_roughness_per_group(df):
 
 def plot_average_roughness(df):
     plt.figure()
-    title = 'Average Roughness'
-    xlabel = 'Maximum Perturbation'
-    ylabel = 'Roughness'
+    title = 'Surface Roughness'
+    xlabel = r'Maximum Perturbation $\delta$'
+    ylabel = 'Average Global Roughness'
 
     plt.plot(df.loc[df['group'] == 'total']['perturbation'],
              df.loc[df['group'] == 'total']['average roughness'],
