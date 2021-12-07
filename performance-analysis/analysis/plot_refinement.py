@@ -136,6 +136,24 @@ def plot_average_roughness(df):
     plt.savefig(save_name)
 
 
+def plot_average_roughness_smoothed(df):
+    plt.figure()
+    title = 'Surface Roughness'
+    xlabel = r'Number of smoothing iterations'
+    ylabel = 'Average Global Roughness'
+
+    plt.plot(df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10]['iterations'],
+             df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10]['average roughness'],
+             linestyle='', marker='d', color=colors['wwig'])
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+
+    save_name = 'images/average_roughness_smoothed.png'
+    plt.savefig(save_name)
+
+
 if __name__ == '__main__':
 
     # coarseness
@@ -151,8 +169,18 @@ if __name__ == '__main__':
         pd.read_csv(f, header=0, index_col=0) for f in all_rough_files),
         sort=False, ignore_index=True)
     print(df_rough.keys())
+
     plot_roughness_per_group(df_rough)
     plot_average_roughness(df_rough)
+
+    all_smooth_files = glob.glob('csv/wwig_roughness_smoothed_*.csv')
+    df_smooth = pd.concat((
+        pd.read_csv(f, header=0, index_col=0) for f in all_smooth_files),
+        sort=False, ignore_index=True)
+    df_smooth.iterations.fillna(df_smooth.perturbation, inplace=True)
+    del df_smooth['perturbation']
+    print(df_smooth.keys())
+    plot_average_roughness_smoothed(df_smooth)
 
     fratio = 'csv/wwig_ratio_size.csv'
     df_ratio = pd.read_csv(fratio, header=0, index_col=0)
