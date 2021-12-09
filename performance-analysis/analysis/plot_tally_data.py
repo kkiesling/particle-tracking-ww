@@ -118,6 +118,8 @@ def plot_tally_cwwm(df_output, refinement, df_measure=None, pltratio=True,
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    if pltratio:
+        plt.ylim((0.9, 1.1))
     plt.legend(loc='best', ncol=1,
                fontsize='x-small')
     plt.tight_layout()
@@ -262,6 +264,9 @@ def plot_tally(df_output, refinement, df_measure=None, pltratio=True,
         xmin = min(tally_vals[measurement])
         plt.xticks(np.arange(xmin, xmax+2, step=2))
 
+    if pltratio:
+        plt.ylim((0.9, 1.1))
+
     # labels
     ylabel = 'Tally (Experimental/Reference)'
     title = 'Surface Tally Results'
@@ -355,6 +360,11 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
         fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=2,
                    fontsize='x-small')
 
+    if df_measure is not None:
+        ax[0].set_ylim(0.97, 0.99)
+        ax[1].set_ylim(0.0, 0.02)
+        ax[2].set_ylim(0.0, 0.02)
+
     # labels
     title = 'Splitting Efficiency'
     fig.suptitle(title, fontsize='x-large')
@@ -428,6 +438,12 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
              label='Stochatistic Termination', color=colors['analog'])
     ax2.set_ylabel(r'$f_{term}$')
 
+    if df_measure is not None:
+        ax[0].set_ylim((0.157, 0.17))  ## overall
+        ax[1].set_ylim((1.39, 1.52))  ## total num
+        ax[2].set_ylim((0.0445, 0.0445))  ## f splits
+        ax2.set_ylim((0.117, 0.124))  # f terms
+
     title = 'Weight Window Efficiency'
     fig.suptitle(title, fontsize='x-large')
     fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=5,
@@ -436,40 +452,40 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     save_name = 'images/ww_efficiency_{}.png'.format(refinement)
     plt.savefig(save_name)
 
-    fig, ax = plt.subplots()
-    ax2 = ax.twinx()
-    if df_measure is None:
-        # also plot cwwm results
-        xmax = max(df_wwig[output_key])
-        xmin = min(df_wwig[output_key])
-        df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
-        cwwm_create = np.full(2, float(df_cwwm['ww creation']) / 10**5)
-        cwwm_loss = np.full(2, float(df_cwwm['ww loss']) / 10**5)
-        ax.plot([xmin, xmax], cwwm_create, marker='',
-                ls=':', color=colors['cwwm'], label='CWWM')
-        ax2.plot([xmin, xmax], cwwm_loss, marker='',
-                 ls='', color=colors['cwwm'], label='')
-
-    ax.plot(df_wwig[measurement], df_wwig['ww creation'] / 10**5,
-            marker=markers['wwig'], ls='',
-            label='Creation', color=colors['wwig'])
-    ax.set_ylabel(r'Neutron Creation ($\times 10^5$)')
-    ax.set_xlabel(xlabel)
-    ax2.plot(df_wwig[measurement],
-             df_wwig['ww loss'] / 10**5,
-             marker=markers['analog'], ls='',
-             label='Loss', color=colors['analog'])
-    ax2.set_ylabel(r'Neutron Loss ($\times 10^5$)')
-    if df_measure is None:
-        xmax = max(df_wwig[output_key])
-        xmin = min(df_wwig[output_key])
-        plt.xticks(np.arange(xmin, xmax+2, step=2))
-
-    fig.suptitle('Neutron Creation/Loss by Weight Window')
-    fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=3,
-               fontsize='x-small')
-    fig.tight_layout(pad=2.5)
-    save_name = 'images/ww_creationloss_{}.png'.format(refinement)
+    # fig, ax = plt.subplots()
+    # ax2 = ax.twinx()
+    # if df_measure is None:
+    #     # also plot cwwm results
+    #     xmax = max(df_wwig[output_key])
+    #     xmin = min(df_wwig[output_key])
+    #     df_cwwm = df_output.loc[df_output['mode'] == 'cwwm']
+    #     cwwm_create = np.full(2, float(df_cwwm['ww creation']) / 10**5)
+    #     cwwm_loss = np.full(2, float(df_cwwm['ww loss']) / 10**5)
+    #     ax.plot([xmin, xmax], cwwm_create, marker='',
+    #             ls=':', color=colors['cwwm'], label='CWWM')
+    #     ax2.plot([xmin, xmax], cwwm_loss, marker='',
+    #              ls='', color=colors['cwwm'], label='')
+#
+    # ax.plot(df_wwig[measurement], df_wwig['ww creation'] / 10**5,
+    #         marker=markers['wwig'], ls='',
+    #         label='Creation', color=colors['wwig'])
+    # ax.set_ylabel(r'Neutron Creation ($\times 10^5$)')
+    # ax.set_xlabel(xlabel)
+    # ax2.plot(df_wwig[measurement],
+    #          df_wwig['ww loss'] / 10**5,
+    #          marker=markers['analog'], ls='',
+    #          label='Loss', color=colors['analog'])
+    # ax2.set_ylabel(r'Neutron Loss ($\times 10^5$)')
+    # if df_measure is None:
+    #     xmax = max(df_wwig[output_key])
+    #     xmin = min(df_wwig[output_key])
+    #     plt.xticks(np.arange(xmin, xmax+2, step=2))
+#
+    # fig.suptitle('Neutron Creation/Loss by Weight Window')
+    # fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=3,
+    #            fontsize='x-small')
+    # fig.tight_layout(pad=2.5)
+    # save_name = 'images/ww_creationloss_{}.png'.format(refinement)
     #plt.savefig(save_name)
 
 
@@ -630,6 +646,7 @@ def plot_relative_error(df_output, refinement, df_measure=None):
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.ylim((0.001, 0.03))
     plt.legend(loc='best', ncol=2,
                fontsize='x-small')
     plt.tight_layout()
