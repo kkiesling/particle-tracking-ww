@@ -120,7 +120,7 @@ def plot_roughness_per_group(df):
 
 def plot_average_roughness(df):
     plt.figure()
-    title = 'Surface Roughness'
+    title = 'Surface Roughness\n' + '(artificial roughness)'
     xlabel = r'Maximum Perturbation $\delta$'
     ylabel = 'Average Global Roughness'
 
@@ -130,6 +130,7 @@ def plot_average_roughness(df):
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.ylim((0.18, 0.32))
     plt.tight_layout()
 
     save_name = 'images/average_roughness.png'
@@ -138,16 +139,17 @@ def plot_average_roughness(df):
 
 def plot_average_roughness_smoothed(df):
     plt.figure()
-    title = 'Surface Roughness'
+    title = 'Surface Roughness\n' + '(after smoothing)'
     xlabel = r'Number of smoothing iterations'
     ylabel = 'Average Global Roughness'
 
-    plt.plot(df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10]['iterations'],
-             df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10]['average roughness'],
+    plt.plot(df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10].loc[df['iterations'] > 1]['iterations'],
+             df.loc[df['group'] == 'total'].loc[df['iterations'] <= 10].loc[df['iterations'] > 1]['average roughness'],
              linestyle='', marker='d', color=colors['wwig'])
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.ylim((0.18, 0.32))
     plt.tight_layout()
 
     save_name = 'images/average_roughness_smoothed.png'
@@ -173,7 +175,7 @@ if __name__ == '__main__':
     plot_roughness_per_group(df_rough)
     plot_average_roughness(df_rough)
 
-    all_smooth_files = glob.glob('csv/wwig_roughness_smoothed_*.csv')
+    all_smooth_files = glob.glob('csv/wwig_roughness_smoothed_s01*.csv')
     df_smooth = pd.concat((
         pd.read_csv(f, header=0, index_col=0) for f in all_smooth_files),
         sort=False, ignore_index=True)
