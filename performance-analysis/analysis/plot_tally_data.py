@@ -441,7 +441,7 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     if df_measure is not None:
         ax[0].set_ylim((0.157, 0.17))  ## overall
         ax[1].set_ylim((1.39, 1.52))  ## total num
-        ax[2].set_ylim((0.0445, 0.0445))  ## f splits
+        ax[2].set_ylim((0.04, 0.0445))  ## f splits
         ax2.set_ylim((0.117, 0.124))  # f terms
 
     title = 'Weight Window Efficiency'
