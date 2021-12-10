@@ -18,7 +18,8 @@ def get_data_names(mf, ratio):
     mins = []
     maxs = []
     for name in key_names:
-        if 'ww' in name:
+        if ('ww' in name):
+            # and (('003' in name) or ('014' in name) or ('024' in name)):
             data[name] = {}
             minval = min(mf.cell_data['hexahedron'][name])
             maxval = max(mf.cell_data['hexahedron'][name])
@@ -34,7 +35,9 @@ def get_data_names(mf, ratio):
 
 def plot_image(group, mins, maxs, levels, ratio):
 
-    v.AddPlot('Pseudocolor', group)
+    v.AddPlot('Pseudocolor', group, 0, 1)
+    v.AddPlot('Pseudocolor', group, 0, 1)
+    # second plot is just to have another legend to work with tick marks
 
     # Pseudocolor plot options
     att = v.PseudocolorAttributes()
@@ -47,7 +50,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     v.SetPlotOptions(att)
 
     # operator options
-    v.AddOperator('Clip')
+    v.AddOperator('Clip', 1)
     att_op = v.ClipAttributes()
     att_op.plane1Status = 0
     att_op.plane2Status = 1
@@ -74,7 +77,7 @@ def plot_image(group, mins, maxs, levels, ratio):
     annobj = v.CreateAnnotationObject('Text2D')
     annobj.visible = 1
     annobj.active = 1
-    annobj.position = (0.055, 0.92)
+    annobj.position = (0.03, 0.92)
     annobj.height = 0.02
     annobj.textColor = (0, 0, 0, 255)
     annobj.useForegroundForTextColor = 1
@@ -86,21 +89,49 @@ def plot_image(group, mins, maxs, levels, ratio):
 
     # set legend attributes
     objnames = v.GetAnnotationObjectNames()
+    legnames = []
     for name in objnames:
         if 'Plot' in name:
-            legname = name
-            break
-    legobj = v.GetAnnotationObject(legname)
+            legnames.append(name)
+
+    # right side ticks - do only min and max if no contours
+    tickvals = [mins, maxs]
+    legobj = v.GetAnnotationObject(legnames[0])
+    legobj.managePosition = 0
+    legobj.position = (0.10, 0.9)
     legobj.drawTitle = 0
     legobj.drawMinMax = 0
-    legobj.numberFormat = "%# -1.3e"
+    legobj.numberFormat = "%# -1.2e"
     legobj.fontBold = 0
     legobj.fontHeight = 0.021
     legobj.yScale = 1.5
     legobj.controlTicks = 0
     legobj.minMaxInclusive = 0
-    legobj.numTicks = 2
-    legobj.suppliedValues = tuple([mins, maxs])
+    legobj.numTicks = len(tickvals)
+    legobj.suppliedValues = tuple(tickvals)
+
+    # left tick marks
+    tickmin = np.around(np.log10(global_min))
+    tickmax = np.around(np.log10(global_max))
+    numticks = tickmax - tickmin + 1
+    tickvals = [
+        10**x for x in np.linspace(tickmin, tickmax, numticks, endpoint=True)]
+    if tickvals[0] < global_min:
+        tickvals = tickvals[1:]
+    legobj2 = v.GetAnnotationObject(legnames[1])
+    legobj2.managePosition = 0
+    legobj2.position = (0.056, 0.9)
+    legobj2.orientation = 1
+    legobj2.drawTitle = 0
+    legobj2.drawMinMax = 0
+    legobj2.numberFormat = "%# -.0e"
+    legobj2.fontBold = 0
+    legobj2.fontHeight = 0.021
+    legobj2.yScale = 1.5
+    legobj2.controlTicks = 0
+    legobj2.minMaxInclusive = 0
+    legobj2.numTicks = len(tickvals)
+    legobj2.suppliedValues = tuple(tickvals)
 
     # view angle and lighting
     vatts = v.View3DAttributes()
@@ -152,10 +183,25 @@ def plot_image(group, mins, maxs, levels, ratio):
     catt.legendFlag = 0
     e = v.SetPlotOptions(catt)
 
+    # update the right side with contour tick marks
+    legobj = v.GetAnnotationObject(legnames[0])
+    legobj.managePosition = 0
+    legobj.position = (0.10, 0.9)
+    legobj.drawTitle = 0
+    legobj.drawMinMax = 0
+    legobj.numberFormat = "%# -1.2e"
+    legobj.fontBold = 0
+    legobj.fontHeight = 0.021
+    legobj.yScale = 1.5
+    legobj.controlTicks = 0
+    legobj.minMaxInclusive = 0
+    legobj.numTicks = len(levels)
+    legobj.suppliedValues = tuple(levels)
+
     robj = v.CreateAnnotationObject('Text2D')
     robj.visible = 1
     robj.active = 1
-    robj.position = (0.055, 0.39)
+    robj.position = (0.03, 0.39)
     robj.height = 0.015
     robj.textColor = (0, 0, 0, 255)
     robj.useForegroundForTextColor = 1
@@ -183,7 +229,7 @@ if __name__ == '__main__':
 
     v.LaunchNowin()
     v.OpenDatabase(f)
-
+    redo = False
     for ratio in [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 25]:
         mf = meshio.read(f)
         data, maxs, mins = get_data_names(mf, ratio)
@@ -191,7 +237,7 @@ if __name__ == '__main__':
         annobj = v.CreateAnnotationObject('Text2D')
         annobj.visible = 1
         annobj.active = 1
-        annobj.position = (0.055, 0.45)
+        annobj.position = (0.03, 0.45)
         annobj.height = 0.015
         annobj.textColor = (0, 0, 0, 255)
         annobj.useForegroundForTextColor = 1
@@ -205,8 +251,9 @@ if __name__ == '__main__':
 
         for name, info in data.items():
             plot_image(name, info['min'], info['max'], info['levels'], ratio)
-            if name == 'ww_n_008':
+            if name == 'ww_n_008' and not redo:
                 # redo # 8 because it is weird
                 plot_image(name, info['min'], info['max'], info['levels'], ratio)
+                redo = True
 
     v.CloseDatabase(f)
