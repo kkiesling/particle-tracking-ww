@@ -36,10 +36,18 @@ def get_data_names(mf, ratio):
 def plot_image(group, mins, maxs, levels, ratio):
 
     v.AddPlot('Pseudocolor', group, 0, 1)
-    v.AddPlot('Pseudocolor', group, 0, 1)
-    # second plot is just to have another legend to work with tick marks
-
     # Pseudocolor plot options
+    att = v.PseudocolorAttributes()
+    att.scaling = 1  # log
+    att.minFlag = 1  # turn on
+    att.min = global_min
+    att.maxFlag = 1  # turn on
+    att.max = global_max
+    att.colorTableName = 'plasma'
+    v.SetPlotOptions(att)
+
+    # second plot is just to have another legend to work with tick marks
+    v.AddPlot('Pseudocolor', group, 0, 1)
     att = v.PseudocolorAttributes()
     att.scaling = 1  # log
     att.minFlag = 1  # turn on
@@ -111,8 +119,8 @@ def plot_image(group, mins, maxs, levels, ratio):
     legobj.suppliedValues = tuple(tickvals)
 
     # left tick marks
-    tickmin = np.around(np.log10(global_min))
-    tickmax = np.around(np.log10(global_max))
+    tickmin = np.floor(np.log10(global_min))
+    tickmax = np.floor(np.log10(global_max))
     numticks = tickmax - tickmin + 1
     tickvals = [
         10**x for x in np.linspace(tickmin, tickmax, numticks, endpoint=True)]
