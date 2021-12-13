@@ -77,8 +77,8 @@ def plot_image(f, data_name, data_vals, extrema, ratio):
     vatts.parallelScale = 346.41
     vatts.nearPlane = -692.82
     vatts.farPlane = 692.82
-    vatts.imagePan = (0.08, 0.03)
-    vatts.imageZoom = 1.01
+    vatts.imagePan = (0.1, 0.03)
+    vatts.imageZoom = 0.95
     vatts.perspective = 1
     vatts.eyeAngle = 2
     vatts.centerOfRotationSet = 0

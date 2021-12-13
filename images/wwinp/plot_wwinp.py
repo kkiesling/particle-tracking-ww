@@ -33,7 +33,7 @@ def get_data_names(mf, ratio):
 
 def plot_image(group, mins, maxs, levels, ratio):
 
-    v.AddPlot('Pseudocolor', group)
+    v.AddPlot('Pseudocolor', group, 0, 1)
 
     # Pseudocolor plot options
     att = v.PseudocolorAttributes()
@@ -45,8 +45,19 @@ def plot_image(group, mins, maxs, levels, ratio):
     att.colorTableName = 'plasma'
     v.SetPlotOptions(att)
 
+    # second plot is just to have another legend to work with tick marks
+    v.AddPlot('Pseudocolor', group, 0, 1)
+    att = v.PseudocolorAttributes()
+    att.scaling = 1  # log
+    att.minFlag = 1  # turn on
+    att.min = global_min
+    att.maxFlag = 1  # turn on
+    att.max = global_max
+    att.colorTableName = 'plasma'
+    v.SetPlotOptions(att)
+
     # operator options
-    v.AddOperator('Clip')
+    v.AddOperator('Clip', 1)
     att_op = v.ClipAttributes()
     att_op.plane1Status = 0
     att_op.plane2Status = 1
@@ -75,8 +86,8 @@ def plot_image(group, mins, maxs, levels, ratio):
     vatts.parallelScale = 346.41
     vatts.nearPlane = -692.82
     vatts.farPlane = 692.82
-    vatts.imagePan = (0.08, 0.03)
-    vatts.imageZoom = 1.01
+    vatts.imagePan = (0.1, 0.03)
+    vatts.imageZoom = 0.95
     vatts.perspective = 1
     vatts.eyeAngle = 2
     vatts.centerOfRotationSet = 0
@@ -104,22 +115,49 @@ def plot_image(group, mins, maxs, levels, ratio):
 
     # set legend attributes
     objnames = v.GetAnnotationObjectNames()
+    legnames = []
     for name in objnames:
         if 'Plot' in name:
-            legname = name
-            break
-    legobj = v.GetAnnotationObject(legname)
+            legnames.append(name)
+
+    # right side ticks - do only min and max if no contours
+    tickvals = [mins, maxs]
+    legobj = v.GetAnnotationObject(legnames[0])
+    legobj.managePosition = 0
+    legobj.position = (0.10, 0.9)
     legobj.drawTitle = 0
     legobj.drawMinMax = 0
-    legobj.numberFormat = "%# -1.3e"
+    legobj.numberFormat = "%# -1.2e"
     legobj.fontBold = 0
     legobj.fontHeight = 0.021
     legobj.yScale = 1.5
     legobj.controlTicks = 0
     legobj.minMaxInclusive = 0
-    legobj.numTicks = 2
-    legobj.suppliedValues = tuple([mins, maxs])
-    #legobj.suppliedLabels = tuple(data_vals)
+    legobj.numTicks = len(tickvals)
+    legobj.suppliedValues = tuple(tickvals)
+
+    # left tick marks
+    tickmin = np.floor(np.log10(global_min))
+    tickmax = np.floor(np.log10(global_max))
+    numticks = tickmax - tickmin + 1
+    tickvals = [
+        10**x for x in np.linspace(tickmin, tickmax, numticks, endpoint=True)]
+    if tickvals[0] < global_min:
+        tickvals = tickvals[1:]
+    legobj2 = v.GetAnnotationObject(legnames[1])
+    legobj2.managePosition = 0
+    legobj2.position = (0.056, 0.9)
+    legobj2.orientation = 1
+    legobj2.drawTitle = 0
+    legobj2.drawMinMax = 0
+    legobj2.numberFormat = "%# -.0e"
+    legobj2.fontBold = 0
+    legobj2.fontHeight = 0.021
+    legobj2.yScale = 1.5
+    legobj2.controlTicks = 0
+    legobj2.minMaxInclusive = 0
+    legobj2.numTicks = len(tickvals)
+    legobj2.suppliedValues = tuple(tickvals)
 
     v.DrawPlots()
 
@@ -151,6 +189,21 @@ def plot_image(group, mins, maxs, levels, ratio):
     catt.lineStyle = 0
     catt.legendFlag = 0
     e = v.SetPlotOptions(catt)
+
+    # update the right side with contour tick marks
+    legobj = v.GetAnnotationObject(legnames[0])
+    legobj.managePosition = 0
+    legobj.position = (0.10, 0.9)
+    legobj.drawTitle = 0
+    legobj.drawMinMax = 0
+    legobj.numberFormat = "%# -1.2e"
+    legobj.fontBold = 0
+    legobj.fontHeight = 0.021
+    legobj.yScale = 1.5
+    legobj.controlTicks = 0
+    legobj.minMaxInclusive = 0
+    legobj.numTicks = len(levels)
+    legobj.suppliedValues = tuple(levels)
 
     robj = v.CreateAnnotationObject('Text2D')
     robj.visible = 1
