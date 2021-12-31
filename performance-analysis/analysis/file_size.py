@@ -1,11 +1,23 @@
 import sys
 import os
 import pandas as pd
+from pymoab import core, types
+
+
+def count_verts(fpath):
+
+    mb = core.Core()
+    mb.load_file(fpath)
+    rs = mb.get_root_set()
+    all_verts = mb.get_entities_by_type(rs, types.MBVERTEX)
+
+    return len(all_verts)
 
 
 def query_size(fdir, ratio):
     all_data = []
     size_total = 0.
+    vertex_count = 0
     for group in range(27):
         data = {}
         ID = '{:03d}'.format(group)
@@ -16,12 +28,16 @@ def query_size(fdir, ratio):
         fsize = os.path.getsize(fpath) / (1024.**2)
         data['size'] = fsize
         size_total += fsize
+        num_verts = count_verts(fpath)
+        data['verts'] = num_verts
+        vertex_count += num_verts
         all_data.append(data)
 
     data = {}
     data['group'] = 'total'
     data['ratio'] = int(ratio)
     data['size'] = size_total
+    data['verts'] = vertex_count
     all_data.append(data)
 
     return all_data

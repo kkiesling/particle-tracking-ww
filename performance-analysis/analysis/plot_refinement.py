@@ -24,6 +24,53 @@ fcwwm = '../inputs/wwinp_slab'
 cwwm_size = os.path.getsize(fcwwm) / (1024.**2)
 
 
+def plot_vertices(df):
+    plt.figure()
+    title = 'Vertex Count'
+    xlabel = r'Decimation Factor $d$'
+    ylabel = 'Total Number of Vertices'
+
+    plt.plot(df.loc[df['group'] == 'total']['dc factor'],
+             df.loc[df['group'] == 'total']['verts'],
+             linestyle='', marker='d', color=colors['wwig'], label='WWIG')
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.legend(loc='best', ncol=2,
+               fontsize='x-small')
+    plt.tight_layout()
+
+    save_name = 'images/verts_decimated.png'
+    plt.savefig(save_name)
+
+
+def subplot_verts(df, group_min, group_max):
+    fig, ax = plt.subplots(nrows=3, ncols=3, sharex=True,
+                           sharey=False, figsize=(9, 9))
+    positions = [[0, 0], [0, 1], [0, 2],
+                 [1, 0], [1, 1], [1, 2],
+                 [2, 0], [2, 1], [2, 2]]
+    for i, group in enumerate(range(group_min, group_max)):
+        pr = positions[i][0]
+        pc = positions[i][1]
+        df_sub = df.loc[df['group'] == str(group)]
+        ax[pr][pc].plot(df_sub['dc factor'],
+                        df_sub['verts'],
+                        linestyle='', marker='d', color=colors['wwig'])
+        title_str = 'E_{}'.format(group)
+        ax[pr][pc].set_title('$E_{' + str(group) + '}$')
+
+    #save_name = 'images/group_roughness_{}_{}.png'.format(group_min, group_max)
+    #plt.savefig(save_name)
+
+
+def plot_verts_per_group(df):
+    # measured roughness vs applied perturbation
+    subplot_verts(df, 0, 9)
+    subplot_verts(df, 9, 18)
+    subplot_verts(df, 18, 27)
+
+
 def plot_fsize(df):
     # plot total file size - decimated sizes only
     plt.figure()
@@ -159,11 +206,15 @@ def plot_average_roughness_smoothed(df):
 if __name__ == '__main__':
 
     # coarseness
-    fdeci = 'csv/wwig_coarseness_measurements.csv'
-    df_deci = pd.read_csv(fdeci, header=0, index_col=0)
+    fdeci = ['csv/wwig_coarseness_measurements.csv', 'csv/wwig_decimation_size.csv']
+    df_deci = pd.concat((
+        pd.read_csv(f, header=0, index_col=0) for f in fdeci), sort=False,
+        ignore_index=True)
     print(df_deci.keys())
     plot_average_coarseness(df_deci)
     plot_fsize(df_deci)
+    plot_vertices(df_deci)
+    plot_verts_per_group(df_deci)
 
     # get all wwig roughness measurement data
     all_rough_files = glob.glob('csv/wwig_roughness_measurements_*.csv')
@@ -175,7 +226,7 @@ if __name__ == '__main__':
     plot_roughness_per_group(df_rough)
     plot_average_roughness(df_rough)
 
-    all_smooth_files = glob.glob('csv/wwig_roughness_smoothed_s01*.csv')
+    all_smooth_files = glob.glob('csv/wwig_roughness_smoothed_*.csv')
     df_smooth = pd.concat((
         pd.read_csv(f, header=0, index_col=0) for f in all_smooth_files),
         sort=False, ignore_index=True)
