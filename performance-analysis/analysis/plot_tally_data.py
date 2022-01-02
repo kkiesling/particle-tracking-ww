@@ -369,8 +369,6 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
     title = 'Splitting Efficiency'
     fig.suptitle(title, fontsize='x-large')
     fig.tight_layout(pad=2.5, h_pad=0)
-    save_name = 'images/ww_efficiency_{}.png'.format(refinement)
-    plt.savefig(save_name)
 
     save_name = 'images/split_efficiency_{}.png'.format(refinement)
     plt.savefig(save_name)
@@ -536,7 +534,7 @@ def plot_fom(df_output, df_measure, refinement):
     plt.savefig(save_name)
 
 
-def plot_fom_ratio(df_output):
+def plot_fom_ratio(df_output, df_surfs):
 
     # get the output data for total tally
     df = df_output.loc[df_output['ratio'].notnull()][
@@ -552,18 +550,35 @@ def plot_fom_ratio(df_output):
                    marker=markers['wwig'], ls='', lw=lw, capsize=cs,
                    color=colors['wwig'], label='WWIG')
     ax[0].set_ylabel('Figure of Merit')
-    ax[1].plot(df['ratio'], df['cpu time'], marker=markers['wwig'], ls='',
-               color=colors['wwig'], label='WWIG')
+    lin1 = ax[1].plot(df['ratio'], df['cpu time'], marker=markers['wwig'], ls='',
+               color=colors['wwig'], label='CPU time')
     ax[1].set_ylabel('CPU time (min)')
+
+    df = pd.merge(df, df_surfs, how='left', left_on=[
+                  'ratio'], right_on=['ratio'])
+    print(df)
+
+    ax2 = ax[1].twinx()
+    lin2 = ax2.plot(df.loc[df['group'] == 'total']['ratio'],
+             df.loc[df['group'] == 'total']['num interior'],
+             marker='x', ls='',
+             color=colors['cwwm'], label='Surface count')
+    ax2.set_ylabel('Number of interior surfaces')
 
     xmax = max(df['ratio'])
     xmin = min(df['ratio'])
     plt.xticks(np.arange(xmin, xmax+2, step=2))
 
+    # legend
+    lns = lin1 + lin2
+    labs = [l.get_label() for l in lns]
+    ax[1].legend(lns, labs, loc=0, ncol=2,
+                 fontsize='x-small')
+
     # labels
     title = 'Performance'
     plt.suptitle(title)
-    plt.xlabel('WWIG Surface Spacing Ratio')
+    ax[1].set_xlabel('WWIG Surface Spacing Ratio')
     plt.tight_layout(pad=2.7, w_pad=.5)
     save_name = 'images/fom_ratio.png'
     plt.savefig(save_name)
@@ -677,6 +692,11 @@ if __name__ == '__main__':
         pd.read_csv(f, header=0, index_col=0) for f in all_rough_files),
         sort=False, ignore_index=True)
 
+    # ratio surface data
+    fsurfs = 'csv/ratio_surfs.csv'
+    df_ratio_surfs = pd.read_csv(fsurfs, header=0, index_col=0)
+    print(df_ratio_surfs.keys())
+
     print(df_output.keys())
     print(df_coarse.keys())
     print(df_rough.keys())
@@ -727,7 +747,7 @@ if __name__ == '__main__':
     # plot fom vs coarseness / coarseness
     plot_fom(df_output, df_coarse, 'coarseness')
     plot_fom(df_output, df_rough, 'roughness')
-    plot_fom_ratio(df_output)
+    plot_fom_ratio(df_output, df_ratio_surfs)
 
     # plot relative error for surface tally
     plot_relative_error(df_output, 'ratio')
