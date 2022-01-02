@@ -333,37 +333,37 @@ def plot_ww_efficiency(df_output, refinement, df_measure=None):
         cwwm_lt = np.full(2, float(df_cwwm['Splits < C_u']))
         cwwm_eq = np.full(2, float(df_cwwm['Splits = C_u']))
         cwwm_gt = np.full(2, float(df_cwwm['Splits > C_u']))
-        ax[0].plot([xmin, xmax], cwwm_lt, marker='',
+        ax[2].plot([xmin, xmax], cwwm_lt, marker='',
                    ls=':', color=colors['cwwm'], label='CWWM')
         ax[1].plot([xmin, xmax], cwwm_eq, marker='',
                    ls=':', color=colors['cwwm'])
-        ax[2].plot([xmin, xmax], cwwm_gt, marker='',
+        ax[0].plot([xmin, xmax], cwwm_gt, marker='',
                    ls=':', color=colors['cwwm'])
 
-    ax[0].plot(df_wwig[measurement], df_wwig['Splits < C_u'],
+    ax[2].plot(df_wwig[measurement], df_wwig['Splits < C_u'],
                marker=markers['wwig'], ls='', label='WWIG',
                color=colors['wwig'])
-    ax[0].set_ylabel('$f_{< C_U}$')
+    ax[2].set_ylabel('$f_{< C_U}$')
 
     ax[1].plot(df_wwig[measurement], df_wwig['Splits = C_u'],
                marker=markers['wwig'], ls='', label='',
                color=colors['wwig'])
     ax[1].set_ylabel('$f_{= C_U}$')
 
-    ax[2].plot(df_wwig[measurement], df_wwig['Splits > C_u'],
+    ax[0].plot(df_wwig[measurement], df_wwig['Splits > C_u'],
                marker=markers['wwig'], ls='', label='',
                color=colors['wwig'])
     ax[2].set_xlabel(xlabel)
-    ax[2].set_ylabel('$f_{> C_U}$')
+    ax[0].set_ylabel('$f_{> C_U}$')
 
     if df_measure is None:
         fig.legend(bbox_to_anchor=(0.5, 0), loc='lower center', ncol=2,
                    fontsize='x-small')
 
     if df_measure is not None:
-        ax[0].set_ylim(0.97, 0.99)
+        ax[2].set_ylim(0.97, 0.99)
         ax[1].set_ylim(0.0, 0.02)
-        ax[2].set_ylim(0.0, 0.02)
+        ax[0].set_ylim(0.0, 0.02)
 
     # labels
     title = 'Splitting Efficiency'
