@@ -105,26 +105,26 @@ ar2_upper, ar2_lower = calc_sigmas(r1, aerr, 2)
 plt.figure()
 
 # reference
-plt.plot(np.append(ratios, ext_x), np.append(r1, 1), label='$E/Ref=1$', ls='-', marker='', lw=.9,
+plt.plot(np.append(ratios, ext_x), np.append(r1, 1), label='$E/F=1$', ls='-', marker='', lw=.9,
          color=ref_color)
-plt.plot(np.append(ratios, ext_x), ref_err + 1, label='$E/Ref \pm 1\sigma$', ls='--', marker='', lw=.9,
+plt.plot(np.append(ratios, ext_x), ref_err + 1, label='$E/F \pm 1\sigma$', ls='--', marker='', lw=.9,
          color=ref_color)
 plt.plot(np.append(ratios, ext_x), -ref_err + 1, ls='--', marker='', lw=.9,
          color=ref_color)
-plt.plot(np.append(ratios, ext_x), 2.*ref_err + 1, label='$E/Ref \pm 2\sigma$', ls=':', marker='', lw=.9,
+plt.plot(np.append(ratios, ext_x), 2.*ref_err + 1, label='$E/F \pm 2\sigma$', ls=':', marker='', lw=.9,
          color=ref_color)
 plt.plot(np.append(ratios, ext_x), -2.*ref_err + 1, ls=':', marker='', lw=.9,
          color=ref_color)
 # wwig/reference
-plt.errorbar(ratios, wgratio, yerr=(wgerr * wgratio), label='$WWIG/Ref$', ls='', marker='d', lw=.9,
+plt.errorbar(ratios, wgratio, yerr=(wgerr * wgratio), label='$WWIG/F$', ls='', marker='d', lw=.9,
              color=wwig_color, capsize=cs)
 # wwinp/reference
 plt.errorbar(ext_x, wpratio, yerr=(wpratio * wperr),
-             label='$CWWM/Ref \pm 1\sigma$', ls='', marker='x', lw=.9,
+             label='$CWWM/F \pm 1\sigma$', ls='', marker='x', lw=.9,
              capsize=cs, color=wwinp_color)
 # analog/reference
 plt.errorbar(ext_x, aratio, yerr=(aratio * aerr),
-             label='$Analog/Ref \pm 1\sigma$', ls='', marker='o', lw=.9,
+             label='$Analog/F \pm 1\sigma$', ls='', marker='o', lw=.9,
              capsize=cs, color=analog_color)
 plt.xlabel('WWIG surface spacing ratio')
 plt.ylabel('Ratio (E/Reference)')
@@ -258,6 +258,7 @@ def calc_df(m1, e1, n1, m2, e2, n2):
 
 
 def calc_confidence_interval(m1, e1, n1, m2, e2, n2):
+    pass
 
 
 def analyze_tost(res, err):
