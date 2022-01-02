@@ -66,9 +66,10 @@ if __name__ == "__main__":
         data = query_surfs(fpath, ratio)
         all_data.extend(data)
 
-
     all_data_df = pd.DataFrame(all_data)
     #print(all_data_df)
+
+    all_data_df.to_csv('csv/ratio_surfs.csv', index_label='i')
 
     plot_surfs(all_data_df)
 
