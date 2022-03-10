@@ -1,3 +1,5 @@
 visitlog.py
-runs/
 debug-output
+runs/**/runtp*
+runs/**/meshta*
+runs/cadis**/model/
