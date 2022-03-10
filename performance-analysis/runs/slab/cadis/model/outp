@@ -1,0 +1,212 @@
+          Thread Name & Version = MCNP5, 1.60
+                                  _                                      
+            ._ _    _  ._   ._   |_                                      
+            | | |  (_  | |  |_)   _)                                     
+                            |                                            
+  +---------------------------------------------------------------------+
+  | Copyright 2010. Los Alamos National Security, LLC.  All rights      |
+  | reserved.                                                           |
+  |   This material was produced under U.S. Government contract         |
+  | DE-AC52-06NA25396 for Los Alamos National Laboratory, which is      |
+  | operated by Los Alamos National Security, LLC, for the U.S.         |
+  | Department of Los Energy. The Government is granted for itself and  |
+  | others acting on its behalf a paid-up, nonexclusive, irrevocable    |
+  | worldwide license in this material to reproduce, prepare derivative |
+  | works, and perform publicly and display publicly. Beginning five    |
+  | (5) years after 2010, subject to additional five-year worldwide     |
+  | renewals, the Government is granted for itself and others acting on |
+  | its behalf a paid-up, nonexclusive, irrevocable worldwide license   |
+  | in this material to reproduce, prepare derivative works, distribute |
+  | copies to the public, perform publicly and display publicly, and to |
+  | permit others to do so. NEITHER THE UNITED STATES NOR THE UNITED    |
+  | STATES DEPARTMENT OF ENERGY, NOR LOS ALAMOS NATIONAL SECURITY, LLC, |
+  | NOR ANY OF THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, |
+  | OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE ACCURACY,  |
+  | COMPLETENESS, OR USEFULNESS OF ANY INFORMATION, APPARATUS, PRODUCT, |
+  | OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE |
+  | PRIVATELY OWNED RIGHTS.                                             |
+  +---------------------------------------------------------------------+
+  
+1mcnp     version 5     ld=09282010                     11/01/21 09:39:31 
+ *************************************************************************                 probid =  11/01/21 09:39:31 
+ ix inp=input runtpe=runtpe outp=outp                                            
+
+         1-       Concrete sphere                                                                 
+         2-       C to run: mcnp6 i=../../inputs/analog.inp                                       
+         3-       C Cell Cards                                                                    
+         4-       C cell # | mat # | density | surf combos                                        
+         5-       C concrete sphere (density=2.3, 100%):                                          
+         6-       01  1  -2.3    +1 -2 +3 -4 +5 -6                                                
+         7-       C void                                                                          
+         8-       100 0          -1:+2:-3:+4:-5:+6                                                
+         9-                                                                                       
+        10-       C Surface Cards - form a rectangle                                              
+        11-       1  PX   -25                                                                     
+        12-       2  PX    25                                                                     
+        13-       *3  PY  -50                                                                     
+        14-       *4  PY   50                                                                     
+        15-       *5  PZ  -50                                                                     
+        16-       *6  PZ   50                                                                     
+        17-                                                                                       
+        18-       C Data Cards                                                                    
+        19-       IMP:n 1 0                                                                       
+        20-       C materials: concrete and air                                                   
+        21-       C name: Concrete, Regular                                                       
+        22-       C density = 2.30000                                                             
+        23-       C remove o18: 8018 -2.8219e-03                                                  
+        24-       m1   1001 -2.2995e-02                                                           
+        25-            1002 -5.2853e-06                                                           
+        26-            8016 -1.2203e+00                                                           
+        27-            8017 -4.9402e-04                                                           
+        28-            11023 -6.6700e-02                                                          
+        29-            13027 -7.8200e-02                                                          
+        30-            14028 -7.1206e-01                                                          
+        31-            14029 -3.7465e-02                                                          
+        32-            14030 -2.5577e-02                                                          
+        33-            20040 -9.7822e-02                                                          
+        34-            20042 -6.8549e-04                                                          
+        35-            20043 -1.4644e-04                                                          
+        36-            20044 -2.3153e-03                                                          
+        37-            20046 -4.6415e-06                                                          
+        38-            20048 -2.2643e-04                                                          
+        39-            26054 -1.8179e-03                                                          
+        40-            26056 -2.9592e-02                                                          
+        41-            26057 -6.9564e-04                                                          
+        42-            26058 -9.4199e-05                                                          
+        43-       C Source definition --- planar source on -x plane                               
+        44-       SDEF DIR=1 VEC=1 0 0  X=-25 Y=D1 Z=D2 ERG=14 PAR=1                              
+        45-       SI1 -50 50i 50                                                                  
+        46-       SP1 0 1 50R                                                                     
+        47-       SI2 -50 50i 50                                                                  
+        48-       SP2 0 1 50R                                                                     
+        49-       NPS 1e4                                                                         
+        50-       MODE N                                                                          
+        51-       C mesh tally for global VR                                                      
+        52-       FMESH4:N  ORIGIN=-25 -50 -50 IMESH=25 JMESH=50 KMESH=50                         
+        53-                 IINTS=25 JINTS=25 KINTS=25                                            
+        54-                 EMESH=20                                                              
+        55-       C surface tally for comparing results - flux on positive x plane                
+        56-       F2:N  2                                                                         
+        57-       E2   1e-11 1e-08 3e-08 5e-08 1e-07 2.25e-07 3.25e-07 4.1399e-07 8e-07           
+        58-            1e-06 1.1253e-06 1.3e-06 1.8554e-06 3.059e-06 1.0677e-05 2.9023e-05        
+        59-            0.0001013 0.00058295 0.0030354 0.015034 0.11109 0.40762 0.90718            
+        60-            1.4227 1.8268 3.0119 6.3763 20.0                                           
+        61-       C energy cut off to keep to one energy group                                    
+        62-       C CUT:N j 6.3763                                                                
+ 
+  warning.    1 materials had unnormalized fractions. print table 40.
+1cells                                                                                                  print table 60
+
+                               atom        gram                                            neutron                                     
+              cell     mat    density     density     volume       mass            pieces importance                                   
+
+        1        1        1  8.17829E-02 2.30000E+00 5.00000E+05 1.15000E+06           0  1.0000E+00                                   
+        2      100        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  0.0000E+00                                   
+
+ total                                               5.00000E+05 1.15000E+06
+
+    minimum source weight = 1.0000E+00    maximum source weight = 1.0000E+00
+
+ ***************************************************
+ * Random Number Generator  =                    1 *
+ * Random Number Seed       =       19073486328125 *
+ * Random Number Multiplier =       19073486328125 *
+ * Random Number Adder      =                    0 *
+ * Random Number Bits Used  =                   48 *
+ * Random Number Stride     =               152917 *
+ ***************************************************
+
+
+          1 warning message so far.
+1cross-section tables                                                                                   print table 100
+
+     table    length
+
+                        tables from file xdata/endf71x/H/1001.710nc                                      
+
+   1001.80c    3652  H1 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)          mat 125      12/17/12
+
+                        tables from file xdata/endf71x/H/1002.710nc                                      
+
+   1002.80c    5924  H2 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)          mat 128      12/17/12
+
+                        tables from file xdata/endf71x/O/8016.710nc                                      
+
+   8016.80c  171194  O16 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 825      12/13/12
+
+                        tables from file xdata/endf71x/O/8017.710nc                                      
+
+   8017.80c    4921  O17 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)         mat 828      12/13/12
+
+                        tables from file xdata/endf71x/Na/11023.710nc                                    
+
+  11023.80c   45024  Na23 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1125      12/22/12
+
+                        tables from file xdata/endf71x/Al/13027.710nc                                    
+
+  13027.80c   85936  Al27 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1325      12/22/12
+
+                        tables from file xdata/endf71x/Si/14028.710nc                                    
+
+  14028.80c  105939  Si28 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1425      12/14/12
+
+                        tables from file xdata/endf71x/Si/14029.710nc                                    
+
+  14029.80c   97840  Si29 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1428      12/14/12
+
+                        tables from file xdata/endf71x/Si/14030.710nc                                    
+
+  14030.80c   91121  Si30 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat1431      12/16/12
+
+                        tables from file xdata/endf71x/Ca/20040.710nc                                    
+
+  20040.80c  104854  Ca40 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2025      12/21/12
+
+                        tables from file xdata/endf71x/Ca/20042.710nc                                    
+
+  20042.80c  110887  Ca42 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2031      12/21/12
+
+                        tables from file xdata/endf71x/Ca/20043.710nc                                    
+
+  20043.80c  112382  Ca43 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2034      12/21/12
+
+                        tables from file xdata/endf71x/Ca/20044.710nc                                    
+
+  20044.80c   85122  Ca44 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2037      12/21/12
+
+                        tables from file xdata/endf71x/Ca/20046.710nc                                    
+
+  20046.80c   68115  Ca46 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2043      12/21/12
+
+                        tables from file xdata/endf71x/Ca/20048.710nc                                    
+
+  20048.80c   63453  Ca48 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2049      12/21/12
+
+                        tables from file xdata/endf71x/Fe/26054.710nc                                    
+
+  26054.80c  154298  Fe54 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2625      12/22/12
+
+                        tables from file xdata/endf71x/Fe/26056.710nc                                    
+
+  26056.80c  249351  Fe56 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2631      12/22/12
+
+                        tables from file xdata/endf71x/Fe/26057.710nc                                    
+
+  26057.80c  157298  Fe57 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2634      12/22/12
+
+                        tables from file xdata/endf71x/Fe/26058.710nc                                    
+
+  26058.80c   91225  Fe58 ENDF71x (jlconlin)  Ref. see jlconlin (ref 09/10/2012  10:00:53)        mat2637      12/22/12
+
+  total     1808536
+
+ ***********************************************************************************************************************
+
+ dump no.    1 on file runtpe     nps =           0     coll =              0     ctm =        0.00   nrn =             
+    0
+
+          1 warning message so far.
+
+ computer time =    0.01 minutes
+
+ mcnp     version 5     09282010                     11/01/21 09:39:31                     probid =  11/01/21 09:39:31 

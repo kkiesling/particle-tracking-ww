@@ -1,0 +1,17 @@
+ mcnp     ver=5    , ld=09282010  11/01/21 09:39:31                   
+          Thread Name & Version = MCNP5, 1.60
+          Copyright LANS/LANL/DOE - see output file
+                                  _                                      
+            ._ _    _  ._   ._   |_                                      
+            | | |  (_  | |  |_)   _)                                     
+                            |                                            
+  
+  warning.    1 materials had unnormalized fractions. print table 40.                                                    
+ comment. using random number generator  1, initial seed = 19073486328125      
+ imcn   is done
+
+
+                              ctm =        0.00   nrn =                 0
+ dump    1 on file runtpe   nps =           0   coll =                0
+ xact   is done
+

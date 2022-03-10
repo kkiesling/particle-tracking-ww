@@ -1,0 +1,95 @@
+STATUS     at 2021-11-01 09:47:28,707: Generating MCNP run tape...
+STATUS     at 2021-11-01 09:47:28,707:             ...finished generating MCNP run tape
+INFO       at 2021-11-01 09:47:28,713: Reading ANISN library info from '/home/kkiesling/Pokeball/install/advantg/mgxs/27n19g.info'
+STATUS     at 2021-11-01 09:47:28,715: Reading ZAID map file...
+STATUS     at 2021-11-01 09:47:28,718:             ...finished reading ZAID map file
+STATUS     at 2021-11-01 09:47:28,721: Creating mesh...
+INFO       at 2021-11-01 09:47:28,721: Creating mesh with 15,625 voxels and 26 * 26 * 26 vertices
+STATUS     at 2021-11-01 09:47:28,721:             ...finished creating mesh
+STATUS     at 2021-11-01 09:47:28,722: Mapping MCNP materials onto mesh...
+INFO       at 2021-11-01 09:47:28,722: Loaded response data from restart file 'model/responses.dat'
+STATUS     at 2021-11-01 09:47:28,722:             ...finished mapping MCNP materials onto mesh
+STATUS     at 2021-11-01 09:47:28,722: Mapping MCNP responses onto mesh and groups...
+STATUS     at 2021-11-01 09:47:28,722:             ...finished mapping MCNP responses onto mesh and groups
+STATUS     at 2021-11-01 09:47:28,722: Generating Denovo input files...
+INFO       at 2021-11-01 09:47:28,726: Restricted group range to [0,26] due to user-input group restrictions
+STATUS     at 2021-11-01 09:47:28,726: Writing GIP library...
+STATUS     at 2021-11-01 09:47:28,740:             ...finished writing GIP library
+STATUS     at 2021-11-01 09:47:28,742:             ...finished generating Denovo input files
+STATUS     at 2021-11-01 09:47:28,742: Executing Denovo...
+INFO       at 2021-11-01 09:47:28,972: Executing Denovo version 5.4
+INFO       at 2021-11-01 09:47:28,972: Loaded cross section library with 2 pure materials
+INFO       at 2021-11-01 09:47:29,223: Solving for (15625 cells)*(1 discretization point)*(128 angles)*(27 groups) =~ 5.4e+07 total unknowns on 1 processor
+INFO       at 2021-11-01 09:47:29,223: Solution vector has about (15625 cells)*(1 discretization point)*(16 moments)*(27 groups) =~ 6.8e+06 elements
+INFO       at 2021-11-01 09:47:33,841: Belos Block GMRES converged after 20 iterations.
+INFO       at 2021-11-01 09:47:33,841: Adjoint group  26 finished in   20 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:36,345: Belos Block GMRES converged after 10 iterations.
+INFO       at 2021-11-01 09:47:36,345: Adjoint group  25 finished in   10 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:38,210: Belos Block GMRES converged after 7 iterations.
+INFO       at 2021-11-01 09:47:38,211: Adjoint group  24 finished in    7 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:40,076: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:47:40,076: Adjoint group  23 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:41,955: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:47:41,955: Adjoint group  22 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:43,320: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:47:43,320: Adjoint group  21 finished in    4 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:44,635: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:47:44,635: Adjoint group  20 finished in    4 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:46,200: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:47:46,200: Adjoint group  19 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:47,397: Belos Block GMRES converged after 3 iterations.
+INFO       at 2021-11-01 09:47:47,397: Adjoint group  18 finished in    3 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:48,676: Belos Block GMRES converged after 3 iterations.
+INFO       at 2021-11-01 09:47:48,676: Adjoint group  17 finished in    3 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:49,954: Belos Block GMRES converged after 3 iterations.
+INFO       at 2021-11-01 09:47:49,954: Adjoint group  16 finished in    3 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:51,827: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:47:51,827: Adjoint group  15 finished in    4 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:53,643: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:47:53,643: Adjoint group  14 finished in    4 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:55,395: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:47:55,395: Adjoint group  13 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:57,561: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:47:57,561: Adjoint group  12 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:47:59,126: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:47:59,126: Adjoint group  11 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:00,992: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:48:00,992: Adjoint group  10 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:02,871: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:48:02,871: Adjoint group   9 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:04,950: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:48:04,950: Adjoint group   8 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:07,119: Belos Block GMRES converged after 7 iterations.
+INFO       at 2021-11-01 09:48:07,119: Adjoint group   7 finished in    7 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:09,399: Belos Block GMRES converged after 8 iterations.
+INFO       at 2021-11-01 09:48:09,399: Adjoint group   6 finished in    8 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:11,578: Belos Block GMRES converged after 7 iterations.
+INFO       at 2021-11-01 09:48:11,578: Adjoint group   5 finished in    7 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:13,407: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:48:13,407: Adjoint group   4 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:14,936: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:48:14,936: Adjoint group   3 finished in    4 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:16,551: Belos Block GMRES converged after 5 iterations.
+INFO       at 2021-11-01 09:48:16,552: Adjoint group   2 finished in    5 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:18,417: Belos Block GMRES converged after 6 iterations.
+INFO       at 2021-11-01 09:48:18,417: Adjoint group   1 finished in    6 Belos Block GMRES iterations.
+INFO       at 2021-11-01 09:48:19,746: Writing Silo output to denovo_adjoint.silo
+INFO       at 2021-11-01 09:48:19,746: Belos Block GMRES converged after 4 iterations.
+INFO       at 2021-11-01 09:48:19,746: Adjoint group   0 finished in    4 Belos Block GMRES iterations.
+STATUS     at 2021-11-01 09:48:20,211:             ...finished executing Denovo in 51.5 seconds
+STATUS     at 2021-11-01 09:48:20,211: Reading Denovo solution from disk...
+STATUS     at 2021-11-01 09:48:20,222:             ...finished reading Denovo solution from disk
+STATUS     at 2021-11-01 09:48:20,222: Sampling MCNP sources to estimate biasing parameters...
+INFO       at 2021-11-01 09:48:20,689: Sampled the source 1020000 times
+INFO       at 2021-11-01 09:48:20,689: Average number of samples per bin: 20000.00
+STATUS     at 2021-11-01 09:48:20,689:             ...finished sampling MCNP sources to estimate biasing parameters
+STATUS     at 2021-11-01 09:48:20,694: Writing weight window file...
+STATUS     at 2021-11-01 09:48:21,101:             ...finished writing weight window file
+STATUS     at 2021-11-01 09:48:21,101: Writing Silo output...
+STATUS     at 2021-11-01 09:48:21,107: Mapping MCNP sources to onto mesh and groups...
+INFO       at 2021-11-01 09:48:21,108: Loaded source data from restart file 'model/sources.dat'
+STATUS     at 2021-11-01 09:48:21,108:             ...finished mapping MCNP sources to onto mesh and groups
+STATUS     at 2021-11-01 09:48:21,109: Mapping MCNP responses onto mesh and groups...
+STATUS     at 2021-11-01 09:48:21,110:             ...finished mapping MCNP responses onto mesh and groups
+INFO       at 2021-11-01 09:48:21,111: Wrote Silo data to 'output/fields.silo'
+STATUS     at 2021-11-01 09:48:21,111:             ...finished writing Silo output

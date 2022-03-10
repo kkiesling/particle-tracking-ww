@@ -1,0 +1,115 @@
+{
+ "options": {
+  "driver": {
+   "method": "cadis", 
+   "mglib": "anisn", 
+   "model": "mcnp", 
+   "outputs": [
+    "mcnp", 
+    "silo"
+   ], 
+   "solver": "denovo"
+  }, 
+  "mesh": {
+   "mesh_refinement": "mcnp", 
+   "mesh_x": [
+    -25.0, 
+    25.0
+   ], 
+   "mesh_x_ints": [
+    25
+   ], 
+   "mesh_y": [
+    -50.0, 
+    50.0
+   ], 
+   "mesh_y_ints": [
+    25
+   ], 
+   "mesh_z": [
+    -50.0, 
+    50.0
+   ], 
+   "mesh_z_ints": [
+    25
+   ]
+  }, 
+  "method": {}, 
+  "mglib": {
+   "anisn_library": "27n19g", 
+   "anisn_upscatter": false
+  }, 
+  "model": {
+   "mcnp_force_point_source": false, 
+   "mcnp_input": "../../../inputs/analog_slab.inp", 
+   "mcnp_lost_rays": 10, 
+   "mcnp_material_names": {}, 
+   "mcnp_max_point_sources": 20, 
+   "mcnp_max_source_samples": 100000000, 
+   "mcnp_min_rays_per_face": 10, 
+   "mcnp_min_source_samples": 1000000, 
+   "mcnp_mix_tolerance": 0.01, 
+   "mcnp_num_rays": 1, 
+   "mcnp_ray_directions": "xyz", 
+   "mcnp_tallies": [
+    2
+   ], 
+   "mcnp_target_source_density": 100, 
+   "mcnp_unfolding_safe": false
+  }, 
+  "output_mcnp": {
+   "mcnp_create_input": true, 
+   "mcnp_max_sb_samples": 100000000, 
+   "mcnp_min_sb_samples": 1000000, 
+   "mcnp_mxspln": 100, 
+   "mcnp_num_wgt_samples": 10000000, 
+   "mcnp_sb_type": "space_energy", 
+   "mcnp_target_sb_density": 10000, 
+   "mcnp_user_sb_sampling": false, 
+   "mcnp_ww_collapse_factor": 1.0, 
+   "mcnp_ww_ratio": 7.0
+  }, 
+  "output_silo": {
+   "silo_edit_reactions": {}, 
+   "silo_response_ids": true, 
+   "silo_source_ids": true, 
+   "silo_source_strength": true, 
+   "silo_ww": false
+  }, 
+  "solver": {
+   "denovo_discretization": "sc", 
+   "denovo_energy_sets": 1, 
+   "denovo_first_group": 0, 
+   "denovo_hdf5_angles": false, 
+   "denovo_krylov_space": 20, 
+   "denovo_last_group": 26, 
+   "denovo_max_iterations": 100, 
+   "denovo_mc_first_collision": false, 
+   "denovo_partition_upscatter": true, 
+   "denovo_pn_order": 3, 
+   "denovo_preconditioner": "none", 
+   "denovo_quad_num_azi": 4, 
+   "denovo_quad_num_polar": 4, 
+   "denovo_quad_polar_axis": "z", 
+   "denovo_quadrature": "qr", 
+   "denovo_silo_mixed": false, 
+   "denovo_silo_moments": false, 
+   "denovo_solver": "gmres", 
+   "denovo_tolerance": 0.001, 
+   "denovo_transport_correction": "diagonal", 
+   "denovo_verbose": true, 
+   "denovo_x_blocks": 1, 
+   "denovo_y_blocks": 1, 
+   "denovo_z_blocks": 1
+  }
+ }, 
+ "system": [
+  "Linux", 
+  "Rapidash", 
+  "4.15.0-142-generic", 
+  "#146~16.04.1-Ubuntu SMP Tue Apr 13 09:27:15 UTC 2021", 
+  "x86_64", 
+  "x86_64"
+ ], 
+ "version": "3.0.3 (r1792: #6603345e on 2015NOV29)"
+}

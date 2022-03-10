@@ -1,0 +1,24 @@
+INFO: Executing Denovo version 5.4
+Initializing materials...
+DEBUG: Reading all 15625 material entries from 'matids.dat'
+DEBUG: Read material vector with 15625 entries
+DEBUG: Local size 15625; global size 15625
+DEBUG: Material counts: 2 mats, 2 pure, 0 mixtures
+INFO: Loaded cross section library with 2 pure materials
+DEBUG: Creating macro mixer and setting mix table
+DEBUG: Mixing and partitioning material ID field
+            ...finished initializing materials
+Building sources...
+DEBUG: Loading 15625 source id entries from 'source_id.dat'
+DEBUG: Loading 1 * 46 = 46 source shape entries from 'source_shape.dat'
+DEBUG: Loading 15625 source strength entries from 'source_intensity.dat'
+DEBUG: Setting volume sources
+            ...finished building sources
+Solving...
+INFO: Solving for (15625 cells)*(1 discretization point)*(128 angles)*(27 groups) =~ 5.4e+07 total unknowns on 1 processor
+INFO: Solution vector has about (15625 cells)*(1 discretization point)*(16 moments)*(27 groups) =~ 6.8e+06 elements
+            ...finished solving in 50.8 seconds
+Processing output...
+INFO: Writing Silo output to denovo_adjoint.silo
+DEBUG: Writing groups 0 through 26 to <denovo_adjoint.silo>
+            ...finished processing output

@@ -1,0 +1,12 @@
+ ***
+ total ww checks:                1521681.0000000000     
+ total splits:                   79826.000000000000     
+ total stochastic termination:   194416.00000000000     
+ total no change:                692767.00000000000     
+ N_splits = C_u:                 54.000000000000000     
+ N_splits > C_u:                 36.000000000000000     
+ N_splits < C_u:                 79736.000000000000     
+ WW check efficiency:           0.18022305594930868     
+ Splits = C_u:                   6.7647132513216240E-004
+ Splits > C_u:                   4.5098088342144165E-004
+ Splits < C_u:                  0.99887254779144641     
